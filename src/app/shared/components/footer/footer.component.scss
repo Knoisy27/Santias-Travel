@@ -1,0 +1,395 @@
+@use '../../../../assets/styles/variables' as vars;
+@use '../../../../assets/styles/mixins' as mixins;
+
+.footer {
+  background-color: vars.$gray-900;
+  color: vars.$gray-300;
+  margin-top: auto;
+}
+
+.footer-main {
+  padding: vars.$spacing-3xl 0 vars.$spacing-2xl;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: vars.$spacing-2xl;
+
+  @include mixins.desktop {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: vars.$spacing-xl;
+  }
+
+  @include mixins.tablet {
+    grid-template-columns: 1fr 1fr;
+    gap: vars.$spacing-lg;
+  }
+
+  @include mixins.mobile {
+    grid-template-columns: 1fr;
+    gap: vars.$spacing-xl;
+  }
+}
+
+.footer-section {
+  .section-title {
+    color: vars.$white;
+    font-size: vars.$font-size-lg;
+    font-weight: vars.$font-weight-semibold;
+    margin-bottom: vars.$spacing-lg;
+    font-family: vars.$font-family-secondary;
+  }
+}
+
+// Brand Section
+.footer-brand {
+  margin-bottom: vars.$spacing-lg;
+
+  .footer-logo {
+    height: 60px;
+    width: auto;
+    margin-bottom: vars.$spacing-md;
+  }
+
+  .footer-title {
+    color: vars.$white;
+    font-size: vars.$font-size-2xl;
+    font-weight: vars.$font-weight-bold;
+    margin-bottom: vars.$spacing-md;
+    font-family: vars.$font-family-secondary;
+  }
+
+  .footer-description {
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+}
+
+// Contact Info
+.contact-info {
+  .contact-item {
+    @include mixins.flex-center;
+    justify-content: flex-start;
+    gap: vars.$spacing-sm;
+    margin-bottom: vars.$spacing-md;
+    color: vars.$gray-300;
+    font-size: vars.$font-size-sm;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    svg {
+      flex-shrink: 0;
+      opacity: 0.8;
+    }
+  }
+}
+
+// Footer Links
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    margin-bottom: vars.$spacing-sm;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .footer-link {
+    color: vars.$gray-300;
+    text-decoration: none;
+    transition: color vars.$transition-fast;
+    display: block;
+    padding: vars.$spacing-xs 0;
+
+    &:hover {
+      color: vars.$white;
+    }
+
+    &.active {
+      color: vars.$primary-blue;
+    }
+  }
+}
+
+// Contact Buttons
+.contact-buttons {
+  margin-bottom: vars.$spacing-lg;
+}
+
+.btn-whatsapp {
+  @include mixins.button-base;
+  @include mixins.flex-center;
+  gap: vars.$spacing-sm;
+  background-color: #25D366;
+  color: vars.$white;
+  width: 100%;
+  margin-bottom: vars.$spacing-md;
+
+  &:hover:not(:disabled) {
+    background-color: #1ea854;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+// Social Media
+.social-media {
+  @include mixins.flex-center;
+  justify-content: flex-start;
+  gap: vars.$spacing-md;
+  flex-wrap: wrap;
+}
+
+.social-link {
+  @include mixins.flex-center;
+  width: 40px;
+  height: 40px;
+  border-radius: vars.$border-radius-full;
+  background-color: vars.$gray-800;
+  color: vars.$gray-300;
+  text-decoration: none;
+  transition: all vars.$transition-fast;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+    color: vars.$white;
+  }
+
+  &.facebook:hover {
+    background-color: #1877f2;
+  }
+
+  &.instagram:hover {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  }
+
+  &.youtube:hover {
+    background-color: #ff0000;
+  }
+
+  &.twitter:hover {
+    background-color: #1da1f2;
+  }
+}
+
+// Newsletter Section
+.newsletter-description {
+  margin-bottom: vars.$spacing-lg;
+  line-height: 1.6;
+  color: vars.$gray-300;
+}
+
+// Estilos globales para mat-form-field en el footer
+app-footer .mat-mdc-form-field {
+  .mat-mdc-text-field-wrapper {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border-radius: 8px !important;
+  }
+  
+  .mat-mdc-form-field-outline {
+    color: rgba(0, 0, 0, 0.3) !important;
+  }
+  
+  .mat-mdc-form-field-outline-thick {
+    color: rgba(0, 0, 0, 0.5) !important;
+  }
+  
+  &.mat-focused .mat-mdc-form-field-outline-thick {
+    color: vars.$primary-blue !important;
+  }
+  
+  .mat-mdc-form-field-label {
+    color: rgba(0, 0, 0, 0.7) !important;
+  }
+  
+  &.mat-focused .mat-mdc-form-field-label {
+    color: vars.$primary-blue !important;
+  }
+  
+  &.mat-form-field-should-float .mat-mdc-form-field-label {
+    color: vars.$primary-blue !important;
+  }
+  
+  .mat-mdc-input-element {
+    color: #333 !important;
+    
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.5) !important;
+    }
+  }
+  
+  .mat-mdc-form-field-icon-suffix {
+    color: rgba(0, 0, 0, 0.7) !important;
+  }
+  
+  .mat-mdc-form-field-error {
+    color: #ff6b6b !important;
+  }
+}
+
+// Estilos globales para el botón del newsletter en el footer
+app-footer .newsletter-btn {
+  background-color: vars.$primary-blue !important;
+  color: vars.$white !important;
+  border: none !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transition: all vars.$transition-fast !important;
+
+  &:hover:not(:disabled) {
+    background-color: #2d4373 !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  &:active:not(:disabled) {
+    background-color: #243961 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  &:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    background-color: vars.$gray-400 !important;
+  }
+
+  mat-icon {
+    margin-right: vars.$spacing-xs !important;
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  mat-progress-spinner {
+    margin-right: vars.$spacing-xs !important;
+  }
+}
+
+.newsletter-form {
+  margin-bottom: vars.$spacing-lg;
+
+  .newsletter-input-group {
+    display: flex;
+    gap: vars.$spacing-md;
+    align-items: flex-start;
+
+    @include mixins.mobile {
+      flex-direction: column;
+      gap: vars.$spacing-sm;
+    }
+
+    .newsletter-field {
+      flex: 1;
+      min-width: 250px;
+
+      @include mixins.mobile {
+        width: 100%;
+        min-width: unset;
+      }
+
+      // Los estilos de mat-form-field están definidos globalmente arriba
+    }
+
+    .newsletter-btn {
+      min-width: 140px;
+      height: 56px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-radius: 8px;
+
+      @include mixins.mobile {
+        width: 100%;
+        min-width: unset;
+      }
+
+      mat-icon {
+        margin-right: vars.$spacing-xs;
+      }
+
+      mat-progress-spinner {
+        margin-right: vars.$spacing-xs;
+      }
+    }
+  }
+}
+
+.privacy-note {
+  font-size: vars.$font-size-xs;
+  color: vars.$gray-400;
+  line-height: 1.5;
+  text-align: center;
+
+  .privacy-link {
+    color: vars.$primary-blue;
+    text-decoration: none;
+    font-weight: vars.$font-weight-medium;
+    transition: color vars.$transition-fast;
+
+    &:hover {
+      color: vars.$white;
+      text-decoration: underline;
+    }
+  }
+}
+
+// Footer Bottom
+.footer-bottom {
+  background-color: vars.$gray-800;
+  padding: vars.$spacing-lg 0;
+  border-top: 1px solid vars.$gray-700;
+}
+
+.footer-bottom-content {
+  @include mixins.flex-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: vars.$spacing-md;
+
+  @include mixins.mobile {
+    @include mixins.flex-column;
+    text-align: center;
+  }
+}
+
+.copyright {
+  color: vars.$gray-400;
+  font-size: vars.$font-size-sm;
+  margin: 0;
+}
+
+.footer-bottom-links {
+  @include mixins.flex-center;
+  gap: vars.$spacing-lg;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  @include mixins.mobile {
+    gap: vars.$spacing-md;
+  }
+
+  li {
+    margin: 0;
+  }
+
+  .footer-bottom-link {
+    color: vars.$gray-400;
+    text-decoration: none;
+    font-size: vars.$font-size-sm;
+    transition: color vars.$transition-fast;
+
+    &:hover {
+      color: vars.$white;
+    }
+  }
+}

@@ -1,0 +1,60 @@
+<section class="testimonials-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Lo que dicen nuestros viajeros</h2>
+      <p class="section-description">
+        Historias reales de quienes han vivido experiencias únicas con nosotros
+      </p>
+    </div>
+
+    <div class="testimonials-grid">
+      @for (testimonial of testimonials; track testimonial.id) {
+        <mat-card class="testimonial-card-material">
+          <mat-card-header>
+            <div mat-card-avatar class="client-avatar-material">
+              @if (testimonial.clientAvatar) {
+                <img [src]="testimonial.clientAvatar" [alt]="testimonial.clientName">
+              } @else {
+                <div class="avatar-placeholder-material">
+                  {{ testimonial.clientName.charAt(0) }}
+                </div>
+              }
+            </div>
+            <mat-card-title>{{ testimonial.clientName }}</mat-card-title>
+            <mat-card-subtitle>
+              <mat-icon class="location-icon">place</mat-icon>
+              {{ testimonial.clientCity }}, {{ testimonial.clientCountry }}
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="rating-material">
+              @for (star of [1,2,3,4,5]; track star) {
+                <mat-icon [class.filled]="star <= testimonial.rating" class="star-icon">
+                  {{ star <= testimonial.rating ? 'star' : 'star_border' }}
+                </mat-icon>
+              }
+            </div>
+            
+            <blockquote class="testimonial-text-material">
+              <mat-icon class="quote-icon">format_quote</mat-icon>
+              {{ testimonial.comment }}
+            </blockquote>
+          </mat-card-content>
+          
+          <mat-card-actions>
+            <mat-chip class="destination-chip" color="primary">
+              <mat-icon matChipAvatar>travel_explore</mat-icon>
+              {{ testimonial.destinationName }}
+            </mat-chip>
+          </mat-card-actions>
+        </mat-card>
+      } @empty {
+        <div class="empty-state-material">
+          <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+          <p>Cargando testimonios...</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>

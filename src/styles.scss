@@ -1,0 +1,427 @@
+
+// Angular Material theming DEBE ir primero
+@use '@angular/material' as mat;
+
+// Importar variables y mixins
+@use 'assets/styles/variables' as vars;
+@use 'assets/styles/mixins' as mixins;
+
+// Crear paleta personalizada con nuestros colores
+$custom-primary: mat.m2-define-palette((
+  50: #e3f2fd,
+  100: #bbdefb,
+  200: #90caf9,
+  300: #64b5f6,
+  400: #42a5f5,
+  500: #{vars.$primary-blue}, // Nuestro color principal
+  600: #1e88e5,
+  700: #1976d2,
+  800: #1565c0,
+  900: #0d47a1,
+  A100: #82b1ff,
+  A200: #448aff,
+  A400: #2979ff,
+  A700: #2962ff,
+  contrast: (
+    50: black,
+    100: black,
+    200: black,
+    300: black,
+    400: black,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: black,
+    A200: white,
+    A400: white,
+    A700: white,
+  )
+));
+
+$custom-accent: mat.m2-define-palette((
+  50: #fff3e0,
+  100: #ffe0b2,
+  200: #ffcc80,
+  300: #ffb74d,
+  400: #ffa726,
+  500: #{vars.$primary-orange}, // Nuestro color de acento
+  600: #fb8c00,
+  700: #f57c00,
+  800: #ef6c00,
+  900: #e65100,
+  A100: #ffd180,
+  A200: #ffab40,
+  A400: #ff9100,
+  A700: #ff6d00,
+  contrast: (
+    50: black,
+    100: black,
+    200: black,
+    300: black,
+    400: black,
+    500: black,
+    600: black,
+    700: black,
+    800: white,
+    900: white,
+    A100: black,
+    A200: black,
+    A400: black,
+    A700: black,
+  )
+));
+
+// Crear el tema personalizado
+$custom-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $custom-primary,
+    accent: $custom-accent,
+    warn: mat.m2-define-palette(mat.$m2-red-palette),
+  ),
+  typography: mat.m2-define-typography-config(
+    $font-family: vars.$font-family-primary,
+  ),
+  density: 0,
+));
+
+// Aplicar el tema
+@include mat.all-component-themes($custom-theme);
+
+// Reset y normalización
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: vars.$font-family-primary, "Helvetica Neue", sans-serif;
+  font-size: vars.$font-size-base;
+  font-weight: vars.$font-weight-normal;
+  line-height: 1.6;
+  color: vars.$gray-800;
+  background-color: vars.$white;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  height: 100%;
+}
+
+// Tipografía global
+h1, h2, h3, h4, h5, h6 {
+  font-family: vars.$font-family-secondary;
+  font-weight: vars.$font-weight-bold;
+  line-height: 1.2;
+  color: vars.$gray-900;
+  margin-bottom: vars.$spacing-md;
+}
+
+h1 {
+  font-size: vars.$font-size-4xl;
+  
+  @include mixins.mobile {
+    font-size: vars.$font-size-3xl;
+  }
+}
+
+h2 {
+  font-size: vars.$font-size-3xl;
+  
+  @include mixins.mobile {
+    font-size: vars.$font-size-2xl;
+  }
+}
+
+h3 {
+  font-size: vars.$font-size-2xl;
+  
+  @include mixins.mobile {
+    font-size: vars.$font-size-xl;
+  }
+}
+
+h4 {
+  font-size: vars.$font-size-xl;
+}
+
+h5 {
+  font-size: vars.$font-size-lg;
+}
+
+h6 {
+  font-size: vars.$font-size-base;
+}
+
+p {
+  margin-bottom: vars.$spacing-md;
+  line-height: 1.7;
+}
+
+a {
+  color: vars.$primary-blue;
+  text-decoration: none;
+  transition: color vars.$transition-fast;
+
+  &:hover {
+    color: #243961;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+// Clases utilitarias
+.container {
+  @include mixins.container;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.font-weight-light {
+  font-weight: vars.$font-weight-light;
+}
+
+.font-weight-normal {
+  font-weight: vars.$font-weight-normal;
+}
+
+.font-weight-medium {
+  font-weight: vars.$font-weight-medium;
+}
+
+.font-weight-semibold {
+  font-weight: vars.$font-weight-semibold;
+}
+
+.font-weight-bold {
+  font-weight: vars.$font-weight-bold;
+}
+
+.text-primary {
+  color: vars.$primary-blue;
+}
+
+.text-secondary {
+  color: vars.$primary-orange;
+}
+
+.text-accent {
+  color: vars.$accent-teal;
+}
+
+.text-muted {
+  color: vars.$gray-500;
+}
+
+.bg-primary {
+  background-color: vars.$primary-blue;
+}
+
+.bg-secondary {
+  background-color: vars.$primary-orange;
+}
+
+.bg-light {
+  background-color: vars.$gray-50;
+}
+
+// Botones globales
+.btn {
+  @include mixins.button-base;
+
+  &.btn-primary {
+    @include mixins.button-primary;
+  }
+
+  &.btn-secondary {
+    @include mixins.button-secondary;
+  }
+
+  &.btn-outline {
+    @include mixins.button-outline;
+  }
+
+  &.btn-sm {
+    padding: vars.$spacing-xs vars.$spacing-sm;
+    font-size: vars.$font-size-sm;
+  }
+
+  &.btn-lg {
+    padding: vars.$spacing-md vars.$spacing-lg;
+    font-size: vars.$font-size-lg;
+  }
+}
+
+// Efectos de hover para imágenes
+.image-hover {
+  overflow: hidden;
+  
+  img {
+    transition: transform vars.$transition-slow;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+// Animaciones
+.fade-in {
+  @include mixins.fade-in;
+}
+
+.slide-in-up {
+  @include mixins.slide-in('up');
+}
+
+// Scrollbar personalizada
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: vars.$gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  background: vars.$gray-300;
+  border-radius: vars.$border-radius-full;
+
+  &:hover {
+    background: vars.$gray-400;
+  }
+}
+
+// Overlay para modales y popups
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: vars.$z-modal-backdrop;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Loading spinner
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid vars.$gray-200;
+  border-top: 4px solid vars.$primary-blue;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Responsive utilities
+.d-none {
+  display: none;
+}
+
+.d-block {
+  display: block;
+}
+
+.d-flex {
+  display: flex;
+}
+
+@include mixins.mobile {
+  .d-mobile-none {
+    display: none;
+  }
+  
+  .d-mobile-block {
+    display: block;
+  }
+}
+
+@include mixins.desktop {
+  .d-desktop-none {
+    display: none;
+  }
+  
+  .d-desktop-block {
+    display: block;
+  }
+}
+
+html { height: 100%; }
+
+// Angular Material Snackbar custom styles
+.success-snackbar {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+.error-snackbar {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+.warning-snackbar {
+  background-color: #ff9800 !important;
+  color: white !important;
+}
+
+.info-snackbar {
+  background-color: #2196f3 !important;
+  color: white !important;
+}
+
+// Newsletter Dialog custom styles
+.newsletter-dialog-panel {
+  .mat-mdc-dialog-container {
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  
+  .mat-mdc-dialog-content {
+    padding: 0;
+  }
+  
+  .mat-mdc-dialog-actions {
+    padding: 0;
+    margin: 0;
+  }
+}

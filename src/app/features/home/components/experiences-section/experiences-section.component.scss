@@ -1,0 +1,475 @@
+@use '../../../../../assets/styles/variables' as vars;
+@use '../../../../../assets/styles/mixins' as mixins;
+
+.experiences-section {
+  padding: vars.$spacing-3xl 0;
+  background: vars.$white;
+  overflow-x: hidden; // Prevenir scroll horizontal
+  width: 100%;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: vars.$spacing-3xl;
+
+  .section-title {
+    font-size: vars.$font-size-3xl;
+    color: vars.$gray-900;
+    margin-bottom: vars.$spacing-md;
+
+    @include mixins.mobile {
+      font-size: vars.$font-size-2xl;
+    }
+  }
+
+  .section-description {
+    font-size: vars.$font-size-lg;
+    color: vars.$gray-600;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+// Slider container
+.slider-container {
+  position: relative;
+  margin-bottom: vars.$spacing-3xl;
+  overflow: hidden; // Ocultar el desbordamiento horizontal
+  padding: 0;
+  max-width: 100%;
+  
+  // Permitir que las cards se expandan verticalmente pero no horizontalmente
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    z-index: 5;
+    pointer-events: none;
+  }
+  
+  &::before {
+    left: 0;
+    background: linear-gradient(to right, vars.$white, transparent);
+  }
+  
+  &::after {
+    right: 0;
+    background: linear-gradient(to left, vars.$white, transparent);
+  }
+}
+
+.destinations-slider {
+  display: flex;
+  gap: vars.$spacing-md;
+  transition: transform 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94); // Transición más fluida y rápida
+  padding: vars.$spacing-xl vars.$spacing-xl;
+  align-items: center;
+  width: max-content; // Solo el ancho necesario para las cards
+}
+
+// Controles del slider
+.slider-controls {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  @include mixins.flex-between;
+  pointer-events: none;
+  z-index: 10;
+
+  .slider-btn {
+    @include mixins.flex-center;
+    width: 50px;
+    height: 50px;
+    border-radius: vars.$border-radius-full;
+    background: rgba(vars.$white, 0.9);
+    border: 1px solid vars.$gray-300;
+    color: vars.$gray-700;
+    cursor: pointer;
+    transition: all 150ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    pointer-events: all;
+    box-shadow: vars.$shadow-md;
+
+    &:hover:not(:disabled) {
+      background: vars.$white;
+      color: vars.$primary-blue;
+      transform: scale(1.1);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &.prev {
+      left: 10px;
+    }
+
+    &.next {
+      right: 10px;
+    }
+  }
+}
+
+// Indicadores
+.slider-indicators {
+  @include mixins.flex-center;
+  gap: vars.$spacing-sm;
+  margin-top: vars.$spacing-lg;
+
+  .indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: vars.$border-radius-full;
+    border: none;
+    background: vars.$gray-300;
+    cursor: pointer;
+    transition: all 150ms cubic-bezier(0.4, 0.0, 0.2, 1);
+
+    &.active {
+      background: vars.$primary-blue;
+      transform: scale(1.2);
+    }
+
+    &:hover {
+      background: vars.$primary-blue;
+    }
+  }
+}
+
+.destination-card {
+  @include mixins.card;
+  overflow: hidden;
+  min-width: 260px;
+  max-width: 280px;
+  height: 380px;
+  flex-shrink: 0;
+  transition: all 250ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  cursor: pointer;
+  border-radius: vars.$border-radius-2xl;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+
+  // Efecto hover para agrandar la card (solo vertical para evitar desbordamiento)
+  &:hover {
+    transform: translateY(-15px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+  }
+
+  // Card central destacada
+  &.center-card {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    
+    &:hover {
+      transform: translateY(-20px) scale(1.06);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .card-image {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+
+    .destination-location {
+      position: absolute;
+      top: vars.$spacing-md;
+      left: vars.$spacing-md;
+      background: rgba(vars.$white, 0.95);
+      padding: vars.$spacing-xs vars.$spacing-md;
+      border-radius: vars.$border-radius-full;
+      font-size: vars.$font-size-xs;
+      font-weight: vars.$font-weight-semibold;
+      color: vars.$gray-700;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    // Overlay con información adicional
+    .card-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+      padding: vars.$spacing-xl vars.$spacing-md vars.$spacing-md;
+      opacity: 0;
+      transition: opacity 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
+
+      .overlay-content {
+        @include mixins.flex-between;
+        align-items: end;
+
+        .duration-badge,
+        .price-badge {
+          background: rgba(vars.$white, 0.9);
+          padding: vars.$spacing-xs vars.$spacing-sm;
+          border-radius: vars.$border-radius-md;
+          font-size: vars.$font-size-xs;
+          font-weight: vars.$font-weight-semibold;
+          backdrop-filter: blur(10px);
+        }
+
+        .duration-badge {
+          color: vars.$gray-700;
+        }
+
+        .price-badge {
+          color: vars.$primary-blue;
+          font-weight: vars.$font-weight-bold;
+        }
+      }
+    }
+
+    &:hover {
+      img {
+        transform: scale(1.1);
+      }
+
+      .card-overlay {
+        opacity: 1;
+      }
+    }
+  }
+
+  .card-content {
+    padding: vars.$spacing-md;
+    height: 140px;
+    @include mixins.flex-column;
+    justify-content: space-between;
+
+    .destination-name {
+      font-size: vars.$font-size-base;
+      font-weight: vars.$font-weight-bold;
+      color: vars.$gray-900;
+      margin-bottom: vars.$spacing-xs;
+      @include mixins.text-clamp(1);
+      line-height: 1.3;
+    }
+
+    .destination-description {
+      color: vars.$gray-600;
+      line-height: 1.4;
+      margin-bottom: vars.$spacing-sm;
+      @include mixins.text-clamp(2);
+      font-size: vars.$font-size-sm;
+      flex-grow: 1;
+    }
+
+    .btn {
+      width: 100%;
+      padding: vars.$spacing-xs vars.$spacing-sm;
+      font-size: vars.$font-size-xs;
+      font-weight: vars.$font-weight-semibold;
+      border-radius: vars.$border-radius-lg;
+      transition: all 150ms cubic-bezier(0.4, 0.0, 0.2, 1);
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 89, 152, 0.3);
+      }
+    }
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: vars.$spacing-3xl;
+  color: vars.$gray-500;
+  @include mixins.flex-center;
+  @include mixins.flex-column;
+  gap: vars.$spacing-lg;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.section-footer {
+  text-align: center;
+
+  .view-all-btn-material {
+    min-width: 200px;
+    height: 48px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 24px;
+    
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+// Material UI Cards Styles
+.destination-card-material {
+  position: relative;
+  min-width: 280px;
+  max-width: 320px;
+  height: 420px;
+  flex-shrink: 0;
+  transition: all 250ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  cursor: pointer;
+  border-radius: 16px;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  &.center-card {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    
+    &:hover {
+      transform: translateY(-12px) scale(1.02);
+    }
+  }
+
+  .card-image-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+
+    .destination-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      margin: 0; // Override mat-card-image default margin
+      transition: transform 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+
+    .destination-location-chip {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      
+      mat-chip {
+        background: rgba(255, 255, 255, 0.95);
+        color: #374151;
+        font-weight: 600;
+        font-size: 12px;
+        backdrop-filter: blur(10px);
+      }
+    }
+
+    .card-overlay-material {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+      padding: 16px;
+      opacity: 0;
+      transition: opacity 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
+
+      .overlay-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 8px;
+        
+        .duration-chip {
+          background: rgba(59, 130, 246, 0.9);
+          color: white;
+          font-size: 12px;
+          
+          mat-icon {
+            font-size: 14px;
+            width: 14px;
+            height: 14px;
+          }
+        }
+
+        .price-chip {
+          font-weight: 700;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
+  &:hover .card-overlay-material {
+    opacity: 1;
+  }
+
+  &:hover .destination-image {
+    transform: scale(1.05);
+  }
+
+  // Material Card overrides
+  ::ng-deep .mat-mdc-card-header {
+    padding: 16px 16px 8px 16px;
+    
+    .mat-mdc-card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e293b;
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    .mat-mdc-card-subtitle {
+      font-size: 14px;
+      color: #64748b;
+      margin: 4px 0 0 0;
+    }
+  }
+
+  ::ng-deep .mat-mdc-card-content {
+    padding: 0 16px;
+    
+    p {
+      color: #4b5563;
+      font-size: 14px;
+      line-height: 1.4;
+      margin: 0;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+  }
+
+  ::ng-deep .mat-mdc-card-actions {
+    padding: 8px 16px 16px 16px;
+    gap: 8px;
+    
+    button {
+      font-weight: 600;
+      
+      mat-icon {
+        margin-right: 4px;
+      }
+    }
+  }
+}
+
+// Material Slider Controls
+.slider-btn-material {
+  &.prev {
+    left: 20px;
+  }
+  
+  &.next {
+    right: 20px;
+  }
+  
+  &:disabled {
+    opacity: 0.3;
+  }
+}

@@ -1,0 +1,125 @@
+@use '../../../../assets/styles/variables' as vars;
+@use '../../../../assets/styles/mixins' as mixins;
+
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  border: none;
+  border-radius: 50%;
+  color: vars.$white;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+  z-index: vars.$z-fixed + 2;
+  transition: all vars.$transition-normal;
+  @include mixins.flex-center;
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  svg {
+    transition: transform vars.$transition-fast;
+  }
+
+  &:hover svg {
+    transform: scale(1.1);
+  }
+
+  // Animación de entrada
+  animation: slideInRight 0.5s ease-out;
+
+  @media (max-width: #{vars.$breakpoint-sm - 1px}) {
+    width: 56px;
+    height: 56px;
+    bottom: 16px;
+    right: 16px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+// Animación de pulsación sutil
+@keyframes pulse {
+  0% {
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.7);
+  }
+  100% {
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+  }
+}
+
+// Aplicar pulsación cada 3 segundos
+.whatsapp-float {
+  animation: slideInRight 0.5s ease-out, pulse 2s infinite 3s;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Material WhatsApp FAB
+.whatsapp-float-material {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  z-index: 1020 !important;
+  background: linear-gradient(135deg, #25d366, #128c7e) !important;
+  color: white !important;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4) !important;
+  transition: all 300ms cubic-bezier(0.4, 0.0, 0.2, 1) !important;
+
+  &:hover {
+    transform: scale(1.1) !important;
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6) !important;
+    background: linear-gradient(135deg, #1ea854, #0d7a6b) !important;
+  }
+
+  &:active {
+    transform: scale(0.95) !important;
+  }
+
+  svg {
+    transition: transform 200ms ease;
+  }
+
+  &:hover svg {
+    transform: scale(1.1);
+  }
+
+  // Animaciones Material
+  animation: slideInRight 0.5s ease-out, pulse 2s infinite 3s;
+
+  @media (max-width: 640px) {
+    bottom: 16px !important;
+    right: 16px !important;
+    width: 48px !important;
+    height: 48px !important;
+    
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}

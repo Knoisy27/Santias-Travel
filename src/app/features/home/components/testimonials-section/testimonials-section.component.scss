@@ -1,0 +1,248 @@
+@use '../../../../../assets/styles/variables' as vars;
+@use '../../../../../assets/styles/mixins' as mixins;
+
+.testimonials-section {
+  padding: vars.$spacing-3xl 0;
+  background: vars.$gray-50;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: vars.$spacing-3xl;
+
+  .section-title {
+    font-size: vars.$font-size-3xl;
+    color: vars.$gray-900;
+    margin-bottom: vars.$spacing-md;
+
+    @include mixins.mobile {
+      font-size: vars.$font-size-2xl;
+    }
+  }
+
+  .section-description {
+    font-size: vars.$font-size-lg;
+    color: vars.$gray-600;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: vars.$spacing-xl;
+
+  @include mixins.mobile {
+    grid-template-columns: 1fr;
+    gap: vars.$spacing-lg;
+  }
+}
+
+.testimonial-card {
+  @include mixins.card;
+  padding: vars.$spacing-lg;
+
+  .testimonial-header {
+    @include mixins.flex-between;
+    margin-bottom: vars.$spacing-md;
+
+    .client-info {
+      @include mixins.flex-center;
+      gap: vars.$spacing-md;
+
+      .client-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: vars.$border-radius-full;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .avatar-placeholder {
+          @include mixins.flex-center;
+          width: 100%;
+          height: 100%;
+          background: vars.$primary-blue;
+          color: vars.$white;
+          font-weight: vars.$font-weight-bold;
+          font-size: vars.$font-size-lg;
+        }
+      }
+
+      .client-details {
+        .client-name {
+          font-weight: vars.$font-weight-semibold;
+          color: vars.$gray-900;
+          margin-bottom: 2px;
+        }
+
+        .client-location {
+          font-size: vars.$font-size-sm;
+          color: vars.$gray-500;
+          margin: 0;
+        }
+      }
+    }
+
+    .rating {
+      @include mixins.flex-center;
+      gap: 2px;
+
+      .star {
+        color: vars.$gray-300;
+        font-size: vars.$font-size-lg;
+
+        &.filled {
+          color: #fbbf24;
+        }
+      }
+    }
+  }
+
+  .testimonial-text {
+    color: vars.$gray-700;
+    line-height: 1.6;
+    margin-bottom: vars.$spacing-md;
+    font-style: italic;
+  }
+
+  .testimonial-footer {
+    .destination {
+      font-size: vars.$font-size-sm;
+      color: vars.$primary-blue;
+      font-weight: vars.$font-weight-medium;
+    }
+  }
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: vars.$spacing-3xl;
+  color: vars.$gray-500;
+}
+
+.empty-state-material {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: vars.$spacing-3xl;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: vars.$spacing-lg;
+  color: vars.$gray-500;
+}
+
+// Material UI Testimonial Cards
+.testimonial-card-material {
+  border-radius: 16px;
+  transition: all 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .client-avatar-material {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-placeholder-material {
+      color: white;
+      font-weight: 600;
+      font-size: 18px;
+    }
+  }
+
+  .location-icon {
+    font-size: 16px;
+    vertical-align: middle;
+    margin-right: 4px;
+    color: #64748b;
+  }
+
+  .rating-material {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 16px;
+
+    .star-icon {
+      font-size: 20px;
+      color: #d1d5db;
+      transition: color 200ms ease;
+
+      &.filled {
+        color: #fbbf24;
+      }
+    }
+  }
+
+  .testimonial-text-material {
+    position: relative;
+    font-style: italic;
+    color: #374151;
+    line-height: 1.6;
+    margin: 0;
+    padding-left: 24px;
+
+    .quote-icon {
+      position: absolute;
+      left: -4px;
+      top: -2px;
+      color: #3b82f6;
+      opacity: 0.3;
+      font-size: 24px;
+    }
+  }
+
+  .destination-chip {
+    font-weight: 600;
+    
+    mat-icon {
+      font-size: 16px;
+    }
+  }
+
+  // Material Card Header overrides
+  ::ng-deep .mat-mdc-card-header {
+    .mat-mdc-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .mat-mdc-card-subtitle {
+      font-size: 14px;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  // Material Card Content overrides
+  ::ng-deep .mat-mdc-card-content {
+    padding-top: 8px;
+  }
+
+  // Material Card Actions overrides
+  ::ng-deep .mat-mdc-card-actions {
+    padding-top: 8px;
+  }
+}
