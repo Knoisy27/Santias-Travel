@@ -6,10 +6,14 @@
     "start": "ng serve",
     "build": "ng build",
     "build:vercel": "node build-vercel.js",
+    "build:dev": "ng build --configuration development && node build-vercel.js",
+    "build:prod": "ng build --configuration production && node build-vercel.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:santiasTravelFront": "node dist/santiasTravelFront/server/server.mjs",
-    "serve:vercel": "node dist/my-ssr/server/server.mjs"
+    "serve:vercel": "node dist/my-ssr/server/server.mjs",
+    "deploy:dev": "vercel --env development",
+    "deploy:prod": "vercel --prod"
   },
   "prettier": {
     "printWidth": 100,
