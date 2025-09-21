@@ -2,14 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "dist/my-ssr/server/server.mjs",
-      "use": "@vercel/node"
+      "src": "dist/my-ssr/browser/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "dist/my-ssr/server/server.mjs"
+      "dest": "dist/my-ssr/browser/$1"
+    },
+    {
+      "src": "/",
+      "dest": "dist/my-ssr/browser/index.html"
     }
   ],
   "env": {
