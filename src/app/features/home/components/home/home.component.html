@@ -1,0 +1,33 @@
+<!-- Loading State -->
+@if (isLoading()) {
+  <div class="loading-container">
+    <mat-progress-spinner 
+      mode="indeterminate" 
+      diameter="60"
+      strokeWidth="4"
+      color="primary">
+    </mat-progress-spinner>
+    <h3>Cargando experiencias increíbles...</h3>
+    <p>Preparando los mejores destinos para ti</p>
+  </div>
+} @else {
+  <!-- Hero Section -->
+  <app-hero-section [agencyInfo]="agencyInfo()"></app-hero-section>
+
+  <!-- About Section -->
+  <section id="about">
+    <app-about-section [agencyInfo]="agencyInfo()"></app-about-section>
+  </section>
+
+  <!-- Experiences Section -->
+  <section id="experiences">
+    <app-experiences-section [destinations]="featuredDestinations()"></app-experiences-section>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section id="testimonials">
+    <app-testimonials-section [testimonials]="featuredTestimonials()"></app-testimonials-section>
+  </section>
+
+
+}

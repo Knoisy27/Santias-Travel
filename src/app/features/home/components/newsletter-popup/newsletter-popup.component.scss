@@ -1,0 +1,194 @@
+@use '../../../../../assets/styles/variables' as vars;
+@use '../../../../../assets/styles/mixins' as mixins;
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(vars.$black, 0.7);
+  z-index: vars.$z-modal;
+  @include mixins.flex-center;
+  padding: vars.$spacing-md;
+  animation: fadeInOverlay vars.$transition-normal ease-out;
+}
+
+.popup-content {
+  background: vars.$white;
+  border-radius: vars.$border-radius-2xl;
+  padding: vars.$spacing-2xl;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+  box-shadow: vars.$shadow-xl;
+  animation: slideInUp vars.$transition-normal ease-out;
+
+  @include mixins.mobile {
+    padding: vars.$spacing-xl;
+    margin: vars.$spacing-md;
+  }
+}
+
+.close-button {
+  position: absolute;
+  top: vars.$spacing-md;
+  right: vars.$spacing-md;
+  background: none;
+  border: none;
+  color: vars.$gray-400;
+  cursor: pointer;
+  padding: vars.$spacing-xs;
+  border-radius: vars.$border-radius-full;
+  @include mixins.flex-center;
+  transition: all vars.$transition-fast;
+
+  &:hover {
+    background-color: vars.$gray-100;
+    color: vars.$gray-600;
+  }
+}
+
+.popup-header {
+  text-align: center;
+  margin-bottom: vars.$spacing-xl;
+
+  .popup-title {
+    font-size: vars.$font-size-2xl;
+    font-weight: vars.$font-weight-bold;
+    color: vars.$primary-blue;
+    margin-bottom: vars.$spacing-md;
+
+    @include mixins.mobile {
+      font-size: vars.$font-size-xl;
+    }
+  }
+
+  .popup-description {
+    color: vars.$gray-600;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+.newsletter-form {
+  margin-bottom: vars.$spacing-lg;
+
+  .input-group {
+    @include mixins.flex-center;
+    gap: vars.$spacing-sm;
+    margin-bottom: vars.$spacing-md;
+
+    @include mixins.mobile {
+      @include mixins.flex-column;
+      align-items: stretch;
+    }
+
+    .email-input {
+      flex: 1;
+      padding: vars.$spacing-md;
+      border: 2px solid vars.$gray-300;
+      border-radius: vars.$border-radius-lg;
+      font-size: vars.$font-size-base;
+      transition: border-color vars.$transition-fast;
+
+      &::placeholder {
+        color: vars.$gray-400;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: vars.$primary-blue;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      @include mixins.mobile {
+        margin-bottom: vars.$spacing-sm;
+      }
+    }
+
+    .btn {
+      min-width: 120px;
+      @include mixins.flex-center;
+      gap: vars.$spacing-xs;
+
+      .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid transparent;
+        border-top: 2px solid currentColor;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @include mixins.mobile {
+        width: 100%;
+      }
+    }
+  }
+
+  .message {
+    text-align: center;
+    font-size: vars.$font-size-sm;
+    padding: vars.$spacing-sm;
+    border-radius: vars.$border-radius-md;
+    
+    &.success {
+      background-color: rgba(vars.$success, 0.1);
+      color: vars.$success;
+      border: 1px solid rgba(vars.$success, 0.3);
+    }
+    
+    &.error {
+      background-color: rgba(vars.$error, 0.1);
+      color: vars.$error;
+      border: 1px solid rgba(vars.$error, 0.3);
+    }
+  }
+}
+
+.privacy-note {
+  font-size: vars.$font-size-xs;
+  color: vars.$gray-500;
+  text-align: center;
+  line-height: 1.5;
+
+  .privacy-link {
+    color: vars.$primary-blue;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Animaciones
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

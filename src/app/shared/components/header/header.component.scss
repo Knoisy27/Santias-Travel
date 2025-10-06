@@ -1,0 +1,334 @@
+@use '../../../../assets/styles/variables' as vars;
+@use '../../../../assets/styles/mixins' as mixins;
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: vars.$z-fixed;
+  background-color: vars.$white;
+  border-bottom: 1px solid vars.$gray-200;
+  transition: all vars.$transition-fast;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar {
+  padding: vars.$spacing-md 0;
+
+  @include mixins.mobile {
+    padding: vars.$spacing-sm 0;
+  }
+
+  .container {
+    @include mixins.flex-between;
+    align-items: center;
+    gap: vars.$spacing-md;
+
+    @include mixins.mobile {
+      gap: vars.$spacing-sm;
+      padding: 0 vars.$spacing-md;
+    }
+
+    @include mixins.tablet {
+      gap: vars.$spacing-md;
+    }
+  }
+}
+
+// Brand
+.navbar-brand {
+  .brand-link {
+    @include mixins.flex-center;
+    text-decoration: none;
+    transition: opacity vars.$transition-fast;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  .brand-logo {
+    height: 50px;
+    width: auto;
+
+    @include mixins.mobile {
+      height: 40px;
+    }
+  }
+
+  .brand-name {
+    font-family: vars.$font-family-secondary;
+    font-size: vars.$font-size-xl;
+    font-weight: vars.$font-weight-bold;
+    color: vars.$gray-800;
+
+    @include mixins.mobile {
+      font-size: vars.$font-size-lg;
+    }
+  }
+}
+
+// Menu Toggle (Mobile)
+.menu-toggle {
+  @include mixins.flex-column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: vars.$spacing-sm;
+  cursor: pointer;
+  z-index: vars.$z-fixed + 1;
+  width: 44px;
+  height: 44px;
+  border-radius: vars.$border-radius-md;
+  transition: all vars.$transition-fast;
+  display: none !important;
+
+  @include mixins.mobile {
+    display: flex !important;
+  }
+
+  &:hover {
+    background-color: rgba(vars.$primary-blue, 0.1);
+  }
+
+  .hamburger-line {
+    width: 24px;
+    height: 3px;
+    background-color: vars.$gray-700;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform-origin: center;
+    border-radius: 2px;
+
+    &:nth-child(1) {
+      transform-origin: top left;
+    }
+
+    &:nth-child(3) {
+      transform-origin: bottom left;
+    }
+  }
+
+  &.active {
+    .hamburger-line {
+      &:nth-child(1) {
+        transform: rotate(45deg) translate(3px, 3px);
+      }
+
+      &:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+
+      &:nth-child(3) {
+        transform: rotate(-45deg) translate(3px, -3px);
+      }
+    }
+  }
+
+  &:focus {
+    outline: 2px solid vars.$primary-blue;
+    outline-offset: 2px;
+  }
+}
+
+// Navigation Menu
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-lg;
+  flex: 1;
+  justify-content: space-between;
+
+  @include mixins.mobile {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 300px;
+    height: 100vh;
+    background-color: vars.$white;
+    @include mixins.flex-column;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 80px vars.$spacing-lg vars.$spacing-lg;
+    box-shadow: vars.$shadow-lg;
+    transition: right 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    overflow-y: auto;
+    z-index: vars.$z-fixed;
+
+    &.active {
+      right: 0;
+    }
+  }
+}
+
+.navbar-nav {
+  display: flex;
+  list-style: none;
+  gap: vars.$spacing-lg;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+
+  @include mixins.tablet {
+    gap: vars.$spacing-md;
+  }
+
+  @include mixins.mobile {
+    @include mixins.flex-column;
+    gap: vars.$spacing-sm;
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .nav-item {
+    .nav-link, .nav-button {
+      font-weight: vars.$font-weight-medium;
+      color: vars.$gray-700;
+      text-decoration: none;
+      padding: vars.$spacing-sm vars.$spacing-md;
+      border-radius: vars.$border-radius-md;
+      transition: all vars.$transition-fast;
+      position: relative;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      display: block;
+
+      @include mixins.tablet {
+        padding: vars.$spacing-xs vars.$spacing-sm;
+        font-size: vars.$font-size-sm;
+      }
+
+      &:hover {
+        color: vars.$primary-blue;
+        background-color: rgba(vars.$primary-blue, 0.05);
+      }
+
+      &.active {
+        color: vars.$primary-blue;
+        font-weight: vars.$font-weight-semibold;
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 20px;
+          height: 2px;
+          background-color: vars.$primary-blue;
+          border-radius: vars.$border-radius-full;
+
+          @include mixins.mobile {
+            display: none;
+          }
+        }
+      }
+
+      @include mixins.mobile {
+        padding: vars.$spacing-md;
+        font-size: vars.$font-size-lg;
+        border-bottom: 1px solid vars.$gray-100;
+        width: 100%;
+        text-align: left;
+        border-radius: 0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &:hover {
+          background-color: rgba(vars.$primary-blue, 0.1);
+        }
+      }
+
+    }
+  }
+}
+
+// Actions
+.navbar-actions {
+  @include mixins.flex-center;
+  gap: vars.$spacing-md;
+
+  @include mixins.mobile {
+    width: 100%;
+    padding-top: vars.$spacing-lg;
+    border-top: 1px solid vars.$gray-200;
+    justify-content: center;
+    @include mixins.flex-column;
+    gap: vars.$spacing-md;
+  }
+
+  .newsletter-btn {
+    color: vars.$primary-blue;
+    transition: all 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
+
+    &:hover {
+      background-color: rgba(vars.$primary-blue, 0.1);
+      transform: scale(1.1);
+    }
+
+    mat-icon {
+      font-size: 20px;
+    }
+  }
+
+  .contact-info {
+    font-size: vars.$font-size-sm;
+    color: vars.$gray-600;
+    font-weight: vars.$font-weight-medium;
+    white-space: nowrap;
+  }
+}
+
+// Menu Overlay (Mobile)
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(vars.$black, 0.5);
+  z-index: vars.$z-fixed - 1;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+
+  @include mixins.tablet {
+    display: none;
+  }
+  
+  @include mixins.desktop {
+    display: none;
+  }
+}
+
+// Animaciones para cuando el menú está activo
+.navbar-menu.active + .menu-overlay,
+.menu-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+// Animación de entrada del menú
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.navbar-menu.active {
+  @include mixins.mobile {
+    animation: slideInRight 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+}

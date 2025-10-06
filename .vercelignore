@@ -1,0 +1,11 @@
+# Archivos que NO se suben a Vercel
+node_modules/
+src/
+.angular/
+dist/santiasTravelFront/
+build-vercel.js
+*.log
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
