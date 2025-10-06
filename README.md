@@ -198,6 +198,6 @@ Este proyecto sigue las convenciones de Angular y mantiene un código limpio y b
 
 ---
 
-**Desarrollado por**: Josué Londoño  
+**Desarrollado por**: Jose Luis Ayala 
 **Framework**: Angular 20.2  
-**Última actualización**: Enero 2025
+**Última actualización**: Octubre 2025
