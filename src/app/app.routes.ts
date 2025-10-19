@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -39,8 +40,40 @@ export const routes: Routes = [
       {
         path: 'privacidad',
         loadComponent: () => import('./features/legal/components/privacy/privacy.component').then(m => m.PrivacyComponent)
+      },
+      {
+        path: 'admin',
+        canActivate: [AuthGuard],
+        data: { roles: ['ADMIN', 'AGENT'] },
+        children: [
+          {
+            path: 'viajes',
+            loadComponent: () => import('./features/trips-admin/components/trips-admin.component').then(m => m.TripsAdminComponent),
+            data: { skipPrerender: true }
+          },
+              {
+                path: 'viajes/viajes-grupales',
+                loadComponent: () => import('./features/trips-admin/components/viajes-grupales-form/viajes-grupales-form.component').then(m => m.ViajesGrupalesFormComponent),
+                data: { skipPrerender: true }
+              },
+              {
+                path: 'viajes/viajes-individuales',
+                loadComponent: () => import('./features/trips-admin/components/viajes-individuales-form/viajes-individuales-form.component').then(m => m.ViajesIndividualesFormComponent),
+                data: { skipPrerender: true }
+              }
+        ]
       }
     ]
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./features/auth/components/login/login.component').then(m => m.LoginComponent),
+    data: { skipPrerender: true }
+  },
+  {
+    path: 'backend-test',
+    loadComponent: () => import('./features/auth/components/backend-test/backend-test.component').then(m => m.BackendTestComponent),
+    data: { skipPrerender: true }
   },
   {
     path: '**',

@@ -1,15 +1,17 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { MaterialModule } from '../../material/material.module';
 import { AgencyService } from '../../../core/services/agency.service';
 import { AgencyInfo } from '../../../core/interfaces/agency.interface';
 import { NewsletterDialogService } from '../../services/newsletter-dialog.service';
+import { AuthService, User } from '../../../core/services/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, MaterialModule],
+  imports: [CommonModule, RouterModule, MaterialModule, TitleCasePipe],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -17,9 +19,16 @@ export class HeaderComponent implements OnInit {
   private agencyService = inject(AgencyService);
   private router = inject(Router);
   private newsletterService = inject(NewsletterDialogService);
+  private authService = inject(AuthService);
+  private snackBar = inject(MatSnackBar);
   
   agencyInfo = signal<AgencyInfo | null>(null);
   isMenuOpen = signal(false);
+  isUserMenuOpen = signal(false);
+  
+  // Variables para el triple click
+  private clickCount = 0;
+  private clickTimeout: any;
 
   ngOnInit(): void {
     this.loadAgencyInfo();
@@ -100,6 +109,95 @@ export class HeaderComponent implements OnInit {
       if (result) {
         // Usuario se suscribió al newsletter
       }
+    });
+  }
+
+  /**
+   * Manejar triple click en el nombre de la marca
+   * - Si NO está autenticado: Accede al login
+   * - Si SÍ está autenticado: Muestra información del usuario
+   */
+  onBrandNameClick(event: Event): void {
+    this.clickCount++;
+    
+    // Limpiar timeout anterior si existe
+    if (this.clickTimeout) {
+      clearTimeout(this.clickTimeout);
+    }
+    
+    // Si es el tercer click
+    if (this.clickCount === 3) {
+      event.preventDefault(); // Prevenir la navegación del enlace
+      event.stopPropagation(); // Detener la propagación del evento
+      
+      if (this.isAuthenticated) {
+        // Usuario autenticado: Mostrar información
+        const user = this.currentUser;
+        this.snackBar.open(
+          `¡Hola ${user?.name}! Ya estás logueado como ${user?.role}. Usa el menú de usuario para cerrar sesión.`,
+          'Cerrar',
+          { 
+            duration: 4000,
+            panelClass: ['info-snackbar']
+          }
+        );
+      } else {
+        // Usuario no autenticado: Ir al login
+        this.router.navigate(['/login']);
+      }
+      
+      this.clickCount = 0;
+      return;
+    }
+    
+    // Resetear contador después de 1 segundo sin clicks
+    this.clickTimeout = setTimeout(() => {
+      this.clickCount = 0;
+    }, 1000);
+  }
+
+  /**
+   * Obtener el usuario autenticado
+   */
+  get currentUser(): User | null {
+    return this.authService.user();
+  }
+
+  /**
+   * Verificar si el usuario está autenticado
+   */
+  get isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  /**
+   * Toggle del menú de usuario
+   */
+  toggleUserMenu(): void {
+    this.isUserMenuOpen.update(isOpen => !isOpen);
+  }
+
+  /**
+   * Cerrar menú de usuario
+   */
+  closeUserMenu(): void {
+    this.isUserMenuOpen.set(false);
+  }
+
+  /**
+   * Cerrar sesión
+   */
+  logout(): void {
+    // Cerrar menú primero
+    this.closeUserMenu();
+    
+    // Ejecutar logout (solo limpieza local, sin notificar backend)
+    this.authService.logoutLocal();
+    
+    // Redirigir inmediatamente
+    this.router.navigate(['/']).then(() => {
+      // Forzar recarga de la página para limpiar cualquier estado residual
+      window.location.reload();
     });
   }
 }
