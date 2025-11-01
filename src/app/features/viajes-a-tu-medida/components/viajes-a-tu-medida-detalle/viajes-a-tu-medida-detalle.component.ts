@@ -8,6 +8,7 @@ import { TripsService, ViajeIndividual } from '../../../../core/services/trips.s
 import { UtilsService } from '../../../../core/services/utils.service';
 import { APP_CONSTANTS } from '../../../../core/constants/app.constants';
 import { Subject, takeUntil } from 'rxjs';
+import { VIAJES_A_TU_MEDIDA_CONFIG } from '../../config/viajes-a-tu-medida.config';
 
 @Component({
   selector: 'app-viajes-a-tu-medida-detalle',
@@ -20,6 +21,7 @@ export class ViajesATuMedidaDetalleComponent implements OnInit, OnDestroy {
   viaje: ViajeIndividual | null = null;
   isLoading = true;
   private destroy$ = new Subject<void>();
+  readonly config = VIAJES_A_TU_MEDIDA_CONFIG;
   
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -39,11 +41,11 @@ export class ViajesATuMedidaDetalleComponent implements OnInit, OnDestroy {
       if (!isNaN(idNumber)) {
         this.cargarViaje(idNumber);
       } else {
-        this.snackBar.open('ID de viaje inválido', 'Cerrar', { duration: 3000 });
+        this.snackBar.open(this.config.detail.messages.invalidId, 'Cerrar', { duration: this.config.errors.edit.duration });
         this.router.navigate(['/viajes-a-tu-medida']);
       }
     } else {
-      this.snackBar.open('ID de viaje no proporcionado', 'Cerrar', { duration: 3000 });
+      this.snackBar.open(this.config.detail.messages.noIdProvided, 'Cerrar', { duration: this.config.errors.edit.duration });
       this.router.navigate(['/viajes-a-tu-medida']);
     }
   }
@@ -70,7 +72,7 @@ export class ViajesATuMedidaDetalleComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Error al cargar viaje:', error);
           this.isLoading = false;
-          this.snackBar.open('Error al cargar el viaje. Redirigiendo...', 'Cerrar', { duration: 3000 });
+          this.snackBar.open(this.config.detail.messages.loadError, 'Cerrar', { duration: this.config.errors.edit.duration });
           
           this.ngZone.run(() => {
             this.cdr.markForCheck();
@@ -115,10 +117,12 @@ export class ViajesATuMedidaDetalleComponent implements OnInit, OnDestroy {
   consultarInformacion(): void {
     if (!this.viaje) return;
 
-    const mensaje = `¡Hola! Me interesa conocer más información sobre el viaje "${this.viaje.nombre}".\n\n` +
-                   `Descripción: ${this.viaje.descripcion}\n\n` +
-                   (this.viaje.valor ? `Precio: ${this.formatearPrecio(this.viaje.valor)}\n\n` : '') +
-                   '¿Podrían brindarme más detalles?';
+    const precio = this.viaje.valor ? this.formatearPrecio(this.viaje.valor) : undefined;
+    const mensaje = this.config.detail.messages.whatsappMessage(
+      this.viaje.nombre,
+      this.viaje.descripcion,
+      precio
+    );
 
     const whatsappNumber = APP_CONSTANTS.AGENCY_INFO.whatsapp;
     this.utilsService.openWhatsApp(whatsappNumber, mensaje);

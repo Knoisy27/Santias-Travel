@@ -5,6 +5,7 @@ import { TripsService, ViajeIndividual } from '../../../../core/services/trips.s
 import { AuthService } from '../../../../core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
+import { VIAJES_A_TU_MEDIDA_CONFIG } from '../../config/viajes-a-tu-medida.config';
 
 @Component({
   selector: 'app-viajes-a-tu-medida',
@@ -17,6 +18,7 @@ export class ViajesATuMedidaComponent implements OnInit, OnDestroy {
   viajes: ViajeIndividual[] = [];
   showMockTrip = true;
   private destroy$ = new Subject<void>();
+  readonly config = VIAJES_A_TU_MEDIDA_CONFIG;
   
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
@@ -79,7 +81,7 @@ export class ViajesATuMedidaComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     
     if (!viaje.id) {
-      this.snackBar.open('Error: No se puede editar un viaje sin ID', 'Cerrar', { duration: 3000 });
+      this.snackBar.open(this.config.errors.edit.noId, 'Cerrar', { duration: this.config.errors.edit.duration });
       return;
     }
 
@@ -90,11 +92,11 @@ export class ViajesATuMedidaComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     
     if (!viaje.id) {
-      this.snackBar.open('Error: No se puede eliminar un viaje sin ID', 'Cerrar', { duration: 3000 });
+      this.snackBar.open(this.config.errors.delete.noId, 'Cerrar', { duration: this.config.errors.delete.duration });
       return;
     }
 
-    const confirmacion = confirm(`¿Estás seguro de que deseas eliminar el viaje "${viaje.nombre}"?`);
+    const confirmacion = confirm(this.config.errors.delete.confirmMessage(viaje.nombre));
     
     if (!confirmacion) {
       return;
@@ -104,7 +106,7 @@ export class ViajesATuMedidaComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this.snackBar.open('Viaje eliminado exitosamente', 'Cerrar', { duration: 3000 });
+          this.snackBar.open(this.config.errors.delete.success, 'Cerrar', { duration: this.config.errors.delete.duration });
           this.viajes = this.viajes.filter(v => v.id !== viaje.id);
           
           if (this.viajes.length === 0) {
@@ -118,25 +120,24 @@ export class ViajesATuMedidaComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Error al eliminar viaje:', error);
-          let errorMessage = 'Error al eliminar el viaje. Intenta nuevamente.';
+          let errorMessage = this.config.errors.delete.serverError;
           
           if (error.status === 403) {
-            errorMessage = 'No tienes permisos para eliminar este viaje.';
+            errorMessage = this.config.errors.delete.forbidden;
           } else if (error.status === 404) {
-            errorMessage = 'El viaje no fue encontrado.';
+            errorMessage = this.config.errors.delete.notFound;
           } else if (error.status === 500) {
-            // Intentar obtener mensaje más específico del error
             const errorDetail = error?.error?.message || error?.message;
             if (errorDetail && errorDetail !== 'Error interno del servidor. Nuestro equipo ha sido notificado.') {
               errorMessage = `Error del servidor: ${errorDetail}`;
             } else {
-              errorMessage = 'Error interno del servidor. Por favor, intenta más tarde o contacta al administrador.';
+              errorMessage = this.config.errors.delete.serverError;
             }
           } else if (error.status === 0) {
-            errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión.';
+            errorMessage = this.config.errors.delete.connectionError;
           }
           
-          this.snackBar.open(errorMessage, 'Cerrar', { duration: 5000 });
+          this.snackBar.open(errorMessage, 'Cerrar', { duration: this.config.errors.delete.longDuration });
         }
       });
   }

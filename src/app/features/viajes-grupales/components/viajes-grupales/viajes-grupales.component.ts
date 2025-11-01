@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MaterialModule } from '../../../../shared/material/material.module';
 import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
+import { VIAJES_GRUPALES_CONFIG } from '../../config/viajes-grupales.config';
 
 @Component({
   selector: 'app-viajes-grupales',
@@ -18,6 +19,7 @@ export class ViajesGrupalesComponent implements OnInit, OnDestroy {
   viajes: ViajeGrupal[] = [];
   showMockTrip = true;
   private destroy$ = new Subject<void>();
+  readonly config = VIAJES_GRUPALES_CONFIG;
 
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
@@ -111,7 +113,7 @@ export class ViajesGrupalesComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     
     if (!viaje.idVigr) {
-      this.snackBar.open('Error: No se puede editar un viaje sin ID', 'Cerrar', { duration: 3000 });
+      this.snackBar.open(this.config.errors.edit.noId, 'Cerrar', { duration: this.config.errors.edit.duration });
       return;
     }
 
@@ -122,11 +124,11 @@ export class ViajesGrupalesComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     
     if (!viaje.idVigr) {
-      this.snackBar.open('Error: No se puede eliminar un viaje sin ID', 'Cerrar', { duration: 3000 });
+      this.snackBar.open(this.config.errors.delete.noId, 'Cerrar', { duration: this.config.errors.delete.duration });
       return;
     }
 
-    const confirmacion = confirm(`¿Estás seguro de que deseas eliminar el viaje "${viaje.nombre}"?`);
+    const confirmacion = confirm(this.config.errors.delete.confirmMessage(viaje.nombre));
     
     if (!confirmacion) {
       return;
@@ -136,7 +138,7 @@ export class ViajesGrupalesComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this.snackBar.open('Viaje grupal eliminado exitosamente', 'Cerrar', { duration: 3000 });
+          this.snackBar.open(this.config.errors.delete.success, 'Cerrar', { duration: this.config.errors.delete.duration });
           this.viajes = this.viajes.filter(v => v.idVigr !== viaje.idVigr);
           
           if (this.viajes.length === 0) {
@@ -150,24 +152,24 @@ export class ViajesGrupalesComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Error al eliminar viaje grupal:', error);
-          let errorMessage = 'Error al eliminar el viaje grupal. Intenta nuevamente.';
+          let errorMessage = this.config.errors.delete.serverError;
           
           if (error.status === 403) {
-            errorMessage = 'No tienes permisos para eliminar este viaje.';
+            errorMessage = this.config.errors.delete.forbidden;
           } else if (error.status === 404) {
-            errorMessage = 'El viaje no fue encontrado.';
+            errorMessage = this.config.errors.delete.notFound;
           } else if (error.status === 500) {
             const errorDetail = error?.error?.message || error?.message;
             if (errorDetail && errorDetail !== 'Error interno del servidor. Nuestro equipo ha sido notificado.') {
               errorMessage = `Error del servidor: ${errorDetail}`;
             } else {
-              errorMessage = 'Error interno del servidor. Por favor, intenta más tarde o contacta al administrador.';
+              errorMessage = this.config.errors.delete.serverError;
             }
           } else if (error.status === 0) {
-            errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión.';
+            errorMessage = this.config.errors.delete.connectionError;
           }
           
-          this.snackBar.open(errorMessage, 'Cerrar', { duration: 5000 });
+          this.snackBar.open(errorMessage, 'Cerrar', { duration: this.config.errors.delete.longDuration });
         }
       });
   }

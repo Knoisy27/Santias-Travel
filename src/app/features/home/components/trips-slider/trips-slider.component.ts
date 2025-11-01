@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { TripsService, ViajeIndividual } from '../../../../core/services/trips.service';
 import { MaterialModule } from '../../../../shared/material/material.module';
 import { Subject, takeUntil } from 'rxjs';
+import { TRIPS_SLIDER_CONFIG } from '../../config/trips-slider.config';
 
 @Component({
   selector: 'app-trips-slider',
@@ -18,8 +19,7 @@ export class TripsSliderComponent implements OnInit, OnDestroy {
   currentIndex = signal(0);
   isLoading = signal(true);
   private destroy$ = new Subject<void>();
-  private readonly MOCK_IMAGE = 'assets/images/mock-viajes/mock_viajes.png';
-  private readonly MAX_CARDS = 5;
+  readonly config = TRIPS_SLIDER_CONFIG;
 
   private tripsService: TripsService;
   private router: Router;
@@ -56,7 +56,7 @@ export class TripsSliderComponent implements OnInit, OnDestroy {
               const fechaB = b.fechaCreacion ? new Date(b.fechaCreacion).getTime() : 0;
               return fechaB - fechaA;
             })
-            .slice(0, this.MAX_CARDS); // Tomar solo los últimos 5
+            .slice(0, this.config.mockData.maxCards); // Tomar solo los últimos N
 
           // Si no hay suficientes viajes, completar con mocks
           const viajesConMocks = this.completarConMocks(viajesOrdenados);
@@ -91,21 +91,21 @@ export class TripsSliderComponent implements OnInit, OnDestroy {
   }
 
   private completarConMocks(viajes: ViajeIndividual[]): ViajeIndividual[] {
-    const mocksNecesarios = this.MAX_CARDS - viajes.length;
+    const mocksNecesarios = this.config.mockData.maxCards - viajes.length;
     if (mocksNecesarios <= 0) return viajes;
 
     const mocks: ViajeIndividual[] = [];
     for (let i = 0; i < mocksNecesarios; i++) {
       mocks.push({
         id: undefined,
-        nombre: `Viaje Destacado ${i + 1}`,
-        descripcion: 'Descubre experiencias únicas diseñadas especialmente para ti. Desde destinos exóticos hasta aventuras culturales inolvidables.',
+        nombre: this.config.mockData.nombrePattern(i),
+        descripcion: this.config.mockData.defaultDescription,
         valor: 0,
-        imagenUrl: this.MOCK_IMAGE,
+        imagenUrl: this.config.mockData.imagePath,
         fechaInicio: '',
         fechaFin: '',
-        estado: 'A',
-        modificadoPor: 'Sistema'
+        estado: this.config.mockData.defaultEstado,
+        modificadoPor: this.config.mockData.defaultModificadoPor
       });
     }
 
@@ -147,8 +147,7 @@ export class TripsSliderComponent implements OnInit, OnDestroy {
   }
 
   get transformValue(): string {
-    // Cada card tiene 320px de ancho (w-80) + 16px de padding (px-4) = 336px total
-    const cardWidth = 336;
+    const cardWidth = this.config.tripCard.cardWidth;
     const offset = this.currentIndex() * cardWidth;
     return `translateX(-${offset}px)`;
   }

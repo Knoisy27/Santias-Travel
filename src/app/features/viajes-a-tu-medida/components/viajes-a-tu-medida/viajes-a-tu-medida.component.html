@@ -1,6 +1,6 @@
 <div class="container">
-  <h1>Viajes a tu Medida</h1>
-  <p class="subtitle">Descubre experiencias únicas diseñadas especialmente para ti</p>
+  <h1>{{ config.list.title }}</h1>
+  <p class="subtitle">{{ config.list.subtitle }}</p>
   
   <div class="trips-container">
     <!-- Mock de viaje cuando el backend está caído -->
@@ -18,14 +18,12 @@
           </div>
         </div>
         <div class="trip-content">
-          <h2 class="trip-title">Experiencia de Viaje Personalizada</h2>
+          <h2 class="trip-title">{{ config.list.mockTrip.title }}</h2>
           <p class="trip-description">
-            Nuestro sistema está temporalmente fuera de servicio. Mientras tanto, 
-            imagina tu viaje perfecto: desde destinos exóticos hasta experiencias 
-            culturales únicas, todo diseñado especialmente para ti.
+            {{ config.list.mockTrip.description }}
           </p>
           <div class="mock-indicator">
-            <span class="mock-badge">Modo Demo</span>
+            <span class="mock-badge">{{ config.list.mockTrip.badge }}</span>
           </div>
         </div>
       </div>
@@ -70,7 +68,7 @@
           </div>
           <div class="trip-actions-bottom">
             <button class="btn-details" (click)="verDetalles(viaje); $event.stopPropagation()">
-              Más detalles
+              {{ config.list.buttonText }}
             </button>
           </div>
         </div>
@@ -79,7 +77,7 @@
 
     <!-- Mensaje cuando no hay viajes (solo si no es mock) -->
     <div class="no-trips" *ngIf="!showMockTrip && viajes.length === 0">
-      <p>No hay viajes disponibles en este momento.</p>
+      <p>{{ config.list.emptyState }}</p>
     </div>
   </div>
 </div>

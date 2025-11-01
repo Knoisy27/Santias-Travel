@@ -1,6 +1,6 @@
 <div class="container">
-  <h1>Viajes Grupales</h1>
-  <p class="subtitle">Descubre experiencias inolvidables compartiendo aventuras con otros viajeros</p>
+  <h1>{{ config.list.title }}</h1>
+  <p class="subtitle">{{ config.list.subtitle }}</p>
   
   <div class="trips-container">
     <!-- Mock de viaje cuando el backend está caído -->
@@ -18,14 +18,12 @@
           </div>
         </div>
         <div class="trip-content">
-          <h2 class="trip-title">Experiencia de Viaje Grupal</h2>
+          <h2 class="trip-title">{{ config.list.mockTrip.title }}</h2>
           <p class="trip-description">
-            Nuestro sistema está temporalmente fuera de servicio. Mientras tanto, 
-            imagina tu viaje perfecto compartido con otros viajeros: desde destinos 
-            exóticos hasta experiencias culturales únicas, todo diseñado para grupos.
+            {{ config.list.mockTrip.description }}
           </p>
           <div class="mock-indicator">
-            <span class="mock-badge">Modo Demo</span>
+            <span class="mock-badge">{{ config.list.mockTrip.badge }}</span>
           </div>
         </div>
       </div>
@@ -65,7 +63,7 @@
           
           <!-- Fechas disponibles -->
           <div class="trip-date" *ngIf="viaje.fechaInicio && viaje.fechaFin">
-            <span class="trip-date-label">Fechas disponibles:</span>
+            <span class="trip-date-label">{{ config.list.dateLabel }}</span>
             <span class="trip-date-value">{{ formatearRangoFechas(viaje.fechaInicio, viaje.fechaFin) }}</span>
           </div>
 
@@ -81,7 +79,7 @@
           </div>
           <div class="trip-actions-bottom">
             <button class="btn-details" (click)="verMasDetalles(viaje); $event.stopPropagation()">
-              Más detalles
+              {{ config.list.buttonText }}
             </button>
           </div>
         </div>
@@ -90,7 +88,7 @@
 
     <!-- Mensaje cuando no hay viajes (solo si no es mock) -->
     <div class="no-trips" *ngIf="!showMockTrip && viajes.length === 0">
-      <p>No hay viajes grupales disponibles en este momento.</p>
+      <p>{{ config.list.emptyState }}</p>
     </div>
   </div>
 </div>

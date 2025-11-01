@@ -9,6 +9,7 @@ import { UtilsService } from '../../../../core/services/utils.service';
 import { APP_CONSTANTS } from '../../../../core/constants/app.constants';
 import { Subject, takeUntil } from 'rxjs';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { VIAJES_GRUPALES_CONFIG } from '../../config/viajes-grupales.config';
 
 @Component({
   selector: 'app-viajes-grupales-detalle',
@@ -21,6 +22,7 @@ export class ViajesGrupalesDetalleComponent implements OnInit, OnDestroy {
   viaje: ViajeGrupal | null = null;
   isLoading = true;
   private destroy$ = new Subject<void>();
+  readonly config = VIAJES_GRUPALES_CONFIG;
   
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -41,11 +43,11 @@ export class ViajesGrupalesDetalleComponent implements OnInit, OnDestroy {
       if (!isNaN(idNumber)) {
         this.cargarViaje(idNumber);
       } else {
-        this.snackBar.open('ID de viaje inválido', 'Cerrar', { duration: 3000 });
+        this.snackBar.open(this.config.detail.messages.invalidId, 'Cerrar', { duration: this.config.errors.edit.duration });
         this.router.navigate(['/viajes-grupales']);
       }
     } else {
-      this.snackBar.open('ID de viaje no proporcionado', 'Cerrar', { duration: 3000 });
+      this.snackBar.open(this.config.detail.messages.noIdProvided, 'Cerrar', { duration: this.config.errors.edit.duration });
       this.router.navigate(['/viajes-grupales']);
     }
   }
@@ -72,7 +74,7 @@ export class ViajesGrupalesDetalleComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Error al cargar viaje grupal:', error);
           this.isLoading = false;
-          this.snackBar.open('Error al cargar el viaje. Redirigiendo...', 'Cerrar', { duration: 3000 });
+          this.snackBar.open(this.config.detail.messages.loadError, 'Cerrar', { duration: this.config.errors.edit.duration });
           
           this.ngZone.run(() => {
             this.cdr.markForCheck();
@@ -117,11 +119,17 @@ export class ViajesGrupalesDetalleComponent implements OnInit, OnDestroy {
   consultarInformacion(): void {
     if (!this.viaje) return;
 
-    const mensaje = `¡Hola! Me interesa conocer más información sobre el viaje grupal "${this.viaje.nombre}".\n\n` +
-                   `Descripción: ${this.viaje.descripcion}\n\n` +
-                   (this.viaje.valor ? `Precio: ${this.formatearPrecio(this.viaje.valor)}\n\n` : '') +
-                   (this.viaje.fechaInicio && this.viaje.fechaFin ? `Fechas: ${this.formatearRangoFechas(this.viaje.fechaInicio, this.viaje.fechaFin)}\n\n` : '') +
-                   '¿Podrían brindarme más detalles?';
+    const precio = this.viaje.valor ? this.formatearPrecio(this.viaje.valor) : undefined;
+    const fechas = (this.viaje.fechaInicio && this.viaje.fechaFin) 
+      ? this.formatearRangoFechas(this.viaje.fechaInicio, this.viaje.fechaFin) 
+      : undefined;
+    
+    const mensaje = this.config.detail.messages.whatsappMessage(
+      this.viaje.nombre,
+      this.viaje.descripcion,
+      precio,
+      fechas
+    );
 
     const whatsappNumber = APP_CONSTANTS.AGENCY_INFO.whatsapp;
     this.utilsService.openWhatsApp(whatsappNumber, mensaje);
