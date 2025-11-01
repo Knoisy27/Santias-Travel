@@ -10,6 +10,8 @@ import { HeroSectionComponent } from '../hero-section/hero-section.component';
 import { AboutSectionComponent } from '../about-section/about-section.component';
 import { TestimonialsSectionComponent } from '../testimonials-section/testimonials-section.component';
 import { TripsSliderComponent } from '../trips-slider/trips-slider.component';
+import { ServicesSectionComponent } from '../services-section/services-section.component';
+import { CtaSectionComponent } from '../cta-section/cta-section.component';
 // import { NewsletterPopupComponent } from '../newsletter-popup/newsletter-popup.component'; // No usado
 
 @Component({
@@ -22,7 +24,9 @@ import { TripsSliderComponent } from '../trips-slider/trips-slider.component';
     HeroSectionComponent,
     AboutSectionComponent,
     TestimonialsSectionComponent,
-    TripsSliderComponent
+    TripsSliderComponent,
+    ServicesSectionComponent,
+    CtaSectionComponent
     // NewsletterPopupComponent // No usado
   ],
   templateUrl: './home.component.html',

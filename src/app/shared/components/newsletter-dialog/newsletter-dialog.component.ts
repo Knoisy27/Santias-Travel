@@ -25,11 +25,10 @@ import { NotificationService } from '../../services/notification.service';
 
         <form [formGroup]="newsletterForm" (ngSubmit)="subscribe()" class="newsletter-form">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Correo electrónico</mat-label>
             <input matInput 
                    type="email" 
                    formControlName="email"
-                   placeholder="tu-email@ejemplo.com"
+                   placeholder="Correo electrónico"
                    [disabled]="isSubscribing()">
             <mat-icon matSuffix>email</mat-icon>
             @if (newsletterForm.get('email')?.hasError('required') && newsletterForm.get('email')?.touched) {

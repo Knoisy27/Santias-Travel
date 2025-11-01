@@ -19,8 +19,7 @@ import { MaterialModule } from '../../../../shared/material/material.module';
           <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form-fields">
             <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Nombre completo</mat-label>
-                <input matInput formControlName="name" placeholder="Tu nombre completo">
+                <input matInput formControlName="name" placeholder="Nombre completo">
                 <mat-icon matSuffix>person</mat-icon>
                 @if (contactForm.get('name')?.hasError('required') && contactForm.get('name')?.touched) {
                   <mat-error>El nombre es requerido</mat-error>
@@ -30,8 +29,7 @@ import { MaterialModule } from '../../../../shared/material/material.module';
 
             <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Correo electrónico</mat-label>
-                <input matInput type="email" formControlName="email" placeholder="tu@email.com">
+                <input matInput type="email" formControlName="email" placeholder="Correo electrónico">
                 <mat-icon matSuffix>email</mat-icon>
                 @if (contactForm.get('email')?.hasError('required') && contactForm.get('email')?.touched) {
                   <mat-error>El email es requerido</mat-error>
@@ -44,16 +42,14 @@ import { MaterialModule } from '../../../../shared/material/material.module';
 
             <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Teléfono</mat-label>
-                <input matInput type="tel" formControlName="phone" placeholder="+57 300 123 4567">
+                <input matInput type="tel" formControlName="phone" placeholder="Teléfono">
                 <mat-icon matSuffix>phone</mat-icon>
               </mat-form-field>
             </div>
 
             <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Destino de interés</mat-label>
-                <mat-select formControlName="destination">
+                <mat-select formControlName="destination" placeholder="Destino de interés">
                   <mat-option value="">Selecciona un destino</mat-option>
                   <mat-option value="europa">Europa</mat-option>
                   <mat-option value="asia">Asia</mat-option>
@@ -67,15 +63,13 @@ import { MaterialModule } from '../../../../shared/material/material.module';
 
             <div class="form-row">
               <mat-form-field appearance="outline" class="date-picker">
-                <mat-label>Fecha de viaje</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="travelDate" readonly>
+                <input matInput [matDatepicker]="picker" formControlName="travelDate" placeholder="Fecha de viaje" readonly>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="travelers">
-                <mat-label>Número de viajeros</mat-label>
-                <mat-select formControlName="travelers">
+                <mat-select formControlName="travelers" placeholder="Número de viajeros">
                   <mat-option value="1">1 persona</mat-option>
                   <mat-option value="2">2 personas</mat-option>
                   <mat-option value="3">3 personas</mat-option>
@@ -87,9 +81,8 @@ import { MaterialModule } from '../../../../shared/material/material.module';
 
             <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Mensaje</mat-label>
                 <textarea matInput formControlName="message" rows="4" 
-                         placeholder="Cuéntanos sobre el viaje de tus sueños..."></textarea>
+                         placeholder="Mensaje - Cuéntanos sobre el viaje de tus sueños..."></textarea>
               </mat-form-field>
             </div>
 

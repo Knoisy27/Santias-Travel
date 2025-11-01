@@ -2,6 +2,7 @@ export interface TripsSliderConfig {
   // Configuración general del slider
   general: {
     title: string;
+    subtitle: string;
     emptyState: string;
     loadingSpinner: {
       diameter: number;
@@ -37,7 +38,8 @@ export interface TripsSliderConfig {
 
 export const TRIPS_SLIDER_CONFIG: TripsSliderConfig = {
   general: {
-    title: 'Últimos Viajes Destacados',
+    title: 'Descubre a dónde puedes viajar',
+    subtitle: 'Cada lugar tiene una historia esperando por ti. ¿Por cuál empezamos?',
     emptyState: 'No hay viajes disponibles en este momento.',
     loadingSpinner: {
       diameter: 50,

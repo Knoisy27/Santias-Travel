@@ -221,6 +221,20 @@ app-footer .mat-mdc-form-field {
     color: vars.$primary-blue !important;
   }
   
+  // Eliminar la línea vertical del separador del label flotante (gap en el outline)
+  .mat-mdc-notched-outline {
+    .mat-mdc-form-field-outline-gap {
+      border-left: none !important;
+      border-right: none !important;
+    }
+    
+    // Alternativa: hacer el gap transparente
+    .mdc-notched-outline__notch {
+      border-left: none !important;
+      border-right: none !important;
+    }
+  }
+  
   .mat-mdc-input-element {
     color: #333 !important;
     

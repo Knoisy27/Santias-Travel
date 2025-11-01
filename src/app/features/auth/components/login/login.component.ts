@@ -42,12 +42,11 @@ import { AuthService, LoginRequest } from '../../../../core/services/auth.servic
         <mat-card-content>
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Usuario</mat-label>
               <input 
                 matInput 
                 type="text" 
                 formControlName="username"
-                placeholder="admin"
+                placeholder="Usuario"
                 autocomplete="username"
               >
               <mat-icon matSuffix>person</mat-icon>
@@ -63,12 +62,11 @@ import { AuthService, LoginRequest } from '../../../../core/services/auth.servic
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Contraseña</mat-label>
               <input 
                 matInput 
                 [type]="hidePassword() ? 'password' : 'text'"
                 formControlName="password"
-                placeholder="••••••••"
+                placeholder="Contraseña"
                 autocomplete="current-password"
               >
               <button 

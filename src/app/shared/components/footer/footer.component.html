@@ -60,12 +60,11 @@
           
           <form class="newsletter-form" [formGroup]="newsletterForm" (ngSubmit)="subscribeToNewsletter()">
             <div class="newsletter-input-group">
-              <mat-form-field appearance="outline" class="newsletter-field">
-                <mat-label>Email</mat-label>
+              <mat-form-field class="newsletter-field">
                 <input matInput 
                        type="email" 
                        formControlName="email"
-                       placeholder="tu-email@ejemplo.com">
+                       placeholder="Email">
                 <mat-icon matSuffix>email</mat-icon>
                 @if (newsletterForm.get('email')?.hasError('email') && newsletterForm.get('email')?.touched) {
                   <mat-error>Ingresa un email válido</mat-error>
