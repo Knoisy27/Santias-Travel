@@ -25,7 +25,7 @@ export interface ViajeGrupal {
 }
 
 export interface ViajeIndividual {
-  idViaj?: number;
+  id?: number;
   nombre: string;
   descripcion: string;
   valor: number;

@@ -76,7 +76,7 @@ export const APP_CONSTANTS = {
   // Rutas de la aplicación
   ROUTES: {
     home: '/',
-    destinations: '/destinos',
+    destinations: '/viajes-grupales',
     customTrips: '/viajes-personalizados',
     about: '/sobre-nosotros',
     contact: '/contacto',

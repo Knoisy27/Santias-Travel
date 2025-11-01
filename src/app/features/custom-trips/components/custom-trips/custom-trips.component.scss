@@ -1,0 +1,178 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+h1 {
+  text-align: center;
+  color: #1f2937;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  text-align: center;
+  color: #6b7280;
+  font-size: 1.125rem;
+  margin-bottom: 3rem;
+}
+
+.trips-container {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+}
+
+.trip-card {
+  display: flex;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.trip-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+}
+
+.trip-image-container {
+  flex: 0 0 300px;
+  position: relative;
+}
+
+.trip-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.mock-image {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.mock-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: #d1d5db;
+  border-radius: 50%;
+  opacity: 0.7;
+}
+
+.trip-content {
+  flex: 1;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.trip-title {
+  color: #1f2937;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.trip-description {
+  color: #4b5563;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+.trip-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.trip-price {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #059669;
+}
+
+.trip-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.status-activo {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-inactivo {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.mock-indicator {
+  margin-top: 1rem;
+}
+
+.mock-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background-color: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.no-trips {
+  text-align: center;
+  padding: 3rem;
+  color: #6b7280;
+}
+
+.mock-trip {
+  border: 2px dashed #d1d5db;
+  background: #fafafa;
+}
+
+.mock-trip .trip-title {
+  color: #6b7280;
+}
+
+.mock-trip .trip-description {
+  color: #9ca3af;
+}
+
+@media (max-width: 768px) {
+  .trip-card {
+    flex-direction: column;
+  }
+
+  .trip-image-container {
+    flex: none;
+  }
+
+  .trip-image,
+  .mock-image {
+    height: 250px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+}

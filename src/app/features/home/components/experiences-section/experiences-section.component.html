@@ -7,45 +7,36 @@
       </p>
     </div>
 
-    @if (destinations.length > 0) {
+    @if (trips.length > 0) {
       <div class="slider-container">
         <div class="destinations-slider" [style.transform]="'translateX(' + (-currentSlide() * slideWidth) + 'px)'">
-          @for (destination of destinations; track destination.id; let i = $index) {
+          @for (trip of trips; track trip.idVigr; let i = $index) {
             <mat-card class="destination-card-material" 
                       [class.center-card]="i === getCenterCardIndex()"
                       (mouseenter)="onCardHover(i)"
                       (mouseleave)="onCardLeave()">
               <div class="card-image-container">
-                <img mat-card-image [src]="destination.image || 'assets/images/placeholder-destination.jpg'" [alt]="destination.name" class="destination-image">
-                
-                <div class="destination-location-chip">
-                  <mat-chip>{{ destination.country }}</mat-chip>
-                </div>
+                <img mat-card-image [src]="trip.imagenUrl || 'assets/images/placeholder-destination.jpg'" [alt]="trip.nombre" class="destination-image">
                 
                 <div class="card-overlay-material">
                   <div class="overlay-content">
-                    <mat-chip class="duration-chip">
-                      <mat-icon matChipAvatar>schedule</mat-icon>
-                      {{ destination.duration }} días
-                    </mat-chip>
                     <mat-chip class="price-chip" color="accent">
-                      ${{ destination.price | number }} {{ destination.currency }}
+                      ${{ trip.valor | number }}
                     </mat-chip>
                   </div>
                 </div>
               </div>
               
               <mat-card-header>
-                <mat-card-title>{{ destination.name }}</mat-card-title>
-                <mat-card-subtitle>{{ destination.country }}</mat-card-subtitle>
+                <mat-card-title>{{ trip.nombre }}</mat-card-title>
               </mat-card-header>
               
               <mat-card-content>
-                <p>{{ destination.shortDescription }}</p>
+                <p>{{ trip.descripcion }}</p>
               </mat-card-content>
               
               <mat-card-actions align="end">
-                <button mat-button color="primary" (click)="viewDestination(destination.id)">
+                <button mat-button color="primary" (click)="viewTrip(trip.idVigr)">
                   <mat-icon>visibility</mat-icon>
                   Ver detalles
                 </button>
@@ -93,9 +84,9 @@
               color="primary" 
               size="large"
               class="view-all-btn-material"
-              (click)="viewAllDestinations()">
+              (click)="viewAllTrips()">
         <mat-icon>explore</mat-icon>
-        Ver todos los destinos
+        Ver todos los viajes grupales
       </button>
     </div>
   </div>

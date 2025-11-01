@@ -12,18 +12,13 @@ export const routes: Routes = [
         data: { preload: true } // Preload para la página principal
       },
       {
-        path: 'destinos',
-        loadComponent: () => import('./features/destinations/components/destinations-list/destinations-list.component').then(m => m.DestinationsListComponent),
-        data: { preload: true } // Preload para página importante
-      },
-      // {
-      //   path: 'destino/:id',
-      //   loadComponent: () => import('./features/destinations/components/destination-detail/destination-detail.component').then(m => m.DestinationDetailComponent),
-      //   data: { skipPrerender: true }
-      // },
-      {
         path: 'viajes-personalizados',
         loadComponent: () => import('./features/custom-trips/components/custom-trips/custom-trips.component').then(m => m.CustomTripsComponent)
+      },
+      {
+        path: 'viajes-grupales',
+        loadComponent: () => import('./features/viajes-grupales/components/viajes-grupales/viajes-grupales.component').then(m => m.ViajesGrupalesComponent),
+        data: { preload: true } // Preload para página importante
       },
       {
         path: 'sobre-nosotros',

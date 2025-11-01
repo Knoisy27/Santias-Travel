@@ -1,0 +1,56 @@
+<div class="container">
+  <h1>Viajes Personalizados</h1>
+  <p class="subtitle">Descubre experiencias únicas diseñadas especialmente para ti</p>
+  
+  <div class="trips-container">
+    <!-- Mock de viaje cuando el backend está caído -->
+    <ng-container *ngIf="showMockTrip">
+      <div class="trip-card mock-trip">
+        <div class="trip-image-container">
+          <div class="mock-image">
+            <div class="mock-placeholder">
+              <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="#9CA3AF"/>
+                <path d="M19 15L20.09 19.26L24 20L20.09 20.74L19 25L17.91 20.74L14 20L17.91 19.26L19 15Z" fill="#9CA3AF"/>
+                <path d="M5 11L6.09 15.26L10 16L6.09 16.74L5 21L3.91 16.74L0 16L3.91 15.26L5 11Z" fill="#9CA3AF"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="trip-content">
+          <h2 class="trip-title">Experiencia de Viaje Personalizada</h2>
+          <p class="trip-description">
+            Nuestro sistema está temporalmente fuera de servicio. Mientras tanto, 
+            imagina tu viaje perfecto: desde destinos exóticos hasta experiencias 
+            culturales únicas, todo diseñado especialmente para ti.
+          </p>
+          <div class="mock-indicator">
+            <span class="mock-badge">Modo Demo</span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Viajes reales del backend -->
+    <ng-container *ngIf="!showMockTrip && viajes.length > 0">
+      <div class="trip-card" *ngFor="let viaje of viajes; trackBy: trackByViaje">
+        <div class="trip-image-container">
+          <img [src]="viaje.imagenUrl" [alt]="viaje.nombre" class="trip-image">
+        </div>
+        <div class="trip-content">
+          <h2 class="trip-title">{{ viaje.nombre }}</h2>
+          <p class="trip-description">{{ viaje.descripcion }}</p>
+          <div class="trip-details">
+            <span class="trip-price" *ngIf="viaje.valor">Desde ${{ viaje.valor | number:'1.0-0' }}</span>
+            <!-- <span class="trip-status" [class]="'status-' + viaje.estado.toLowerCase()">{{ viaje.estado }}</span> -->
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Mensaje cuando no hay viajes (solo si no es mock) -->
+    <div class="no-trips" *ngIf="!showMockTrip && viajes.length === 0">
+      <p>No hay viajes disponibles en este momento.</p>
+    </div>
+  </div>
+</div>

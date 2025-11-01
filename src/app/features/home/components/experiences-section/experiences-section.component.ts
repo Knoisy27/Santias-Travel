@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnDestroy, inject, signal, computed } from '@
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MaterialModule } from '../../../../shared/material/material.module';
-import { Destination } from '../../../../core/interfaces/destination.interface';
+import { ViajeGrupal } from '../../../../core/services/trips.service';
 
 @Component({
   selector: 'app-experiences-section',
@@ -12,7 +12,7 @@ import { Destination } from '../../../../core/interfaces/destination.interface';
   styleUrl: './experiences-section.component.scss'
 })
 export class ExperiencesSectionComponent implements OnInit, OnDestroy {
-  @Input() destinations: Destination[] = [];
+  @Input() trips: ViajeGrupal[] = [];
   
   private router = inject(Router);
   private autoSlideInterval?: number;
@@ -22,8 +22,8 @@ export class ExperiencesSectionComponent implements OnInit, OnDestroy {
   slidesToShow = 3; // Mostrar 3 cards a la vez en desktop
   
   // Computed properties
-  maxSlides = computed(() => Math.max(0, this.destinations.length - this.slidesToShow));
-  indicators = computed(() => Array(Math.ceil(this.destinations.length / this.slidesToShow)).fill(0));
+  maxSlides = computed(() => Math.max(0, this.trips.length - this.slidesToShow));
+  indicators = computed(() => Array(Math.ceil(this.trips.length / this.slidesToShow)).fill(0));
   
   ngOnInit(): void {
     this.startAutoSlide();
@@ -74,12 +74,14 @@ export class ExperiencesSectionComponent implements OnInit, OnDestroy {
     this.currentSlide.set(index);
   }
 
-  viewDestination(destinationId: string): void {
-    this.router.navigate(['/destinos', destinationId]);
+  viewTrip(tripId: number | undefined): void {
+    if (tripId) {
+      this.router.navigate(['/viajes-grupales']);
+    }
   }
 
-  viewAllDestinations(): void {
-    this.router.navigate(['/destinos']);
+  viewAllTrips(): void {
+    this.router.navigate(['/viajes-grupales']);
   }
 
   // Pausar auto-slide cuando el usuario interactúa

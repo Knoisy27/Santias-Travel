@@ -6,7 +6,7 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Prerender
   },
   {
-    path: 'destinos',
+    path: 'viajes-grupales',
     renderMode: RenderMode.Prerender
   },
   {
