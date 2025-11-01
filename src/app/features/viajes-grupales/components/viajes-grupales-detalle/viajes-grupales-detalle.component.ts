@@ -24,6 +24,12 @@ export class ViajesGrupalesDetalleComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   readonly config = VIAJES_GRUPALES_CONFIG;
   
+  // Estados de los desplegables
+  isIncluyeExpanded = false;
+  isNoIncluyeExpanded = false;
+  isItinerarioExpanded = false;
+  isSugerenciasExpanded = false;
+  
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private tripsService = inject(TripsService);
@@ -156,6 +162,23 @@ export class ViajesGrupalesDetalleComponent implements OnInit, OnDestroy {
 
   getSugerenciasHtml(): SafeHtml {
     return this.sanitizeHtml(this.viaje?.sugerencias);
+  }
+
+  // Métodos para controlar los desplegables
+  toggleIncluye(): void {
+    this.isIncluyeExpanded = !this.isIncluyeExpanded;
+  }
+
+  toggleNoIncluye(): void {
+    this.isNoIncluyeExpanded = !this.isNoIncluyeExpanded;
+  }
+
+  toggleItinerario(): void {
+    this.isItinerarioExpanded = !this.isItinerarioExpanded;
+  }
+
+  toggleSugerencias(): void {
+    this.isSugerenciasExpanded = !this.isSugerenciasExpanded;
   }
 }
 

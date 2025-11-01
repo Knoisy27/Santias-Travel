@@ -102,8 +102,9 @@ export class FooterComponent implements OnInit {
   openWhatsApp(): void {
     const agencyInfo = this.agencyInfo();
     if (agencyInfo?.whatsapp) {
+      const cleanPhone = agencyInfo.whatsapp.replace(/\D/g, '');
       const message = encodeURIComponent('¡Hola! Me interesa conocer más sobre sus destinos de viaje.');
-      window.open(`https://wa.me/${agencyInfo.whatsapp}?text=${message}`, '_blank');
+      window.open(`https://wa.me/${cleanPhone}?text=${message}`, '_blank');
     }
   }
 

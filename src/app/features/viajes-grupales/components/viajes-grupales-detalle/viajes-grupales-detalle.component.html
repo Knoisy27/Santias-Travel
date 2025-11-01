@@ -6,10 +6,10 @@
     </div>
   </div>
 } @else if (viaje) {
-  <div class="w-screen h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center p-2 sm:p-4 overflow-auto">
-    <div class="w-full h-full max-w-7xl mx-auto flex items-center mt-8 sm:mt-12 lg:mt-16">
-      <mat-card class="overflow-hidden w-full my-4 lg:my-0 lg:h-full lg:flex lg:items-center shadow-2xl border border-gray-100 bg-white/95 backdrop-blur-sm">
-        <div class="flex flex-col lg:flex-row w-full lg:h-full">
+  <div class="w-screen min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex justify-center p-2 sm:p-4">
+    <div class="w-full max-w-7xl mx-auto flex mt-8 sm:mt-12 lg:mt-16 mb-8 sm:mb-12 lg:mb-16">
+      <mat-card class="overflow-hidden w-full my-4 lg:my-0 lg:flex lg:items-start shadow-2xl border border-gray-100 bg-white/95 backdrop-blur-sm">
+        <div class="flex flex-col lg:flex-row w-full">
           <!-- Imagen a la izquierda -->
           <div class="w-full lg:w-1/2 flex-shrink-0 p-2 sm:p-4 pt-4 sm:pt-6 lg:pt-4 flex items-center justify-center">
             <div class="w-full max-w-md aspect-video rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 shadow-inner border border-gray-200/50 flex items-center justify-center">
@@ -22,12 +22,12 @@
           </div>
 
           <!-- Contenido a la derecha -->
-          <div class="w-full lg:w-1/2 flex flex-col justify-center p-6 lg:p-8 pt-2 lg:pt-2 h-full bg-gradient-to-b from-transparent to-gray-50/30 lg:bg-gradient-to-r lg:from-transparent lg:to-gray-50/30 overflow-y-auto">
+          <div class="w-full lg:w-1/2 flex flex-col p-6 lg:p-8 pt-2 lg:pt-2 bg-gradient-to-b from-transparent to-gray-50/30 lg:bg-gradient-to-r lg:from-transparent lg:to-gray-50/30">
             <!-- Título "Viaja a" -->
             <p class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">{{ config.detail.content.prefixTitle }}</p>
             
             <!-- Nombre del viaje -->
-            <mat-card-title class="text-3xl lg:text-4xl font-extrabold bg-gradient-to-r from-amber-700 to-amber-900 bg-clip-text text-transparent mb-4 !m-0 drop-shadow-sm">
+            <mat-card-title class="text-3xl lg:text-4xl font-extrabold text-amber-600 mb-4 !m-0 drop-shadow-sm">
               {{ viaje.nombre }}
             </mat-card-title>
 
@@ -70,70 +70,122 @@
             </div>
 
             <!-- Acordeones desplegables -->
-            <div class="space-y-4 mb-6">
+            <div class="mb-6 flex flex-col gap-4">
               <!-- Incluye -->
               @if (viaje.incluye) {
-                <mat-expansion-panel class="shadow-sm">
-                  <mat-expansion-panel-header class="bg-gray-50 hover:bg-gray-100">
-                    <mat-panel-title class="flex items-center gap-2">
-                      <span class="w-2 h-2 rounded-full bg-green-600"></span>
+                <div class="border border-gray-200 rounded-lg shadow-sm overflow-hidden bg-white">
+                  <button 
+                    (click)="toggleIncluye()"
+                    class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors duration-200 text-left">
+                    <div class="flex items-center gap-2">
+                      <span class="w-2 h-2 rounded-full bg-amber-600"></span>
                       <span class="font-bold text-gray-800">{{ config.detail.content.sections.includes.title }}</span>
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <div class="text-sm lg:text-base text-gray-700 leading-relaxed pt-2" 
-                    [innerHTML]="getIncluyeHtml()">
+                    </div>
+                    <svg 
+                      class="w-5 h-5 text-gray-600 transition-transform duration-300"
+                      [class.rotate-180]="isIncluyeExpanded"
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div 
+                    class="overflow-hidden transition-all duration-300 ease-out origin-top"
+                    [class.max-h-0]="!isIncluyeExpanded"
+                    [class.max-h-[2000px]]="isIncluyeExpanded">
+                    <div class="p-4 pt-2 text-sm lg:text-base text-gray-700 leading-relaxed" [innerHTML]="getIncluyeHtml()"></div>
                   </div>
-                </mat-expansion-panel>
+                </div>
               }
 
               <!-- No Incluye -->
               @if (viaje.noIncluye) {
-                <mat-expansion-panel class="shadow-sm">
-                  <mat-expansion-panel-header class="bg-gray-50 hover:bg-gray-100">
-                    <mat-panel-title class="flex items-center gap-2">
-                      <span class="w-2 h-2 rounded-full bg-red-600"></span>
+                <div class="border border-gray-200 rounded-lg shadow-sm overflow-hidden bg-white">
+                  <button 
+                    (click)="toggleNoIncluye()"
+                    class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors duration-200 text-left">
+                    <div class="flex items-center gap-2">
+                      <span class="w-2 h-2 rounded-full bg-amber-600"></span>
                       <span class="font-bold text-gray-800">{{ config.detail.content.sections.excludes.title }}</span>
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <div class="text-sm lg:text-base text-gray-700 leading-relaxed pt-2" 
-                    [innerHTML]="getNoIncluyeHtml()">
+                    </div>
+                    <svg 
+                      class="w-5 h-5 text-gray-600 transition-transform duration-300"
+                      [class.rotate-180]="isNoIncluyeExpanded"
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div 
+                    class="overflow-hidden transition-all duration-300 ease-out origin-top"
+                    [class.max-h-0]="!isNoIncluyeExpanded"
+                    [class.max-h-[2000px]]="isNoIncluyeExpanded">
+                    <div class="p-4 pt-2 text-sm lg:text-base text-gray-700 leading-relaxed" [innerHTML]="getNoIncluyeHtml()"></div>
                   </div>
-                </mat-expansion-panel>
+                </div>
               }
 
               <!-- Itinerario -->
               @if (viaje.itinerario) {
-                <mat-expansion-panel class="shadow-sm">
-                  <mat-expansion-panel-header class="bg-gray-50 hover:bg-gray-100">
-                    <mat-panel-title class="flex items-center gap-2">
-                      <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                <div class="border border-gray-200 rounded-lg shadow-sm overflow-hidden bg-white">
+                  <button 
+                    (click)="toggleItinerario()"
+                    class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors duration-200 text-left">
+                    <div class="flex items-center gap-2">
+                      <span class="w-2 h-2 rounded-full bg-amber-600"></span>
                       <span class="font-bold text-gray-800">{{ config.detail.content.sections.itinerary.title }}</span>
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <div class="text-sm lg:text-base text-gray-700 leading-relaxed pt-2" 
-                    [innerHTML]="getItinerarioHtml()">
+                    </div>
+                    <svg 
+                      class="w-5 h-5 text-gray-600 transition-transform duration-300"
+                      [class.rotate-180]="isItinerarioExpanded"
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div 
+                    class="overflow-hidden transition-all duration-300 ease-out origin-top"
+                    [class.max-h-0]="!isItinerarioExpanded"
+                    [class.max-h-[2000px]]="isItinerarioExpanded">
+                    <div class="p-4 pt-2 text-sm lg:text-base text-gray-700 leading-relaxed" [innerHTML]="getItinerarioHtml()"></div>
                   </div>
-                </mat-expansion-panel>
+                </div>
               }
 
               <!-- Sugerencias -->
               @if (viaje.sugerencias) {
-                <mat-expansion-panel class="shadow-sm">
-                  <mat-expansion-panel-header class="bg-gray-50 hover:bg-gray-100">
-                    <mat-panel-title class="flex items-center gap-2">
+                <div class="border border-gray-200 rounded-lg shadow-sm overflow-hidden bg-white">
+                  <button 
+                    (click)="toggleSugerencias()"
+                    class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors duration-200 text-left">
+                    <div class="flex items-center gap-2">
                       <span class="w-2 h-2 rounded-full bg-amber-600"></span>
                       <span class="font-bold text-gray-800">{{ config.detail.content.sections.suggestions.title }}</span>
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <div class="text-sm lg:text-base text-gray-700 leading-relaxed pt-2" 
-                    [innerHTML]="getSugerenciasHtml()">
+                    </div>
+                    <svg 
+                      class="w-5 h-5 text-gray-600 transition-transform duration-300"
+                      [class.rotate-180]="isSugerenciasExpanded"
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div 
+                    class="overflow-hidden transition-all duration-300 ease-out origin-top"
+                    [class.max-h-0]="!isSugerenciasExpanded"
+                    [class.max-h-[2000px]]="isSugerenciasExpanded">
+                    <div class="p-4 pt-2 text-sm lg:text-base text-gray-700 leading-relaxed" [innerHTML]="getSugerenciasHtml()"></div>
                   </div>
-                </mat-expansion-panel>
+                </div>
               }
             </div>
 
             <!-- Botón de acción -->
-            <div class="mt-6 sm:mt-8 flex justify-center lg:justify-start sticky bottom-0 bg-gradient-to-t from-white via-white to-transparent pt-4 pb-2">
+            <div class="mt-6 sm:mt-8 flex justify-center lg:justify-start pt-4 pb-2">
               <button 
                 (click)="consultarInformacion()"
                 class="w-auto max-w-full px-6 sm:px-8 py-3 sm:py-4 bg-[#25D366] hover:bg-[#20BA5A] text-white rounded-full font-semibold text-sm sm:text-base shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 sm:gap-3">

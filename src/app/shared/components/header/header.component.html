@@ -49,11 +49,6 @@
 
         <!-- Contact Info y Menú de Usuario -->
         <div class="navbar-actions">
-          <button mat-icon-button class="newsletter-btn" (click)="openNewsletterDialog()"
-            title="Suscríbete al newsletter">
-            <mat-icon>mail</mat-icon>
-          </button>
-          
           <!-- Menú de Usuario (solo si está autenticado) -->
           @if (isAuthenticated) {
             <div class="user-menu-container">

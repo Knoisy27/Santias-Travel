@@ -6,6 +6,8 @@ import { TestimonialService } from '../../../../core/services/testimonial.servic
 import { AgencyService } from '../../../../core/services/agency.service';
 import { Testimonial } from '../../../../core/interfaces/testimonial.interface';
 import { AgencyInfo } from '../../../../core/interfaces/agency.interface';
+import { MockDataService } from '../../../../core/services/mock-data.service';
+import { APP_CONSTANTS } from '../../../../core/constants/app.constants';
 import { HeroSectionComponent } from '../hero-section/hero-section.component';
 import { AboutSectionComponent } from '../about-section/about-section.component';
 import { TestimonialsSectionComponent } from '../testimonials-section/testimonials-section.component';
@@ -35,6 +37,7 @@ import { CtaSectionComponent } from '../cta-section/cta-section.component';
 export class HomeComponent implements OnInit {
   private testimonialService = inject(TestimonialService);
   private agencyService = inject(AgencyService);
+  private mockDataService = inject(MockDataService);
 
   agencyInfo = signal<AgencyInfo | null>(null);
   featuredTestimonials = signal<Testimonial[]>([]);
@@ -56,52 +59,67 @@ export class HomeComponent implements OnInit {
   private loadMockData(): void {
     // Usar setTimeout para evitar ExpressionChangedAfterItHasBeenCheckedError
     setTimeout(() => {
-      // Datos de ejemplo para la agencia
-      const mockAgencyInfo = {
-      name: 'Santias Travel',
-      description: 'Tu agencia de viajes de confianza',
-      logo: '',
-      email: 'info@santiastravel.com',
-      phone: '+57 300 123 4567',
-      whatsapp: '573001234567',
-      address: 'Bogotá, Colombia',
-      city: 'Bogotá',
-      country: 'Colombia',
-      socialMedia: {
-        facebook: 'https://facebook.com/santiastravel',
-        instagram: 'https://instagram.com/santiastravel'
-      },
-      statistics: {
-        yearsOfExperience: 7,
-        destinationsAvailable: 50,
-        happyClients: 106000,
-        tripsCompleted: 5000
-      },
-      certifications: []
-    };
-
-    // Datos de ejemplo para testimonios
-    const mockTestimonials = [
-      {
-        id: '1',
-        clientName: 'María García',
-        clientCity: 'Bogotá',
-        clientCountry: 'Colombia',
-        rating: 5,
-        comment: 'Una experiencia increíble. Todo perfectamente organizado y el servicio excepcional.',
-        destinationId: '1',
-        destinationName: 'Sudáfrica',
-        travelDate: new Date('2024-01-15'),
-        isVerified: true,
-        isHighlighted: true,
-        createdAt: new Date()
-      }
-    ];
-
-      // Setear datos después de nextTick para evitar errores de detección de cambios
-      this.agencyInfo.set(mockAgencyInfo);
-      this.featuredTestimonials.set(mockTestimonials);
-      this.isLoading.set(false);
+      // Usar datos mock centralizados para la agencia
+      this.mockDataService.getAgencyInfo().subscribe({
+        next: (info) => {
+          this.agencyInfo.set(info);
+          
+          // Datos de ejemplo para testimonios
+          const mockTestimonials = [
+            {
+              id: '1',
+              clientName: 'María García',
+              clientCity: 'Bogotá',
+              clientCountry: 'Colombia',
+              rating: 5,
+              comment: 'Una experiencia increíble. Todo perfectamente organizado y el servicio excepcional.',
+              destinationId: '1',
+              destinationName: 'México',
+              travelDate: new Date('2025-03-15'),
+              isVerified: true,
+              isHighlighted: true,
+              createdAt: new Date()
+            },
+            
+            {
+              id: '2',
+              clientName: 'Juan Martínez',
+              clientCity: 'Cali',
+              clientCountry: 'Colombia',
+              rating: 5,
+              comment: 'Excelente servicio, muy profesional y atento a las necesidades de los clientes.',
+              destinationId: '2',
+              destinationName: 'Perú',
+              travelDate: new Date('2025-06-15'),
+              isVerified: true,
+              isHighlighted: true,
+              createdAt: new Date()
+            },
+            {
+              id: '2',
+              clientName: 'Camila Hurtado',
+              clientCity: 'Medellín',
+              clientCountry: 'Colombia',
+              rating: 5,
+              comment: 'El viaje superó todas mis expectativas, atención y organización de primera.',
+              destinationId: '2',
+              destinationName: 'Punta Cana',
+              travelDate: new Date('2025-09-15'),
+              isVerified: true,
+              isHighlighted: true,
+              createdAt: new Date()
+            },
+          ];
+          
+          this.featuredTestimonials.set(mockTestimonials);
+          this.isLoading.set(false);
+        },
+        error: (error) => {
+          // Fallback a constantes si hay error
+          this.agencyInfo.set(APP_CONSTANTS.AGENCY_INFO);
+          this.isLoading.set(false);
+        }
+      });
     }, 0);
   }
 

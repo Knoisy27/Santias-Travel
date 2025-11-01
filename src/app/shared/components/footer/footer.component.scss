@@ -13,22 +13,26 @@
 
 .footer-content {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: vars.$spacing-2xl;
+  justify-items: center;
 
   @include mixins.desktop {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: vars.$spacing-xl;
+    justify-items: center;
   }
 
   @include mixins.tablet {
     grid-template-columns: 1fr 1fr;
     gap: vars.$spacing-lg;
+    justify-items: start;
   }
 
   @include mixins.mobile {
     grid-template-columns: 1fr;
     gap: vars.$spacing-xl;
+    justify-items: start;
   }
 }
 
@@ -75,14 +79,24 @@
     margin-bottom: vars.$spacing-md;
     color: vars.$gray-300;
     font-size: vars.$font-size-sm;
+    transition: color vars.$transition-fast;
 
     &:last-child {
       margin-bottom: 0;
     }
 
+    &:hover {
+      color: vars.$white;
+    }
+
     svg {
       flex-shrink: 0;
       opacity: 0.8;
+      transition: opacity vars.$transition-fast;
+    }
+
+    &:hover svg {
+      opacity: 1;
     }
   }
 }
