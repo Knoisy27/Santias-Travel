@@ -33,14 +33,14 @@
 
     <!-- Viajes reales del backend -->
     <ng-container *ngIf="!showMockTrip && viajes.length > 0">
-      <div class="trip-card" *ngFor="let viaje of viajes; trackBy: trackByViaje">
+      <div class="trip-card cursor-pointer" *ngFor="let viaje of viajes; trackBy: trackByViaje" (click)="verDetalles(viaje)">
         <div class="trip-image-container">
           <img [src]="viaje.imagenUrl" [alt]="viaje.nombre" class="trip-image">
         </div>
         <div class="trip-content">
           <div class="trip-header">
             <h2 class="trip-title">{{ viaje.nombre }}</h2>
-            <div class="trip-actions" *ngIf="canEdit || canDelete">
+            <div class="trip-actions" *ngIf="canEdit || canDelete" (click)="$event.stopPropagation()">
               <button 
                 *ngIf="canEdit"
                 class="btn-edit"

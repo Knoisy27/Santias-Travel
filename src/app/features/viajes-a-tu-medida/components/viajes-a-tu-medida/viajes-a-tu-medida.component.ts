@@ -140,5 +140,12 @@ export class ViajesATuMedidaComponent implements OnInit, OnDestroy {
         }
       });
   }
+
+  verDetalles(viaje: ViajeIndividual): void {
+    if (viaje?.id) {
+      this.router.navigate(['/viajes-a-tu-medida', viaje.id]);
+    }
+  }
+
 }
 

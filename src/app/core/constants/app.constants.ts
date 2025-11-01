@@ -56,14 +56,6 @@ export const APP_CONSTANTS = {
     }
   },
 
-  // Configuración de carrusel
-  CAROUSEL_CONFIG: {
-    autoSlideInterval: 5000, // 5 segundos
-    slidesToShow: 3,
-    slidesToShowMobile: 1,
-    slidesToShowTablet: 2
-  },
-
   // Configuración de notificaciones
   NOTIFICATION_CONFIG: {
     duration: {
@@ -95,7 +87,6 @@ export const APP_CONSTANTS = {
 export type AgencyInfo = typeof APP_CONSTANTS.AGENCY_INFO;
 export type WhatsAppMessages = typeof APP_CONSTANTS.WHATSAPP_MESSAGES;
 export type FormConfig = typeof APP_CONSTANTS.FORM_CONFIG;
-export type CarouselConfig = typeof APP_CONSTANTS.CAROUSEL_CONFIG;
 export type NotificationConfig = typeof APP_CONSTANTS.NOTIFICATION_CONFIG;
 export type Routes = typeof APP_CONSTANTS.ROUTES;
 export type ApiConfig = typeof APP_CONSTANTS.API_CONFIG;

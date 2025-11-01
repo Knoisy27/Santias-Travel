@@ -2,14 +2,12 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../../shared/material/material.module';
-import { TripsService, ViajeGrupal } from '../../../../core/services/trips.service';
 import { TestimonialService } from '../../../../core/services/testimonial.service';
 import { AgencyService } from '../../../../core/services/agency.service';
 import { Testimonial } from '../../../../core/interfaces/testimonial.interface';
 import { AgencyInfo } from '../../../../core/interfaces/agency.interface';
 import { HeroSectionComponent } from '../hero-section/hero-section.component';
 import { AboutSectionComponent } from '../about-section/about-section.component';
-import { ExperiencesSectionComponent } from '../experiences-section/experiences-section.component';
 import { TestimonialsSectionComponent } from '../testimonials-section/testimonials-section.component';
 // import { NewsletterPopupComponent } from '../newsletter-popup/newsletter-popup.component'; // No usado
 
@@ -22,7 +20,6 @@ import { TestimonialsSectionComponent } from '../testimonials-section/testimonia
     MaterialModule,
     HeroSectionComponent,
     AboutSectionComponent,
-    ExperiencesSectionComponent,
     TestimonialsSectionComponent
     // NewsletterPopupComponent // No usado
   ],
@@ -30,12 +27,10 @@ import { TestimonialsSectionComponent } from '../testimonials-section/testimonia
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  private tripsService = inject(TripsService);
   private testimonialService = inject(TestimonialService);
   private agencyService = inject(AgencyService);
 
   agencyInfo = signal<AgencyInfo | null>(null);
-  featuredTrips = signal<ViajeGrupal[]>([]);
   featuredTestimonials = signal<Testimonial[]>([]);
   isLoading = signal(true);
   showNewsletterPopup = signal(false);
@@ -79,9 +74,6 @@ export class HomeComponent implements OnInit {
       certifications: []
     };
 
-    // Datos de ejemplo para viajes grupales
-    const mockTrips: ViajeGrupal[] = [];
-
     // Datos de ejemplo para testimonios
     const mockTestimonials = [
       {
@@ -102,7 +94,6 @@ export class HomeComponent implements OnInit {
 
       // Setear datos después de nextTick para evitar errores de detección de cambios
       this.agencyInfo.set(mockAgencyInfo);
-      this.featuredTrips.set(mockTrips);
       this.featuredTestimonials.set(mockTestimonials);
       this.isLoading.set(false);
     }, 0);

@@ -1,10 +1,13 @@
-
 // Angular Material theming DEBE ir primero
 @use '@angular/material' as mat;
 
 // Importar variables y mixins
 @use 'assets/styles/variables' as vars;
 @use 'assets/styles/mixins' as mixins;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 // Crear paleta personalizada con nuestros colores
 $custom-primary: mat.m2-define-palette((

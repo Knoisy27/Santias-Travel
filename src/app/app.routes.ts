@@ -16,6 +16,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/viajes-a-tu-medida/components/viajes-a-tu-medida/viajes-a-tu-medida.component').then(m => m.ViajesATuMedidaComponent)
       },
       {
+        path: 'viajes-a-tu-medida/:id',
+        loadComponent: () => import('./features/viajes-a-tu-medida/components/viajes-a-tu-medida-detalle/viajes-a-tu-medida-detalle.component').then(m => m.ViajesATuMedidaDetalleComponent)
+      },
+      {
         path: 'viajes-grupales',
         loadComponent: () => import('./features/viajes-grupales/components/viajes-grupales/viajes-grupales.component').then(m => m.ViajesGrupalesComponent),
         data: { preload: true } // Preload para página importante
