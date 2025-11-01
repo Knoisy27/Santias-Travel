@@ -9,6 +9,7 @@ import { AgencyInfo } from '../../../../core/interfaces/agency.interface';
 import { HeroSectionComponent } from '../hero-section/hero-section.component';
 import { AboutSectionComponent } from '../about-section/about-section.component';
 import { TestimonialsSectionComponent } from '../testimonials-section/testimonials-section.component';
+import { TripsSliderComponent } from '../trips-slider/trips-slider.component';
 // import { NewsletterPopupComponent } from '../newsletter-popup/newsletter-popup.component'; // No usado
 
 @Component({
@@ -20,7 +21,8 @@ import { TestimonialsSectionComponent } from '../testimonials-section/testimonia
     MaterialModule,
     HeroSectionComponent,
     AboutSectionComponent,
-    TestimonialsSectionComponent
+    TestimonialsSectionComponent,
+    TripsSliderComponent
     // NewsletterPopupComponent // No usado
   ],
   templateUrl: './home.component.html',

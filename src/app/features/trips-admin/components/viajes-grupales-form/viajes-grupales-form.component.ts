@@ -211,7 +211,7 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
       if (this.isEditMode() && this.viajeId()) {
         this.updateViajeGrupal(this.viajeId()!, user, imagenUrl, videoUrl);
       } else {
-        this.createViajeGrupal(user, imagenUrl, videoUrl);
+      this.createViajeGrupal(user, imagenUrl, videoUrl);
       }
     }).catch((error) => {
       this.isLoading.set(false);
@@ -350,19 +350,19 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
             errorMessage = 'No tienes permisos para realizar esta acción.';
           } else if (error.status === 404) {
             errorMessage = 'El viaje no fue encontrado.';
-          } else if (error.status === 0) {
-            errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión o el backend.';
-          }
-          this.snackBar.open(errorMessage, 'Cerrar', { duration: 5000 });
+        } else if (error.status === 0) {
+          errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión o el backend.';
         }
-      });
+        this.snackBar.open(errorMessage, 'Cerrar', { duration: 5000 });
+      }
+    });
   }
 
   onCancel(): void {
     if (this.isEditMode()) {
       this.router.navigate(['/viajes-grupales']);
     } else {
-      this.router.navigate(['/admin/viajes']);
+    this.router.navigate(['/admin/viajes']);
     }
   }
 

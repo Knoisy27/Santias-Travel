@@ -39,7 +39,6 @@
         </div>
         <div class="trip-content">
           <div class="trip-header">
-            <h2 class="trip-title">{{ viaje.nombre }}</h2>
             <div class="trip-actions" *ngIf="canEdit || canDelete" (click)="$event.stopPropagation()">
               <button 
                 *ngIf="canEdit"
@@ -63,14 +62,22 @@
               </button>
             </div>
           </div>
+          
+          <!-- Fechas disponibles -->
+          <div class="trip-date" *ngIf="viaje.fechaInicio && viaje.fechaFin">
+            <span class="trip-date-label">Fechas disponibles:</span>
+            <span class="trip-date-value">{{ formatearRangoFechas(viaje.fechaInicio, viaje.fechaFin) }}</span>
+          </div>
+
+          <!-- Nombre del viaje (bold y más grande) -->
+          <h2 class="trip-title">{{ viaje.nombre }}</h2>
+
+          <!-- Descripción -->
           <p class="trip-description">{{ viaje.descripcion }}</p>
-          <div class="trip-details">
-            <div class="trip-date" *ngIf="viaje.fechaInicio && viaje.fechaFin">
-              Fecha: {{ formatearRangoFechas(viaje.fechaInicio, viaje.fechaFin) }}
-            </div>
-            <div class="trip-price" *ngIf="viaje.valor">
-              Precio: {{ formatearPrecio(viaje.valor) }}
-            </div>
+
+          <!-- Precio -->
+          <div class="trip-price" *ngIf="viaje.valor">
+            {{ formatearPrecio(viaje.valor) }}
           </div>
           <div class="trip-actions-bottom">
             <button class="btn-details" (click)="verMasDetalles(viaje); $event.stopPropagation()">
