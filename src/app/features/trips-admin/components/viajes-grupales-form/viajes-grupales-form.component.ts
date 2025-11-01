@@ -7,11 +7,12 @@ import { TripsService, ViajeGrupalCreateRequest, ViajeGrupal, FileUploadResponse
 import { AuthService } from '../../../../core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
+import { NgxEditorComponent, NgxEditorMenuComponent, Editor, Toolbar } from 'ngx-editor';
 
 @Component({
   selector: 'app-viajes-grupales-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule, NgxEditorComponent, NgxEditorMenuComponent],
   templateUrl: './viajes-grupales-form.component.html',
   styleUrl: './viajes-grupales-form.component.scss'
 })
@@ -38,8 +39,28 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
   viajeId = signal<number | null>(null);
   isEditMode = signal(false);
 
+  // Editores Ngx Editor
+  editorIncluye!: Editor;
+  editorItinerario!: Editor;
+  editorNoIncluye!: Editor;
+  editorSugerencias!: Editor;
+
+  // Toolbar personalizado con solo las opciones requeridas
+  toolbar: Toolbar = [
+    ['bold', 'italic'],
+    ['underline', 'strike'],
+    ['ordered_list', 'bullet_list'],
+    ['align_left', 'align_center', 'align_right', 'align_justify'],
+  ];
+
   constructor() {
     this.viajeForm = this.createForm();
+    
+    // Inicializar editores con configuración
+    this.editorIncluye = new Editor();
+    this.editorItinerario = new Editor();
+    this.editorNoIncluye = new Editor();
+    this.editorSugerencias = new Editor();
   }
 
   ngOnInit(): void {
@@ -57,6 +78,12 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    
+    // Destruir editores
+    this.editorIncluye.destroy();
+    this.editorItinerario.destroy();
+    this.editorNoIncluye.destroy();
+    this.editorSugerencias.destroy();
   }
 
   cargarViaje(id: number): void {

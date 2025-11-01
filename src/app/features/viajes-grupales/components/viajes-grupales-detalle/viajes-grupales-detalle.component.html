@@ -79,9 +79,9 @@
                       <span class="font-bold text-gray-800">Incluye</span>
                     </mat-panel-title>
                   </mat-expansion-panel-header>
-                  <p class="text-sm lg:text-base text-gray-700 whitespace-pre-line leading-relaxed pt-2">
-                    {{ viaje.incluye }}
-                  </p>
+                  <div class="text-sm lg:text-base text-gray-700 leading-relaxed pt-2" 
+                    [innerHTML]="getIncluyeHtml()">
+                  </div>
                 </mat-expansion-panel>
               }
 
@@ -94,9 +94,9 @@
                       <span class="font-bold text-gray-800">No Incluye</span>
                     </mat-panel-title>
                   </mat-expansion-panel-header>
-                  <p class="text-sm lg:text-base text-gray-700 whitespace-pre-line leading-relaxed pt-2">
-                    {{ viaje.noIncluye }}
-                  </p>
+                  <div class="text-sm lg:text-base text-gray-700 leading-relaxed pt-2" 
+                    [innerHTML]="getNoIncluyeHtml()">
+                  </div>
                 </mat-expansion-panel>
               }
 
@@ -109,9 +109,9 @@
                       <span class="font-bold text-gray-800">Itinerario</span>
                     </mat-panel-title>
                   </mat-expansion-panel-header>
-                  <p class="text-sm lg:text-base text-gray-700 whitespace-pre-line leading-relaxed pt-2">
-                    {{ viaje.itinerario }}
-                  </p>
+                  <div class="text-sm lg:text-base text-gray-700 leading-relaxed pt-2" 
+                    [innerHTML]="getItinerarioHtml()">
+                  </div>
                 </mat-expansion-panel>
               }
 
@@ -124,9 +124,9 @@
                       <span class="font-bold text-gray-800">Sugerencias</span>
                     </mat-panel-title>
                   </mat-expansion-panel-header>
-                  <p class="text-sm lg:text-base text-gray-700 whitespace-pre-line leading-relaxed pt-2">
-                    {{ viaje.sugerencias }}
-                  </p>
+                  <div class="text-sm lg:text-base text-gray-700 leading-relaxed pt-2" 
+                    [innerHTML]="getSugerenciasHtml()">
+                  </div>
                 </mat-expansion-panel>
               }
             </div>

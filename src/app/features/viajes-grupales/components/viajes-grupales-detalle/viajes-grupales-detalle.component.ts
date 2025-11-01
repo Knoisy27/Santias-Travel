@@ -8,6 +8,7 @@ import { TripsService, ViajeGrupal } from '../../../../core/services/trips.servi
 import { UtilsService } from '../../../../core/services/utils.service';
 import { APP_CONSTANTS } from '../../../../core/constants/app.constants';
 import { Subject, takeUntil } from 'rxjs';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-viajes-grupales-detalle',
@@ -26,6 +27,7 @@ export class ViajesGrupalesDetalleComponent implements OnInit, OnDestroy {
   private tripsService = inject(TripsService);
   private snackBar = inject(MatSnackBar);
   private utilsService = inject(UtilsService);
+  private sanitizer = inject(DomSanitizer);
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -123,6 +125,29 @@ export class ViajesGrupalesDetalleComponent implements OnInit, OnDestroy {
 
     const whatsappNumber = APP_CONSTANTS.AGENCY_INFO.whatsapp;
     this.utilsService.openWhatsApp(whatsappNumber, mensaje);
+  }
+
+  // Métodos para sanitizar HTML
+  sanitizeHtml(html: string | undefined): SafeHtml {
+    if (!html) return '';
+    // Usar bypassSecurityTrustHtml para permitir renderizado de HTML desde el editor
+    return this.sanitizer.bypassSecurityTrustHtml(html);
+  }
+
+  getIncluyeHtml(): SafeHtml {
+    return this.sanitizeHtml(this.viaje?.incluye);
+  }
+
+  getNoIncluyeHtml(): SafeHtml {
+    return this.sanitizeHtml(this.viaje?.noIncluye);
+  }
+
+  getItinerarioHtml(): SafeHtml {
+    return this.sanitizeHtml(this.viaje?.itinerario);
+  }
+
+  getSugerenciasHtml(): SafeHtml {
+    return this.sanitizeHtml(this.viaje?.sugerencias);
   }
 }
 

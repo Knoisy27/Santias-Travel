@@ -136,43 +136,74 @@
 
             <div class="form-row">
               <!-- Incluye -->
-              <mat-form-field appearance="outline" class="full-width required-field">
-                <mat-label>Incluye</mat-label>
-                <textarea matInput formControlName="incluye" rows="4" 
-                  placeholder="Transporte, alojamiento, comidas, guía, seguros..."></textarea>
-                <mat-error>{{ getFieldError('incluye') }}</mat-error>
-              </mat-form-field>
+              <div class="editor-field full-width required-field">
+                <label class="editor-label">Incluye</label>
+                <div class="NgxEditor__Wrapper">
+                  <ngx-editor-menu [editor]="editorIncluye" [toolbar]="toolbar"></ngx-editor-menu>
+                  <ngx-editor 
+                    [editor]="editorIncluye" 
+                    formControlName="incluye"
+                    [placeholder]="'Transporte, alojamiento, comidas, guía, seguros...'">
+                  </ngx-editor>
+                </div>
+                <div class="editor-error" *ngIf="viajeForm.get('incluye')?.errors && viajeForm.get('incluye')?.touched">
+                  {{ getFieldError('incluye') }}
+                </div>
+              </div>
             </div>
 
             <div class="form-row">
               <!-- Itinerario -->
-              <mat-form-field appearance="outline" class="full-width required-field">
-                <mat-label>Itinerario</mat-label>
-                <textarea matInput formControlName="itinerario" rows="5" 
-                  class="itinerario-textarea"
-                  placeholder="Día 1: Llegada a... Día 2: Visita a..."></textarea>
-                <mat-error>{{ getFieldError('itinerario') }}</mat-error>
-              </mat-form-field>
+              <div class="editor-field full-width required-field">
+                <label class="editor-label">Itinerario</label>
+                <div class="NgxEditor__Wrapper">
+                  <ngx-editor-menu [editor]="editorItinerario" [toolbar]="toolbar"></ngx-editor-menu>
+                  <ngx-editor 
+                    [editor]="editorItinerario" 
+                    formControlName="itinerario"
+                    [placeholder]="'Día 1: Llegada a... Día 2: Visita a...'">
+                  </ngx-editor>
+                </div>
+                <div class="editor-error" *ngIf="viajeForm.get('itinerario')?.errors && viajeForm.get('itinerario')?.touched">
+                  {{ getFieldError('itinerario') }}
+                </div>
+              </div>
             </div>
 
             <div class="form-row">
               <!-- No Incluye -->
-              <mat-form-field appearance="outline" class="full-width required-field">
-                <mat-label>No Incluye</mat-label>
-                <textarea matInput formControlName="noIncluye" rows="4" 
-                  placeholder="Gastos personales, propinas, bebidas alcohólicas..."></textarea>
-                <mat-error>{{ getFieldError('noIncluye') }}</mat-error>
-              </mat-form-field>
+              <div class="editor-field full-width required-field">
+                <label class="editor-label">No Incluye</label>
+                <div class="NgxEditor__Wrapper">
+                  <ngx-editor-menu [editor]="editorNoIncluye" [toolbar]="toolbar"></ngx-editor-menu>
+                  <ngx-editor 
+                    [editor]="editorNoIncluye" 
+                    formControlName="noIncluye"
+                    [placeholder]="'Gastos personales, propinas, bebidas alcohólicas...'">
+                  </ngx-editor>
+                </div>
+                <div class="editor-error" *ngIf="viajeForm.get('noIncluye')?.errors && viajeForm.get('noIncluye')?.touched">
+                  {{ getFieldError('noIncluye') }}
+                </div>
+              </div>
             </div>
 
             <div class="form-row">
               <!-- Sugerencias -->
-              <mat-form-field appearance="outline" class="full-width required-field">
-                <mat-label>Sugerencias</mat-label>
-                <textarea matInput formControlName="sugerencias" rows="4" 
-                  placeholder="Qué llevar, recomendaciones de ropa, documentos necesarios..."></textarea>
-                <mat-error>{{ getFieldError('sugerencias') }}</mat-error>
-              </mat-form-field>
+              <div class="editor-field full-width required-field">
+                <label class="editor-label">Sugerencias</label>
+                <div class="NgxEditor__Wrapper">
+                  <ngx-editor-menu [editor]="editorSugerencias" [toolbar]="toolbar"></ngx-editor-menu>
+                  <ngx-editor 
+                    [editor]="editorSugerencias" 
+                    formControlName="sugerencias"
+                    [placeholder]="'Qué llevar, recomendaciones de ropa, documentos necesarios...'">
+                  </ngx-editor>
+                </div>
+                <div class="editor-error" *ngIf="viajeForm.get('sugerencias')?.errors && viajeForm.get('sugerencias')?.touched">
+                  {{ getFieldError('sugerencias') }}
+                </div>
+              </div>
             </div>
 
             <!-- Botones de acción -->
