@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoadingService } from '../../services/loading.service';
 import { Subscription } from 'rxjs';
@@ -94,6 +94,7 @@ import { Subscription } from 'rxjs';
 })
 export class GlobalLoadingComponent implements OnInit, OnDestroy {
   private loadingService = inject(LoadingService);
+  private cdr = inject(ChangeDetectorRef);
   private subscriptions = new Subscription();
 
   isLoading = false;
@@ -104,6 +105,7 @@ export class GlobalLoadingComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.loadingService.loading$.subscribe(loading => {
         this.isLoading = loading;
+        this.cdr.detectChanges();
       })
     );
 
@@ -111,6 +113,7 @@ export class GlobalLoadingComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.loadingService.loadingMessage$.subscribe(message => {
         this.loadingMessage = message;
+        this.cdr.detectChanges();
       })
     );
   }

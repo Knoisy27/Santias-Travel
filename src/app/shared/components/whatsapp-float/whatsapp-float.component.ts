@@ -2,6 +2,7 @@ import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../material/material.module';
 import { NotificationService } from '../../services/notification.service';
+import { UtilsService } from '../../../core/services/utils.service';
 import { APP_CONSTANTS } from '../../../core/constants/app.constants';
 
 @Component({
@@ -13,13 +14,15 @@ import { APP_CONSTANTS } from '../../../core/constants/app.constants';
 })
 export class WhatsappFloatComponent {
   private notificationService = inject(NotificationService);
+  private utilsService = inject(UtilsService);
   
   phoneNumber = signal(APP_CONSTANTS.AGENCY_INFO.whatsapp);
   message = signal(APP_CONSTANTS.WHATSAPP_MESSAGES.default);
 
   openWhatsApp(): void {
+    const cleanPhone = this.phoneNumber().replace(/\D/g, '');
     const encodedMessage = encodeURIComponent(this.message());
-    const whatsappUrl = `https://wa.me/${this.phoneNumber()}?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
     
     // Verificar si estamos en el navegador
     if (typeof window !== 'undefined') {

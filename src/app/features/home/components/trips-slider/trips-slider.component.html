@@ -1,0 +1,88 @@
+<section class="trips-slider-section py-12 px-2 lg:py-16 bg-gradient-to-b from-gray-50 to-white">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-8 lg:mb-12">
+      <h2 class="text-3xl lg:text-4xl font-bold text-amber-600 mb-3 lg:mb-4">
+      {{ config.general.title }}
+    </h2>
+      <p class="text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto">
+        {{ config.general.subtitle }}
+      </p>
+    </div>
+
+    @if (isLoading()) {
+      <div class="flex justify-center items-center py-12">
+        <mat-spinner [diameter]="config.general.loadingSpinner.diameter" [strokeWidth]="config.general.loadingSpinner.strokeWidth"></mat-spinner>
+      </div>
+    } @else if (displayViajes().length > 0) {
+      <div class="relative">
+        <!-- Botón izquierda -->
+        <button
+          (click)="moverIzquierda()"
+          class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-shadow duration-300 hover:bg-gray-50 border border-gray-200"
+          [attr.aria-label]="config.navigation.leftButtonAriaLabel">
+          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <!-- Contenedor del slider -->
+        <div class="overflow-hidden pl-4 lg:mx-16">
+          <div
+            class="flex transition-transform duration-300 px-8 pl-2 ease-in-out"
+            [style.transform]="transformValue"
+            [style.width]="(displayViajes().length * 336) + 'px'">
+            @for (viaje of displayViajes(); track $index) {
+              <div class="flex-shrink-0 w-80 px-4 py-5">
+                <mat-card class="h-full flex flex-col shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+                  <!-- Imagen -->
+                  <div class="relative w-full h-48 overflow-hidden bg-gray-200">
+                    <img
+                      [src]="viaje.imagenUrl || config.tripCard.placeholderImage"
+                      [alt]="viaje.nombre"
+                      class="w-full h-full object-cover">
+                  </div>
+
+                  <!-- Contenido -->
+                  <mat-card-content class="flex-grow p-4">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2 line-clamp-2">
+                      {{ viaje.nombre }}
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-4 line-clamp-3">
+                      {{ truncarTexto(viaje.descripcion, config.tripCard.maxDescriptionLength) }}
+                    </p>
+                  </mat-card-content>
+
+                  <!-- Botón -->
+                  <mat-card-actions class="p-4 pt-0">
+                    <button
+                      mat-raised-button
+                      color="primary"
+                      class="w-full"
+                      (click)="irADetalle(viaje)">
+                      {{ config.tripCard.buttonText }}
+                    </button>
+                  </mat-card-actions>
+                </mat-card>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Botón derecha -->
+        <button
+          (click)="moverDerecha()"
+          class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-shadow duration-300 hover:bg-gray-50 border border-gray-200"
+          [attr.aria-label]="config.navigation.rightButtonAriaLabel">
+          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    } @else {
+      <div class="text-center py-12">
+        <p class="text-gray-600">{{ config.general.emptyState }}</p>
+      </div>
+    }
+  </div>
+</section>
+

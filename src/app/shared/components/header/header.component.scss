@@ -266,20 +266,6 @@
     gap: vars.$spacing-md;
   }
 
-  .newsletter-btn {
-    color: vars.$primary-blue;
-    transition: all 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
-
-    &:hover {
-      background-color: rgba(vars.$primary-blue, 0.1);
-      transform: scale(1.1);
-    }
-
-    mat-icon {
-      font-size: 20px;
-    }
-  }
-
   .contact-info {
     font-size: vars.$font-size-sm;
     color: vars.$gray-600;
@@ -330,5 +316,155 @@
 .navbar-menu.active {
   @include mixins.mobile {
     animation: slideInRight 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+}
+
+// User Menu
+.user-menu-container {
+  position: relative;
+  display: inline-block;
+}
+
+.user-menu-trigger {
+  @include mixins.flex-center;
+  gap: vars.$spacing-xs;
+  padding: vars.$spacing-xs vars.$spacing-sm;
+  border-radius: vars.$border-radius-md;
+  background: none;
+  border: 1px solid vars.$gray-200;
+  color: vars.$gray-700;
+  font-weight: vars.$font-weight-medium;
+  transition: all vars.$transition-fast;
+  cursor: pointer;
+  min-width: 120px;
+
+  &:hover {
+    background-color: rgba(vars.$primary-blue, 0.05);
+    border-color: vars.$primary-blue;
+    color: vars.$primary-blue;
+  }
+
+  .user-name {
+    font-size: vars.$font-size-sm;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+  }
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.user-menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: vars.$white;
+  border: 1px solid vars.$gray-200;
+  border-radius: vars.$border-radius-md;
+  box-shadow: vars.$shadow-lg;
+  min-width: 200px;
+  z-index: vars.$z-fixed + 10;
+  margin-top: vars.$spacing-xs;
+  overflow: hidden;
+
+  .user-info {
+    @include mixins.flex-center;
+    gap: vars.$spacing-sm;
+    padding: vars.$spacing-md;
+    background-color: vars.$gray-50;
+
+    mat-icon {
+      color: vars.$primary-blue;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .user-details {
+      @include mixins.flex-column;
+      gap: 2px;
+
+      .user-full-name {
+        font-weight: vars.$font-weight-semibold;
+        color: vars.$gray-800;
+        font-size: vars.$font-size-sm;
+      }
+
+      .user-role {
+        font-size: vars.$font-size-xs;
+        color: vars.$gray-600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+  }
+
+  .admin-btn {
+    @include mixins.flex-center;
+    gap: vars.$spacing-sm;
+    width: 100%;
+    padding: vars.$spacing-sm vars.$spacing-md;
+    background: none;
+    border: none;
+    color: vars.$primary-blue;
+    font-size: vars.$font-size-sm;
+    cursor: pointer;
+    transition: background-color vars.$transition-fast;
+
+    &:hover {
+      background-color: rgba(vars.$primary-blue, 0.05);
+    }
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .logout-btn {
+    @include mixins.flex-center;
+    gap: vars.$spacing-sm;
+    width: 100%;
+    padding: vars.$spacing-sm vars.$spacing-md;
+    background: none;
+    border: none;
+    color: #dc2626;
+    font-size: vars.$font-size-sm;
+    cursor: pointer;
+    transition: background-color vars.$transition-fast;
+
+    &:hover {
+      background-color: rgba(220, 38, 38, 0.05);
+    }
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  mat-divider {
+    margin: 0;
+  }
+}
+
+// Responsive adjustments for user menu
+@include mixins.mobile {
+  .user-menu-trigger {
+    .user-name {
+      max-width: 80px;
+    }
+  }
+
+  .user-menu-dropdown {
+    right: -10px;
+    min-width: 180px;
   }
 }

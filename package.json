@@ -4,7 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:local": "ng serve --configuration dev-local",
     "build": "ng build",
+    "build:local": "ng build --configuration dev-local",
     "watch": "ng build --watch --configuration development",
     "serve:ssr:santiasTravelFront": "node dist/santiasTravelFront/server/server.mjs"
   },
@@ -35,7 +37,9 @@
     "@angular/service-worker": "^20.2.3",
     "@angular/ssr": "^20.2.3",
     "express": "^5.1.0",
+    "ngx-editor": "^19.0.0-beta.1",
     "rxjs": "~7.8.0",
+    "swiper": "^12.0.3",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
@@ -44,6 +48,9 @@
     "@angular/compiler-cli": "^20.2.3",
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.18",
     "typescript": "~5.9.2"
   }
 }

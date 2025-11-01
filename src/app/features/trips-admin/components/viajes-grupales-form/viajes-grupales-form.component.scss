@@ -1,0 +1,440 @@
+.form-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 2rem 0;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    mat-icon {
+      font-size: 2.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+
+  .page-subtitle {
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+}
+
+.form-card {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+.viaje-form {
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .full-width {
+    flex: 1;
+  }
+
+  .half-width {
+    flex: 1;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+}
+
+// Estilos para subida de archivos
+.file-upload-container {
+  .file-upload-label {
+    display: block;
+    font-weight: 500;
+    color: #34495e;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .file-upload-area {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      border-color: #3498db;
+      background-color: rgba(52, 152, 219, 0.05);
+    }
+
+    &.uploading {
+      border-color: #f39c12;
+      background-color: rgba(243, 156, 18, 0.05);
+    }
+
+    .upload-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: #6c757d;
+
+      mat-icon {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+        color: #3498db;
+      }
+
+      span {
+        font-weight: 500;
+      }
+
+      small {
+        font-size: 0.75rem;
+        color: #adb5bd;
+      }
+    }
+
+    .uploaded-file {
+      position: relative;
+      width: 100%;
+
+      .preview-image {
+        max-width: 100%;
+        max-height: 100px;
+        border-radius: 4px;
+        object-fit: cover;
+      }
+
+      .preview-video {
+        max-width: 100%;
+        max-height: 100px;
+        border-radius: 4px;
+      }
+
+      .remove-btn {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #dc3545;
+        color: white;
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        border-radius: 50%;
+
+        mat-icon {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+        }
+
+        &:hover {
+          background: #c82333;
+        }
+      }
+    }
+
+    .upload-progress {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      mat-progress-bar {
+        width: 100%;
+      }
+
+      .progress-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+      }
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e9ecef;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 140px;
+    height: 44px;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    mat-spinner {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .form-container {
+    padding: 1rem 0;
+  }
+
+  .form-header {
+    .page-title {
+      font-size: 2rem;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      mat-icon {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+
+    .page-subtitle {
+      font-size: 1rem;
+    }
+  }
+
+  .form-card {
+    padding: 1.5rem;
+    margin: 0 1rem;
+  }
+
+  .viaje-form {
+    .form-row {
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 1rem;
+    }
+
+    .half-width {
+      flex: none;
+    }
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+
+    button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .form-card {
+    padding: 1rem;
+    margin: 0 0.5rem;
+  }
+
+  .form-header {
+    .page-title {
+      font-size: 1.8rem;
+    }
+  }
+}
+
+// Estilos para error de rango de fechas
+.date-range-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #f44336;
+  font-size: 0.875rem;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: #ffebee;
+  border-radius: 4px;
+  border-left: 4px solid #f44336;
+
+  mat-icon {
+    font-size: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+// Estilos específicos para textareas
+::ng-deep {
+  .mat-mdc-form-field {
+    .mat-mdc-text-field-wrapper {
+      .mat-mdc-form-field-flex {
+        .mat-mdc-form-field-infix {
+          textarea {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.5;
+            font-family: inherit;
+            
+            &::placeholder {
+              color: #999;
+              font-style: italic;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // Estilos para textareas de texto largo
+  .mat-mdc-form-field.full-width {
+    textarea {
+      min-height: 120px;
+      
+      &.itinerario-textarea {
+        min-height: 150px;
+      }
+    }
+  }
+
+  // Estilos para asteriscos rojos en campos requeridos
+  .mat-mdc-form-field {
+    .mat-mdc-text-field-wrapper {
+      .mat-mdc-form-field-flex {
+        .mat-mdc-form-field-infix {
+          .mat-mdc-floating-label {
+            &::after {
+              content: ' *';
+              color: #f44336;
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Para campos no requeridos, ocultar el asterisco
+  .mat-mdc-form-field:not(.required-field) {
+    .mat-mdc-text-field-wrapper {
+      .mat-mdc-form-field-flex {
+        .mat-mdc-form-field-infix {
+          .mat-mdc-floating-label {
+            &::after {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Estilos para campos del editor Ngx Editor
+.editor-field {
+  margin-bottom: 1rem;
+
+  .editor-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 0.5rem;
+    
+    &::after {
+      content: ' *';
+      color: #f44336;
+      font-weight: bold;
+    }
+  }
+
+  .editor-error {
+    color: #f44336;
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    padding-left: 0.5rem;
+  }
+
+  .NgxEditor__Wrapper {
+    border: 1px solid rgba(0, 0, 0, 0.38);
+    border-radius: 4px;
+    overflow: hidden;
+    
+    &:focus-within {
+      border-color: #3f51b5;
+      border-width: 2px;
+    }
+
+    ::ng-deep {
+      ngx-editor-menu {
+        .NgxEditor__MenuBar {
+          border: none;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+          padding: 0.5rem;
+          background-color: #fafafa;
+        }
+      }
+
+      ngx-editor {
+        .NgxEditor {
+          border: none;
+          padding: 0;
+          min-height: 150px;
+          cursor: text;
+          
+          .ProseMirror {
+            outline: none;
+            min-height: 150px;
+            padding: 0.5rem;
+            
+            &.NgxEditor_Content {
+              min-height: 150px;
+              padding: 0.5rem;
+              width: 100%;
+              box-sizing: border-box;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Para campos no requeridos, ocultar el asterisco
+.editor-field:not(.required-field) {
+  .editor-label::after {
+    display: none;
+  }
+}

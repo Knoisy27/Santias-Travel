@@ -6,6 +6,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { provideServiceWorker } from '@angular/service-worker';
 
 export const appConfig: ApplicationConfig = {
@@ -15,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(
       withFetch(),
-      withInterceptors([ErrorInterceptor, LoadingInterceptor])
+      withInterceptors([AuthInterceptor, ErrorInterceptor, LoadingInterceptor])
     ),
     provideAnimations(), provideServiceWorker('ngsw-worker.js', {
             enabled: !isDevMode(),

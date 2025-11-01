@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -11,18 +12,21 @@ export const routes: Routes = [
         data: { preload: true } // Preload para la página principal
       },
       {
-        path: 'destinos',
-        loadComponent: () => import('./features/destinations/components/destinations-list/destinations-list.component').then(m => m.DestinationsListComponent),
+        path: 'viajes-a-tu-medida',
+        loadComponent: () => import('./features/viajes-a-tu-medida/components/viajes-a-tu-medida/viajes-a-tu-medida.component').then(m => m.ViajesATuMedidaComponent)
+      },
+      {
+        path: 'viajes-a-tu-medida/:id',
+        loadComponent: () => import('./features/viajes-a-tu-medida/components/viajes-a-tu-medida-detalle/viajes-a-tu-medida-detalle.component').then(m => m.ViajesATuMedidaDetalleComponent)
+      },
+      {
+        path: 'viajes-grupales',
+        loadComponent: () => import('./features/viajes-grupales/components/viajes-grupales/viajes-grupales.component').then(m => m.ViajesGrupalesComponent),
         data: { preload: true } // Preload para página importante
       },
-      // {
-      //   path: 'destino/:id',
-      //   loadComponent: () => import('./features/destinations/components/destination-detail/destination-detail.component').then(m => m.DestinationDetailComponent),
-      //   data: { skipPrerender: true }
-      // },
       {
-        path: 'viajes-personalizados',
-        loadComponent: () => import('./features/custom-trips/components/custom-trips/custom-trips.component').then(m => m.CustomTripsComponent)
+        path: 'viajes-grupales/:id',
+        loadComponent: () => import('./features/viajes-grupales/components/viajes-grupales-detalle/viajes-grupales-detalle.component').then(m => m.ViajesGrupalesDetalleComponent)
       },
       {
         path: 'sobre-nosotros',
@@ -39,8 +43,50 @@ export const routes: Routes = [
       {
         path: 'privacidad',
         loadComponent: () => import('./features/legal/components/privacy/privacy.component').then(m => m.PrivacyComponent)
+      },
+      {
+        path: 'admin',
+        canActivate: [AuthGuard],
+        data: { roles: ['ADMIN', 'AGENT'] },
+        children: [
+          {
+            path: 'viajes',
+            loadComponent: () => import('./features/trips-admin/components/trips-admin.component').then(m => m.TripsAdminComponent),
+            data: { skipPrerender: true }
+          },
+              {
+                path: 'viajes/viajes-grupales',
+                loadComponent: () => import('./features/trips-admin/components/viajes-grupales-form/viajes-grupales-form.component').then(m => m.ViajesGrupalesFormComponent),
+                data: { skipPrerender: true }
+              },
+              {
+                path: 'viajes/viajes-grupales/:id',
+                loadComponent: () => import('./features/trips-admin/components/viajes-grupales-form/viajes-grupales-form.component').then(m => m.ViajesGrupalesFormComponent),
+                data: { skipPrerender: true }
+              },
+              {
+                path: 'viajes/viajes-individuales',
+                loadComponent: () => import('./features/trips-admin/components/viajes-individuales-form/viajes-individuales-form.component').then(m => m.ViajesIndividualesFormComponent),
+                data: { skipPrerender: true }
+              },
+              {
+                path: 'viajes/viajes-individuales/:id',
+                loadComponent: () => import('./features/trips-admin/components/viajes-individuales-form/viajes-individuales-form.component').then(m => m.ViajesIndividualesFormComponent),
+                data: { skipPrerender: true }
+              }
+        ]
       }
     ]
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./features/auth/components/login/login.component').then(m => m.LoginComponent),
+    data: { skipPrerender: true }
+  },
+  {
+    path: 'backend-test',
+    loadComponent: () => import('./features/auth/components/backend-test/backend-test.component').then(m => m.BackendTestComponent),
+    data: { skipPrerender: true }
   },
   {
     path: '**',

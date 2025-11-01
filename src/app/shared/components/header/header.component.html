@@ -3,18 +3,14 @@
     <div class="container">
       <!-- Logo -->
       <div class="navbar-brand">
-        <a routerLink="/" class="brand-link">
+        <a routerLink="/" class="brand-link" (click)="onBrandNameClick($event)">
           <span class="brand-name">Santias Travel</span>
         </a>
       </div>
 
       <!-- Menu Toggle Button (Mobile) -->
-      <button 
-        class="menu-toggle" 
-        [class.active]="isMenuOpen()"
-        (click)="toggleMenu()"
-        aria-label="Toggle navigation menu"
-        type="button">
+      <button class="menu-toggle" [class.active]="isMenuOpen()" (click)="toggleMenu()"
+        aria-label="Toggle navigation menu" type="button">
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
@@ -24,62 +20,79 @@
       <div class="navbar-menu" [class.active]="isMenuOpen()">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a routerLink="/" 
-               class="nav-link" 
-               routerLinkActive="active" 
-               [routerLinkActiveOptions]="{exact: true}"
-               (click)="closeMenu()">
+            <a routerLink="/" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              (click)="closeMenu()">
               Inicio
             </a>
           </li>
           <li class="nav-item">
-            <button 
-              class="nav-link nav-button" 
-              (click)="scrollToSection('about')">
-              Nosotros
-            </button>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/destinos" 
-               class="nav-link" 
-               routerLinkActive="active"
-               (click)="closeMenu()">
+            <a routerLink="/viajes-grupales" class="nav-link" routerLinkActive="active" (click)="closeMenu()">
               Viajes Grupales
             </a>
           </li>
           <li class="nav-item">
-            <a routerLink="/viajes-personalizados" 
-               class="nav-link" 
-               routerLinkActive="active"
-               (click)="closeMenu()">
+            <a routerLink="/viajes-a-tu-medida" class="nav-link" routerLinkActive="active" (click)="closeMenu()">
               Viajes a tu Medida
             </a>
           </li>
           <li class="nav-item">
-            <a routerLink="/contacto" 
-               class="nav-link" 
-               routerLinkActive="active"
-               (click)="closeMenu()">
+            <button class="nav-link nav-button" (click)="scrollToSection('about')">
+              Nosotros
+            </button>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/contacto" class="nav-link" routerLinkActive="active" (click)="closeMenu()">
               Contacto
             </a>
           </li>
         </ul>
 
-        <!-- Contact Info -->
+        <!-- Contact Info y Menú de Usuario -->
         <div class="navbar-actions">
-          <button mat-icon-button 
-                  class="newsletter-btn" 
-                  (click)="openNewsletterDialog()"
-                  title="Suscríbete al newsletter">
-            <mat-icon>mail</mat-icon>
-          </button>
-          <span class="contact-info">Viajes con Santias ✈️</span>
+          <!-- Menú de Usuario (solo si está autenticado) -->
+          @if (isAuthenticated) {
+            <div class="user-menu-container">
+              <button mat-button class="user-menu-trigger" (click)="toggleUserMenu()">
+                <mat-icon>account_circle</mat-icon>
+                <span class="user-name">{{ currentUser?.name }}</span>
+                <mat-icon>{{ isUserMenuOpen() ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</mat-icon>
+              </button>
+              
+              <!-- Menú desplegable -->
+              @if (isUserMenuOpen()) {
+                <div class="user-menu-dropdown">
+                  <div class="user-info">
+                    <mat-icon>person</mat-icon>
+                    <div class="user-details">
+                      <span class="user-full-name">{{ currentUser?.name }}</span>
+                      <span class="user-role">{{ currentUser?.role | titlecase }}</span>
+                    </div>
+                  </div>
+                  <mat-divider></mat-divider>
+                  <!-- Botón de Administración de Viajes (solo para ADMIN y AGENT) -->
+                  @if (currentUser?.role === 'admin' || currentUser?.role === 'agent') {
+                    <button mat-menu-item routerLink="/admin/viajes" (click)="closeUserMenu()" class="admin-btn">
+                      <mat-icon>admin_panel_settings</mat-icon>
+                      <span>Administrar Viajes</span>
+                    </button>
+                    <mat-divider></mat-divider>
+                  }
+                  <button mat-menu-item (click)="logout()" class="logout-btn">
+                    <mat-icon>logout</mat-icon>
+                    <span>Cerrar Sesión</span>
+                  </button>
+                </div>
+              }
+            </div>
+          } @else {
+            <span class="contact-info">Viajes con Santias ✈️</span>
+          }
         </div>
       </div>
 
       <!-- Overlay for mobile menu -->
       @if (isMenuOpen()) {
-        <div class="menu-overlay" (click)="closeMenu()"></div>
+      <div class="menu-overlay" (click)="closeMenu()"></div>
       }
 
     </div>

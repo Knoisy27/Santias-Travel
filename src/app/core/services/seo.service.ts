@@ -102,49 +102,26 @@ export class SEOService {
         'viajes a América',
         'paquetes turísticos',
         'viajes grupales',
-        'viajes personalizados',
+        'viajes a tu medida',
         'Colombia'
       ]
     });
   }
 
   /**
-   * Actualiza meta tags para página de destinos
+   * Actualiza meta tags para página de viajes grupales
    */
-  updateDestinationsPageMeta(): void {
+  updateGroupTripsPageMeta(): void {
     this.updateMetaTags({
-      title: 'Destinos - Santias Travel | Explora el Mundo',
-      description: 'Explora nuestros destinos disponibles. Desde París hasta Tokio, descubre las mejores experiencias de viaje con Santias Travel.',
+      title: 'Viajes Grupales - Santias Travel | Explora el Mundo',
+      description: 'Explora nuestros viajes grupales disponibles. Descubre las mejores experiencias de viaje compartidas con Santias Travel.',
       keywords: [
-        'destinos de viaje',
-        'París',
-        'Tokio',
-        'Nueva York',
-        'Roma',
-        'Machu Picchu',
-        'Bangkok',
-        'viajes internacionales'
-      ]
-    });
-  }
-
-  /**
-   * Actualiza meta tags para un destino específico
-   */
-  updateDestinationMeta(destination: any): void {
-    this.updateMetaTags({
-      title: `${destination.name} - Santias Travel | Paquetes de Viaje`,
-      description: `${destination.description} Descubre este increíble destino con Santias Travel. Precio desde $${destination.price?.toLocaleString('es-CO')} COP.`,
-      keywords: [
-        destination.name,
-        destination.country,
-        'viajes',
-        'turismo',
-        'paquetes de viaje',
+        'viajes grupales',
+        'viajes compartidos',
+        'viajes internacionales',
+        'grupos de viaje',
         'Santias Travel'
-      ],
-      type: 'product',
-      image: destination.image
+      ]
     });
   }
 

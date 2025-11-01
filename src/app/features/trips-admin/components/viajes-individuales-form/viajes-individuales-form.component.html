@@ -1,0 +1,157 @@
+<div class="form-container">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="form-header">
+          <h1 class="page-title">
+            <mat-icon>{{ isEditMode() ? 'edit' : 'person_add' }}</mat-icon>
+            {{ isEditMode() ? 'Editar Viaje Individual' : 'Agregar Viaje Individual' }}
+          </h1>
+          <p class="page-subtitle">{{ isEditMode() ? 'Modifica la información del viaje individual' : 'Completa la información para crear un nuevo viaje individual' }}</p>
+        </div>
+
+        <mat-card class="form-card">
+          <form [formGroup]="viajeForm" (ngSubmit)="onSubmit()" class="viaje-form">
+            <div class="form-row">
+              <!-- Nombre -->
+              <mat-form-field appearance="outline" class="full-width required-field">
+                <input matInput formControlName="nombre" placeholder="Nombre del Viaje">
+                <mat-error>{{ getFieldError('nombre') }}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <!-- Descripción -->
+              <mat-form-field appearance="outline" class="full-width required-field">
+                <textarea matInput formControlName="descripcion" rows="4" 
+                  placeholder="Descripción - Describe el viaje, destinos, actividades principales..."></textarea>
+                <mat-error>{{ getFieldError('descripcion') }}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <!-- Valor -->
+              <mat-form-field appearance="outline" class="half-width">
+                <input matInput type="number" formControlName="valor" placeholder="Valor (COP)">
+                <mat-error>{{ getFieldError('valor') }}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <!-- Fecha Inicio -->
+              <mat-form-field appearance="outline" class="half-width">
+                <input matInput [matDatepicker]="fechaInicioPicker" formControlName="fechaInicio" 
+                  [min]="minDate"
+                  placeholder="Fecha de Inicio">
+                <mat-datepicker-toggle matIconSuffix [for]="fechaInicioPicker"></mat-datepicker-toggle>
+                <mat-datepicker #fechaInicioPicker [startAt]="minDate"></mat-datepicker>
+                <mat-error>{{ getFieldError('fechaInicio') }}</mat-error>
+              </mat-form-field>
+
+              <!-- Fecha Fin -->
+              <mat-form-field appearance="outline" class="half-width">
+                <input matInput [matDatepicker]="fechaFinPicker" formControlName="fechaFin" 
+                  [min]="minDate"
+                  placeholder="Fecha de Fin">
+                <mat-datepicker-toggle matIconSuffix [for]="fechaFinPicker"></mat-datepicker-toggle>
+                <mat-datepicker #fechaFinPicker [startAt]="minDate"></mat-datepicker>
+                <mat-error>{{ getFieldError('fechaFin') }}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Error de rango de fechas -->
+            @if (viajeForm.errors?.['dateRange'] && viajeForm.touched) {
+              <div class="form-row">
+                <div class="date-range-error">
+                  <mat-icon>error</mat-icon>
+                  <span>La fecha de fin debe ser posterior a la fecha de inicio</span>
+                </div>
+              </div>
+            }
+
+            <div class="form-row">
+              <!-- Subida de Imagen -->
+              <div class="file-upload-container half-width">
+                <label class="file-upload-label">Imagen del Viaje</label>
+                <div class="file-upload-area" [class.uploading]="isUploadingImage()">
+                  <input type="file" #imageInput (change)="onImageSelected($event)" 
+                    accept="image/jpeg,image/png,image/webp" style="display: none;">
+                  
+                  @if (uploadedImageUrl()) {
+                    <div class="uploaded-file">
+                      <img [src]="uploadedImageUrl()" alt="Imagen subida" class="preview-image">
+                      <button type="button" mat-icon-button (click)="removeImage()" class="remove-btn">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  } @else if (isUploadingImage()) {
+                    <div class="upload-progress">
+                      <mat-progress-bar mode="determinate" [value]="imageUploadProgress()"></mat-progress-bar>
+                      <span class="progress-text">Subiendo imagen... {{ imageUploadProgress() }}%</span>
+                    </div>
+                  } @else {
+                    <div class="upload-placeholder" (click)="imageInput.click()">
+                      <mat-icon>cloud_upload</mat-icon>
+                      <span>Haz clic para subir imagen</span>
+                      <small>JPG, PNG, WebP (máx. 50MB)</small>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <!-- Subida de Video -->
+              <div class="file-upload-container half-width">
+                <label class="file-upload-label">Video del Viaje</label>
+                <div class="file-upload-area" [class.uploading]="isUploadingVideo()">
+                  <input type="file" #videoInput (change)="onVideoSelected($event)" 
+                    accept="video/mp4,video/webm" style="display: none;">
+                  
+                  @if (uploadedVideoUrl()) {
+                    <div class="uploaded-file">
+                      <video [src]="uploadedVideoUrl()" class="preview-video" controls></video>
+                      <button type="button" mat-icon-button (click)="removeVideo()" class="remove-btn">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  } @else if (isUploadingVideo()) {
+                    <div class="upload-progress">
+                      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                      <span class="progress-text">Subiendo video...</span>
+                    </div>
+                  } @else {
+                    <div class="upload-placeholder" (click)="videoInput.click()">
+                      <mat-icon>video_library</mat-icon>
+                      <span>Haz clic para subir video</span>
+                      <small>MP4, WebM (máx. 50MB)</small>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="form-actions">
+              <button type="button" mat-button (click)="onCancel()" [disabled]="isLoading()">
+                <mat-icon>cancel</mat-icon>
+                Cancelar
+              </button>
+              
+              <button type="submit" mat-raised-button color="primary" 
+                [disabled]="viajeForm.invalid || isLoading()">
+                @if (isLoading()) {
+                  <mat-spinner diameter="20"></mat-spinner>
+                  <span>{{ isEditMode() ? 'Actualizando...' : 'Creando...' }}</span>
+                } @else {
+                  <ng-container>
+                    <mat-icon>save</mat-icon>
+                    <span>{{ isEditMode() ? 'Actualizar Viaje Individual' : 'Crear Viaje Individual' }}</span>
+                  </ng-container>
+                }
+              </button>
+            </div>
+          </form>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
