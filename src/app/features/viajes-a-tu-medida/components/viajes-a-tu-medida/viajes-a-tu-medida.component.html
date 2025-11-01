@@ -68,6 +68,11 @@
             <span class="trip-price" *ngIf="viaje.valor">Desde ${{ viaje.valor | number:'1.0-0' }}</span>
             <!-- <span class="trip-status" [class]="'status-' + viaje.estado.toLowerCase()">{{ viaje.estado }}</span> -->
           </div>
+          <div class="trip-actions-bottom">
+            <button class="btn-details" (click)="verDetalles(viaje); $event.stopPropagation()">
+              Más detalles
+            </button>
+          </div>
         </div>
       </div>
     </ng-container>

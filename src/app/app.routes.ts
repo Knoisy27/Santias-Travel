@@ -25,6 +25,10 @@ export const routes: Routes = [
         data: { preload: true } // Preload para página importante
       },
       {
+        path: 'viajes-grupales/:id',
+        loadComponent: () => import('./features/viajes-grupales/components/viajes-grupales-detalle/viajes-grupales-detalle.component').then(m => m.ViajesGrupalesDetalleComponent)
+      },
+      {
         path: 'sobre-nosotros',
         loadComponent: () => import('./features/about/components/about/about.component').then(m => m.AboutComponent)
       },
