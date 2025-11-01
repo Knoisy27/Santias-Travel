@@ -77,7 +77,7 @@ export const APP_CONSTANTS = {
   ROUTES: {
     home: '/',
     destinations: '/viajes-grupales',
-    customTrips: '/viajes-personalizados',
+        viajesATuMedida: '/viajes-a-tu-medida',
     about: '/sobre-nosotros',
     contact: '/contacto',
     terms: '/terminos',

@@ -1,11 +1,12 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MaterialModule } from '../../../../shared/material/material.module';
-import { TripsService, ViajeIndividualCreateRequest, FileUploadResponse, UploadProgress } from '../../../../core/services/trips.service';
+import { TripsService, ViajeIndividualCreateRequest, ViajeIndividual, FileUploadResponse, UploadProgress } from '../../../../core/services/trips.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-viajes-individuales-form',
@@ -14,12 +15,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './viajes-individuales-form.component.html',
   styleUrl: './viajes-individuales-form.component.scss'
 })
-export class ViajesIndividualesFormComponent {
+export class ViajesIndividualesFormComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private tripsService = inject(TripsService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
+  private destroy$ = new Subject<void>();
 
   viajeForm: FormGroup;
   isLoading = signal(false);
@@ -31,9 +34,63 @@ export class ViajesIndividualesFormComponent {
   selectedVideoFile: File | null = null;
   uploadedImageUrl = signal<string | null>(null);
   uploadedVideoUrl = signal<string | null>(null);
+  
+  viajeId = signal<number | null>(null);
+  isEditMode = signal(false);
 
   constructor() {
     this.viajeForm = this.createForm();
+  }
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      const idNumber = parseInt(id, 10);
+      if (!isNaN(idNumber)) {
+        this.viajeId.set(idNumber);
+        this.isEditMode.set(true);
+        this.cargarViaje(idNumber);
+      }
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  cargarViaje(id: number): void {
+    this.isLoading.set(true);
+    this.tripsService.getViajeIndividual(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (viaje) => {
+          this.viajeForm.patchValue({
+            nombre: viaje.nombre,
+            descripcion: viaje.descripcion,
+            valor: viaje.valor || 0,
+            fechaInicio: viaje.fechaInicio ? viaje.fechaInicio.split('T')[0] : '',
+            fechaFin: viaje.fechaFin ? viaje.fechaFin.split('T')[0] : ''
+          });
+
+          if (viaje.imagenUrl) {
+            this.uploadedImageUrl.set(viaje.imagenUrl);
+          }
+          if (viaje.videoUrl) {
+            this.uploadedVideoUrl.set(viaje.videoUrl);
+          }
+
+          this.isLoading.set(false);
+        },
+        error: (error) => {
+          console.error('Error al cargar viaje:', error);
+          this.isLoading.set(false);
+          this.snackBar.open('Error al cargar el viaje. Redirigiendo...', 'Cerrar', { duration: 3000 });
+          setTimeout(() => {
+            this.router.navigate(['/admin/viajes']);
+          }, 2000);
+        }
+      });
   }
 
   private createForm(): FormGroup {
@@ -104,9 +161,13 @@ export class ViajesIndividualesFormComponent {
       uploadPromises.push(Promise.resolve(null));
     }
 
-    // Esperar a que se suban todos los archivos
+      // Esperar a que se suban todos los archivos
     Promise.all(uploadPromises).then(([imagenUrl, videoUrl]) => {
-      this.createViajeIndividual(user, imagenUrl, videoUrl);
+      if (this.isEditMode() && this.viajeId()) {
+        this.updateViajeIndividual(this.viajeId()!, user, imagenUrl, videoUrl);
+      } else {
+        this.createViajeIndividual(user, imagenUrl, videoUrl);
+      }
     }).catch((error) => {
       this.isLoading.set(false);
       this.snackBar.open('Error al subir archivos. Intenta nuevamente.', 'Cerrar', { duration: 5000 });
@@ -181,8 +242,61 @@ export class ViajesIndividualesFormComponent {
     });
   }
 
+  private updateViajeIndividual(id: number, user: any, imagenUrl: string | null, videoUrl: string | null): void {
+    const formValue = this.viajeForm.value;
+    const updatedViaje: ViajeIndividualCreateRequest = {
+      nombre: formValue.nombre,
+      descripcion: formValue.descripcion,
+      valor: formValue.valor || undefined,
+      imagenUrl: imagenUrl || (this.uploadedImageUrl() || undefined),
+      videoUrl: videoUrl || (this.uploadedVideoUrl() || undefined),
+      fechaInicio: formValue.fechaInicio || undefined,
+      fechaFin: formValue.fechaFin || undefined,
+      estado: 'A',
+      modificadoPor: user.username
+    };
+
+    console.log('Actualizando viaje individual con datos:', updatedViaje);
+
+    this.tripsService.updateViajeIndividual(id, updatedViaje)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.isLoading.set(false);
+          this.snackBar.open('Viaje individual actualizado exitosamente!', 'Cerrar', { duration: 3000 });
+              this.router.navigate(['/viajes-a-tu-medida']);
+        },
+        error: (error) => {
+          this.isLoading.set(false);
+          console.error('Error detallado al actualizar viaje individual:', error);
+          
+          let errorMessage = 'Error al actualizar el viaje individual. Intenta nuevamente.';
+          if (error.status === 400) {
+            if (error.error && error.error.message) {
+              errorMessage = `Error de validación: ${error.error.message}`;
+            } else if (error.error && Array.isArray(error.error)) {
+              errorMessage = `Errores de validación: ${error.error.join(', ')}`;
+            } else {
+              errorMessage = 'Datos inválidos. Por favor, revisa el formulario.';
+            }
+          } else if (error.status === 403) {
+            errorMessage = 'No tienes permisos para realizar esta acción.';
+          } else if (error.status === 404) {
+            errorMessage = 'El viaje no fue encontrado.';
+          } else if (error.status === 0) {
+            errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión o el backend.';
+          }
+          this.snackBar.open(errorMessage, 'Cerrar', { duration: 5000 });
+        }
+      });
+  }
+
   onCancel(): void {
-    this.router.navigate(['/admin/viajes']);
+    if (this.isEditMode()) {
+              this.router.navigate(['/viajes-a-tu-medida']);
+    } else {
+      this.router.navigate(['/admin/viajes']);
+    }
   }
 
   private markFormGroupTouched(): void {

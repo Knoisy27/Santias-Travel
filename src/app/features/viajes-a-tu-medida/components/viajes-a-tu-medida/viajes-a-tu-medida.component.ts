@@ -1,32 +1,31 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TripsService, ViajeGrupal } from '../../../../core/services/trips.service';
+import { Router } from '@angular/router';
+import { TripsService, ViajeIndividual } from '../../../../core/services/trips.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MaterialModule } from '../../../../shared/material/material.module';
 import { Subject, takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-viajes-grupales',
+  selector: 'app-viajes-a-tu-medida',
   standalone: true,
-  imports: [CommonModule, MaterialModule],
-  templateUrl: './viajes-grupales.component.html',
-  styleUrl: './viajes-grupales.component.scss'
+  imports: [CommonModule],
+  templateUrl: './viajes-a-tu-medida.component.html',
+  styleUrl: './viajes-a-tu-medida.component.scss'
 })
-export class ViajesGrupalesComponent implements OnInit, OnDestroy {
-  viajes: ViajeGrupal[] = [];
+export class ViajesATuMedidaComponent implements OnInit, OnDestroy {
+  viajes: ViajeIndividual[] = [];
   showMockTrip = true;
   private destroy$ = new Subject<void>();
-
+  
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
+  private router = inject(Router);
 
   constructor(
     private tripsService: TripsService,
     private cdr: ChangeDetectorRef,
-    private ngZone: NgZone,
-    private router: Router
+    private ngZone: NgZone
   ) {}
 
   ngOnInit() {
@@ -34,7 +33,7 @@ export class ViajesGrupalesComponent implements OnInit, OnDestroy {
   }
 
   cargarViajes() {
-    this.tripsService.getViajesGrupales()
+    this.tripsService.getViajesIndividuales()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (viajes) => {
@@ -47,7 +46,7 @@ export class ViajesGrupalesComponent implements OnInit, OnDestroy {
           });
         },
         error: (error) => {
-          console.error('Error al cargar viajes grupales:', error);
+          console.error('Error al cargar viajes:', error);
           this.showMockTrip = true;
           this.viajes = [];
           this.cdr.detectChanges();
@@ -60,39 +59,8 @@ export class ViajesGrupalesComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  trackByViaje(index: number, viaje: ViajeGrupal): number {
-    return viaje?.idVigr ?? index;
-  }
-
-  formatearFecha(fecha: string): string {
-    if (!fecha) return '';
-    
-    const fechaObj = new Date(fecha);
-    const meses = [
-      'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
-      'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
-    ];
-
-    const dia = fechaObj.getDate();
-    const mes = meses[fechaObj.getMonth()];
-
-    return `${dia} de ${mes}`;
-  }
-
-  formatearRangoFechas(fechaInicio: string, fechaFin: string): string {
-    if (!fechaInicio || !fechaFin) return '';
-    return `${this.formatearFecha(fechaInicio)} al ${this.formatearFecha(fechaFin)}`;
-  }
-
-  formatearPrecio(valor: number): string {
-    if (!valor) return '$0';
-    return `$${valor.toLocaleString('es-CO')}`;
-  }
-
-  verMasDetalles(viaje: ViajeGrupal) {
-    if (viaje?.idVigr) {
-      this.router.navigate(['/viajes-grupales', viaje.idVigr]);
-    }
+  trackByViaje(index: number, viaje: ViajeIndividual): number {
+    return viaje?.id ?? index;
   }
 
   get isAuthenticated(): boolean {
@@ -107,21 +75,21 @@ export class ViajesGrupalesComponent implements OnInit, OnDestroy {
     return this.isAuthenticated && (this.authService.isAdmin() || this.authService.isAgent());
   }
 
-  editarViaje(viaje: ViajeGrupal, event: Event): void {
+  editarViaje(viaje: ViajeIndividual, event: Event): void {
     event.stopPropagation();
     
-    if (!viaje.idVigr) {
+    if (!viaje.id) {
       this.snackBar.open('Error: No se puede editar un viaje sin ID', 'Cerrar', { duration: 3000 });
       return;
     }
 
-    this.router.navigate(['/admin/viajes/viajes-grupales', viaje.idVigr]);
+    this.router.navigate(['/admin/viajes/viajes-individuales', viaje.id]);
   }
 
-  eliminarViaje(viaje: ViajeGrupal, event: Event): void {
+  eliminarViaje(viaje: ViajeIndividual, event: Event): void {
     event.stopPropagation();
     
-    if (!viaje.idVigr) {
+    if (!viaje.id) {
       this.snackBar.open('Error: No se puede eliminar un viaje sin ID', 'Cerrar', { duration: 3000 });
       return;
     }
@@ -132,12 +100,12 @@ export class ViajesGrupalesComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.tripsService.deleteViajeGrupal(viaje.idVigr)
+    this.tripsService.deleteViajeIndividual(viaje.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this.snackBar.open('Viaje grupal eliminado exitosamente', 'Cerrar', { duration: 3000 });
-          this.viajes = this.viajes.filter(v => v.idVigr !== viaje.idVigr);
+          this.snackBar.open('Viaje eliminado exitosamente', 'Cerrar', { duration: 3000 });
+          this.viajes = this.viajes.filter(v => v.id !== viaje.id);
           
           if (this.viajes.length === 0) {
             this.showMockTrip = true;
@@ -149,14 +117,15 @@ export class ViajesGrupalesComponent implements OnInit, OnDestroy {
           });
         },
         error: (error) => {
-          console.error('Error al eliminar viaje grupal:', error);
-          let errorMessage = 'Error al eliminar el viaje grupal. Intenta nuevamente.';
+          console.error('Error al eliminar viaje:', error);
+          let errorMessage = 'Error al eliminar el viaje. Intenta nuevamente.';
           
           if (error.status === 403) {
             errorMessage = 'No tienes permisos para eliminar este viaje.';
           } else if (error.status === 404) {
             errorMessage = 'El viaje no fue encontrado.';
           } else if (error.status === 500) {
+            // Intentar obtener mensaje más específico del error
             const errorDetail = error?.error?.message || error?.message;
             if (errorDetail && errorDetail !== 'Error interno del servidor. Nuestro equipo ha sido notificado.') {
               errorMessage = `Error del servidor: ${errorDetail}`;
@@ -172,3 +141,4 @@ export class ViajesGrupalesComponent implements OnInit, OnDestroy {
       });
   }
 }
+

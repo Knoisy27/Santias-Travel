@@ -102,7 +102,7 @@ export class SEOService {
         'viajes a América',
         'paquetes turísticos',
         'viajes grupales',
-        'viajes personalizados',
+        'viajes a tu medida',
         'Colombia'
       ]
     });

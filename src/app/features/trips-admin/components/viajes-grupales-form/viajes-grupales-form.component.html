@@ -4,10 +4,10 @@
       <div class="col-12">
         <div class="form-header">
           <h1 class="page-title">
-            <mat-icon>group_add</mat-icon>
-            Agregar Viaje Grupal
+            <mat-icon>{{ isEditMode() ? 'edit' : 'group_add' }}</mat-icon>
+            {{ isEditMode() ? 'Editar Viaje Grupal' : 'Agregar Viaje Grupal' }}
           </h1>
-          <p class="page-subtitle">Completa la información para crear un nuevo viaje grupal</p>
+          <p class="page-subtitle">{{ isEditMode() ? 'Modifica la información del viaje grupal' : 'Completa la información para crear un nuevo viaje grupal' }}</p>
         </div>
 
         <mat-card class="form-card">
@@ -186,11 +186,11 @@
                 [disabled]="viajeForm.invalid || isLoading()">
                 @if (isLoading()) {
                   <mat-spinner diameter="20"></mat-spinner>
-                  <span>Creando...</span>
+                  <span>{{ isEditMode() ? 'Actualizando...' : 'Creando...' }}</span>
                 } @else {
                   <ng-container>
                     <mat-icon>save</mat-icon>
-                    <span>Crear Viaje Grupal</span>
+                    <span>{{ isEditMode() ? 'Actualizar Viaje Grupal' : 'Crear Viaje Grupal' }}</span>
                   </ng-container>
                 }
               </button>

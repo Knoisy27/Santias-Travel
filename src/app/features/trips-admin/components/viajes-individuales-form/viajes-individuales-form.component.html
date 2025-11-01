@@ -4,10 +4,10 @@
       <div class="col-12">
         <div class="form-header">
           <h1 class="page-title">
-            <mat-icon>person_add</mat-icon>
-            Agregar Viaje Individual
+            <mat-icon>{{ isEditMode() ? 'edit' : 'person_add' }}</mat-icon>
+            {{ isEditMode() ? 'Editar Viaje Individual' : 'Agregar Viaje Individual' }}
           </h1>
-          <p class="page-subtitle">Completa la información para crear un nuevo viaje individual</p>
+          <p class="page-subtitle">{{ isEditMode() ? 'Modifica la información del viaje individual' : 'Completa la información para crear un nuevo viaje individual' }}</p>
         </div>
 
         <mat-card class="form-card">
@@ -145,11 +145,11 @@
                 [disabled]="viajeForm.invalid || isLoading()">
                 @if (isLoading()) {
                   <mat-spinner diameter="20"></mat-spinner>
-                  <span>Creando...</span>
+                  <span>{{ isEditMode() ? 'Actualizando...' : 'Creando...' }}</span>
                 } @else {
                   <ng-container>
                     <mat-icon>save</mat-icon>
-                    <span>Crear Viaje Individual</span>
+                    <span>{{ isEditMode() ? 'Actualizar Viaje Individual' : 'Crear Viaje Individual' }}</span>
                   </ng-container>
                 }
               </button>

@@ -1,5 +1,5 @@
 <div class="container">
-  <h1>Viajes Personalizados</h1>
+  <h1>Viajes a tu Medida</h1>
   <p class="subtitle">Descubre experiencias únicas diseñadas especialmente para ti</p>
   
   <div class="trips-container">
@@ -9,7 +9,7 @@
         <div class="trip-image-container">
           <div class="mock-image">
             <div class="mock-placeholder">
-              <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="#9CA3AF"/>
                 <path d="M19 15L20.09 19.26L24 20L20.09 20.74L19 25L17.91 20.74L14 20L17.91 19.26L19 15Z" fill="#9CA3AF"/>
                 <path d="M5 11L6.09 15.26L10 16L6.09 16.74L5 21L3.91 16.74L0 16L3.91 15.26L5 11Z" fill="#9CA3AF"/>
@@ -38,7 +38,31 @@
           <img [src]="viaje.imagenUrl" [alt]="viaje.nombre" class="trip-image">
         </div>
         <div class="trip-content">
-          <h2 class="trip-title">{{ viaje.nombre }}</h2>
+          <div class="trip-header">
+            <h2 class="trip-title">{{ viaje.nombre }}</h2>
+            <div class="trip-actions" *ngIf="canEdit || canDelete">
+              <button 
+                *ngIf="canEdit"
+                class="btn-edit"
+                (click)="editarViaje(viaje, $event)"
+                type="button"
+                title="Editar viaje">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM20.71 7.04C21.1 6.65 21.1 6.02 20.71 5.63L18.37 3.29C17.98 2.9 17.35 2.9 16.96 3.29L15.12 5.13L18.87 8.88L20.71 7.04Z" fill="currentColor"/>
+                </svg>
+              </button>
+              <button 
+                *ngIf="canDelete"
+                class="btn-delete"
+                (click)="eliminarViaje(viaje, $event)"
+                type="button"
+                title="Eliminar viaje">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z" fill="currentColor"/>
+                </svg>
+              </button>
+            </div>
+          </div>
           <p class="trip-description">{{ viaje.descripcion }}</p>
           <div class="trip-details">
             <span class="trip-price" *ngIf="viaje.valor">Desde ${{ viaje.valor | number:'1.0-0' }}</span>
@@ -54,3 +78,4 @@
     </div>
   </div>
 </div>
+

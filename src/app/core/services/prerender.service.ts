@@ -12,7 +12,7 @@ export class PrerenderService {
     return [
       { route: '/' },
       { route: '/viajes-grupales' },
-      { route: '/viajes-personalizados' },
+          { route: '/viajes-a-tu-medida' },
       { route: '/sobre-nosotros' },
       { route: '/contacto' },
       { route: '/terminos' },

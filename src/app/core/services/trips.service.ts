@@ -102,8 +102,8 @@ export class TripsService {
     return this.http.post<ViajeGrupal>(`${this.baseUrl}/stViajesGrupales`, viaje);
   }
 
-  updateViajeGrupal(viaje: ViajeGrupal): Observable<ViajeGrupal> {
-    return this.http.put<ViajeGrupal>(`${this.baseUrl}/stViajesGrupales`, viaje);
+  updateViajeGrupal(id: number, viaje: ViajeGrupalCreateRequest): Observable<ViajeGrupal> {
+    return this.http.put<ViajeGrupal>(`${this.baseUrl}/stViajesGrupales/${id}`, viaje);
   }
 
   deleteViajeGrupal(id: number): Observable<void> {
