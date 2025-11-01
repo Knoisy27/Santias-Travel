@@ -9,11 +9,11 @@ export const APP_CONSTANTS = {
     name: 'Santias Travel',
     description: 'Tu agencia de viajes de confianza',
     logo: '/assets/images/logo.png',
-    email: 'info@santiastravel.com',
-    phone: '+57 300 123 4567',
-    whatsapp: '573001234567',
-    address: 'Bogotá, Colombia',
-    city: 'Bogotá',
+    email: 'servicioalcliente@santiastravel.com.co',
+    phone: '+57 3042672662',
+    whatsapp: '+57 3042672662',
+    address: 'Carrera 35 # 26',
+    city: 'Tuluá',
     country: 'Colombia',
     socialMedia: {
       facebook: 'https://facebook.com/santiastravel',
@@ -56,14 +56,6 @@ export const APP_CONSTANTS = {
     }
   },
 
-  // Configuración de carrusel
-  CAROUSEL_CONFIG: {
-    autoSlideInterval: 5000, // 5 segundos
-    slidesToShow: 3,
-    slidesToShowMobile: 1,
-    slidesToShowTablet: 2
-  },
-
   // Configuración de notificaciones
   NOTIFICATION_CONFIG: {
     duration: {
@@ -76,8 +68,8 @@ export const APP_CONSTANTS = {
   // Rutas de la aplicación
   ROUTES: {
     home: '/',
-    destinations: '/destinos',
-    customTrips: '/viajes-personalizados',
+    destinations: '/viajes-grupales',
+        viajesATuMedida: '/viajes-a-tu-medida',
     about: '/sobre-nosotros',
     contact: '/contacto',
     terms: '/terminos',
@@ -95,7 +87,6 @@ export const APP_CONSTANTS = {
 export type AgencyInfo = typeof APP_CONSTANTS.AGENCY_INFO;
 export type WhatsAppMessages = typeof APP_CONSTANTS.WHATSAPP_MESSAGES;
 export type FormConfig = typeof APP_CONSTANTS.FORM_CONFIG;
-export type CarouselConfig = typeof APP_CONSTANTS.CAROUSEL_CONFIG;
 export type NotificationConfig = typeof APP_CONSTANTS.NOTIFICATION_CONFIG;
 export type Routes = typeof APP_CONSTANTS.ROUTES;
 export type ApiConfig = typeof APP_CONSTANTS.API_CONFIG;

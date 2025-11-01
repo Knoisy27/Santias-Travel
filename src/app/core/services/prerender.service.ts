@@ -6,28 +6,13 @@ import { Injectable } from '@angular/core';
 export class PrerenderService {
 
   /**
-   * Obtiene los IDs de destinos para prerendering
-   * Basado en los datos mock que tenemos
-   */
-  getDestinationIds(): string[] {
-    return ['1', '2', '3', '4', '5', '6']; // IDs de los destinos mock
-  }
-
-  /**
-   * Genera rutas de prerendering para destinos
-   */
-  generateDestinationRoutes(): { route: string }[] {
-    return this.getDestinationIds().map(id => ({ route: `/destino/${id}` }));
-  }
-
-  /**
    * Obtiene todas las rutas estáticas
    */
   getStaticRoutes(): { route: string }[] {
     return [
       { route: '/' },
-      { route: '/destinos' },
-      { route: '/viajes-personalizados' },
+      { route: '/viajes-grupales' },
+          { route: '/viajes-a-tu-medida' },
       { route: '/sobre-nosotros' },
       { route: '/contacto' },
       { route: '/terminos' },
@@ -40,8 +25,7 @@ export class PrerenderService {
    */
   getAllRoutes(): { route: string }[] {
     return [
-      ...this.getStaticRoutes(),
-      ...this.generateDestinationRoutes()
+      ...this.getStaticRoutes()
     ];
   }
 }

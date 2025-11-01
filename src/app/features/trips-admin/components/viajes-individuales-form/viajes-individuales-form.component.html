@@ -4,10 +4,10 @@
       <div class="col-12">
         <div class="form-header">
           <h1 class="page-title">
-            <mat-icon>person_add</mat-icon>
-            Agregar Viaje Individual
+            <mat-icon>{{ isEditMode() ? 'edit' : 'person_add' }}</mat-icon>
+            {{ isEditMode() ? 'Editar Viaje Individual' : 'Agregar Viaje Individual' }}
           </h1>
-          <p class="page-subtitle">Completa la información para crear un nuevo viaje individual</p>
+          <p class="page-subtitle">{{ isEditMode() ? 'Modifica la información del viaje individual' : 'Completa la información para crear un nuevo viaje individual' }}</p>
         </div>
 
         <mat-card class="form-card">
@@ -15,8 +15,7 @@
             <div class="form-row">
               <!-- Nombre -->
               <mat-form-field appearance="outline" class="full-width required-field">
-                <mat-label>Nombre del Viaje</mat-label>
-                <input matInput formControlName="nombre" placeholder="Ej: Aventura en la Montaña">
+                <input matInput formControlName="nombre" placeholder="Nombre del Viaje">
                 <mat-error>{{ getFieldError('nombre') }}</mat-error>
               </mat-form-field>
             </div>
@@ -24,9 +23,8 @@
             <div class="form-row">
               <!-- Descripción -->
               <mat-form-field appearance="outline" class="full-width required-field">
-                <mat-label>Descripción</mat-label>
                 <textarea matInput formControlName="descripcion" rows="4" 
-                  placeholder="Describe el viaje, destinos, actividades principales..."></textarea>
+                  placeholder="Descripción - Describe el viaje, destinos, actividades principales..."></textarea>
                 <mat-error>{{ getFieldError('descripcion') }}</mat-error>
               </mat-form-field>
             </div>
@@ -34,8 +32,7 @@
             <div class="form-row">
               <!-- Valor -->
               <mat-form-field appearance="outline" class="half-width">
-                <mat-label>Valor (COP)</mat-label>
-                <input matInput type="number" formControlName="valor" placeholder="0">
+                <input matInput type="number" formControlName="valor" placeholder="Valor (COP)">
                 <mat-error>{{ getFieldError('valor') }}</mat-error>
               </mat-form-field>
             </div>
@@ -43,10 +40,9 @@
             <div class="form-row">
               <!-- Fecha Inicio -->
               <mat-form-field appearance="outline" class="half-width">
-                <mat-label>Fecha de Inicio</mat-label>
                 <input matInput [matDatepicker]="fechaInicioPicker" formControlName="fechaInicio" 
                   [min]="minDate"
-                  placeholder="Selecciona la fecha de inicio">
+                  placeholder="Fecha de Inicio">
                 <mat-datepicker-toggle matIconSuffix [for]="fechaInicioPicker"></mat-datepicker-toggle>
                 <mat-datepicker #fechaInicioPicker [startAt]="minDate"></mat-datepicker>
                 <mat-error>{{ getFieldError('fechaInicio') }}</mat-error>
@@ -54,10 +50,9 @@
 
               <!-- Fecha Fin -->
               <mat-form-field appearance="outline" class="half-width">
-                <mat-label>Fecha de Fin</mat-label>
                 <input matInput [matDatepicker]="fechaFinPicker" formControlName="fechaFin" 
                   [min]="minDate"
-                  placeholder="Selecciona la fecha de fin">
+                  placeholder="Fecha de Fin">
                 <mat-datepicker-toggle matIconSuffix [for]="fechaFinPicker"></mat-datepicker-toggle>
                 <mat-datepicker #fechaFinPicker [startAt]="minDate"></mat-datepicker>
                 <mat-error>{{ getFieldError('fechaFin') }}</mat-error>
@@ -145,11 +140,11 @@
                 [disabled]="viajeForm.invalid || isLoading()">
                 @if (isLoading()) {
                   <mat-spinner diameter="20"></mat-spinner>
-                  <span>Creando...</span>
+                  <span>{{ isEditMode() ? 'Actualizando...' : 'Creando...' }}</span>
                 } @else {
                   <ng-container>
                     <mat-icon>save</mat-icon>
-                    <span>Crear Viaje Individual</span>
+                    <span>{{ isEditMode() ? 'Actualizar Viaje Individual' : 'Crear Viaje Individual' }}</span>
                   </ng-container>
                 }
               </button>

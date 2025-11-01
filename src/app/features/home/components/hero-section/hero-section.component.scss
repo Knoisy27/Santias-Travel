@@ -161,35 +161,38 @@
       transform: scale(1.1);
     }
 
-    &.like {
-      background-color: rgba(233, 30, 99, 0.2);
+    &.instagram {
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      opacity: 0.9;
       
       &:hover {
-        background-color: rgba(233, 30, 99, 0.8);
+        opacity: 1;
+        transform: scale(1.1);
+      }
+      
+      svg {
+        width: 24px;
+        height: 24px;
+        display: block;
+    }
+      
+      mat-icon {
+        color: white;
       }
     }
 
-    &.comment {
-      background-color: rgba(33, 150, 243, 0.2);
+    &.facebook {
+      background-color: #1877F2;
+      opacity: 0.9;
       
       &:hover {
-        background-color: rgba(33, 150, 243, 0.8);
+        opacity: 1;
+        background-color: #166FE5;
+        transform: scale(1.1);
       }
-    }
-
-    &.share {
-      background-color: rgba(76, 175, 80, 0.2);
       
-      &:hover {
-        background-color: rgba(76, 175, 80, 0.8);
-      }
-    }
-
-    &.bookmark {
-      background-color: rgba(156, 39, 176, 0.2);
-      
-      &:hover {
-        background-color: rgba(156, 39, 176, 0.8);
+      mat-icon {
+        color: white;
       }
     }
   }
@@ -211,20 +214,12 @@
     transform: scale(1.1);
   }
 
-  &.like:hover {
-    color: #e91e63;
+  &.instagram:hover {
+    color: white;
   }
 
-  &.comment:hover {
-    color: #2196f3;
-  }
-
-  &.share:hover {
-    color: #4caf50;
-  }
-
-  &.bookmark:hover {
-    color: #ff9800;
+  &.facebook:hover {
+    color: white;
   }
 }
 

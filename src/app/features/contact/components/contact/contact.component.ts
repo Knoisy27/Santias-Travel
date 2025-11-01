@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContactFormComponent } from '../contact-form/contact-form.component';
+import { AgencyService } from '../../../../core/services/agency.service';
+import { AgencyInfo } from '../../../../core/interfaces/agency.interface';
+import { MockDataService } from '../../../../core/services/mock-data.service';
+import { APP_CONSTANTS } from '../../../../core/constants/app.constants';
 
 @Component({
   selector: 'app-contact',
@@ -16,32 +20,50 @@ import { ContactFormComponent } from '../contact-form/contact-form.component';
         
         <div class="contact-content">
           <div class="contact-info">
-            <div class="info-card">
-              <div class="info-icon">
-                <i class="fas fa-phone"></i>
+            @if (agencyInfo()) {
+              <div class="info-card" (click)="callPhone()" style="cursor: pointer;">
+                <div class="info-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                  </svg>
+                </div>
+                <h3>Teléfono</h3>
+                <p>{{ agencyInfo()!.phone }}</p>
+                <p>Lun - Vie: 8:00 AM - 6:00 PM</p>
               </div>
-              <h3>Teléfono</h3>
-              <p>+57 (1) 234-5678</p>
-              <p>Lun - Vie: 8:00 AM - 6:00 PM</p>
-            </div>
-            
-            <div class="info-card">
-              <div class="info-icon">
-                <i class="fas fa-envelope"></i>
+              
+              <div class="info-card" (click)="sendEmail()" style="cursor: pointer;">
+                <div class="info-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                  </svg>
+                </div>
+                <h3>Email</h3>
+                <p>{{ agencyInfo()!.email }}</p>
+                <p>Respuesta en 24 horas</p>
               </div>
-              <h3>Email</h3>
-              <p>info@santiastravel.com</p>
-              <p>Respuesta en 24 horas</p>
-            </div>
-            
-            <div class="info-card">
-              <div class="info-icon">
-                <i class="fas fa-map-marker-alt"></i>
+              
+              <div class="info-card">
+                <div class="info-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                  </svg>
+                </div>
+                <h3>Oficina</h3>
+                <p>{{ agencyInfo()!.address }}</p>
+                <p>{{ agencyInfo()!.city }}, {{ agencyInfo()!.country }}</p>
               </div>
-              <h3>Oficina</h3>
-              <p>Calle 123 #45-67</p>
-              <p>Bogotá, Colombia</p>
-            </div>
+            } @else {
+              <div class="info-card">
+                <div class="info-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                  </svg>
+                </div>
+                <h3>Teléfono</h3>
+                <p>Cargando...</p>
+              </div>
+            }
           </div>
           
           <app-contact-form></app-contact-form>
@@ -120,9 +142,10 @@ import { ContactFormComponent } from '../contact-form/contact-form.component';
         justify-content: center;
         margin: 0 auto 20px;
         
-        i {
+        svg {
           color: white;
-          font-size: 24px;
+          width: 24px;
+          height: 24px;
         }
       }
       
@@ -158,4 +181,36 @@ import { ContactFormComponent } from '../contact-form/contact-form.component';
     }
   `]
 })
-export class ContactComponent {}
+export class ContactComponent implements OnInit {
+  private agencyService = inject(AgencyService);
+  private mockDataService = inject(MockDataService);
+  
+  agencyInfo = signal<AgencyInfo | null>(null);
+
+  ngOnInit(): void {
+    this.loadAgencyInfo();
+  }
+
+  private loadAgencyInfo(): void {
+    this.mockDataService.getAgencyInfo().subscribe({
+      next: (info) => this.agencyInfo.set(info),
+      error: (error) => {
+        this.agencyInfo.set(APP_CONSTANTS.AGENCY_INFO);
+      }
+    });
+  }
+
+  callPhone(): void {
+    const agencyInfo = this.agencyInfo();
+    if (agencyInfo?.phone) {
+      window.open(`tel:${agencyInfo.phone}`, '_self');
+    }
+  }
+
+  sendEmail(): void {
+    const agencyInfo = this.agencyInfo();
+    if (agencyInfo?.email) {
+      window.open(`mailto:${agencyInfo.email}`, '_self');
+    }
+  }
+}

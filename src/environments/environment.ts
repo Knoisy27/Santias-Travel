@@ -7,4 +7,9 @@ export const environment = {
   enableLogging: true,
   mapboxToken: '', // Agregar token de Mapbox si se necesita
   googleMapsApiKey: '', // Agregar API key de Google Maps si se necesita
+  session: {
+    enabled: true,
+    strictMode: false,
+    logActivity: true
+  }
 };

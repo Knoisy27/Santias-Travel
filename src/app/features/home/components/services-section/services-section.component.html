@@ -1,0 +1,31 @@
+<section class="services-section py-12 px-2 lg:py-16 bg-white">
+  <div class="container mx-auto px-4">
+    <!-- Header -->
+    <div class="text-center mb-8 lg:mb-12">
+      <h2 class="text-3xl lg:text-4xl font-bold text-center mb-4 lg:mb-6">
+        <span class="text-amber-600">{{ config.title }}</span>
+      </h2>
+      <p class="text-base lg:text-lg text-gray-600 max-w-3xl mx-auto">
+        {{ config.subtitle }}
+      </p>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 max-w-6xl mx-auto">
+      @for (service of config.services; track service.title) {
+        <div class="service-card">
+          <div class="service-card-content">
+            <div class="service-text">
+              <h3 class="service-title">{{ service.title }}</h3>
+              <p class="service-description">{{ service.description }}</p>
+            </div>
+            <div class="service-icon">
+              <mat-icon>{{ service.icon }}</mat-icon>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+

@@ -6,13 +6,13 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Prerender
   },
   {
-    path: 'destinos',
+    path: 'viajes-grupales',
     renderMode: RenderMode.Prerender
   },
-  {
-    path: 'viajes-personalizados',
-    renderMode: RenderMode.Prerender
-  },
+      {
+        path: 'viajes-a-tu-medida',
+        renderMode: RenderMode.Prerender
+      },
   {
     path: 'sobre-nosotros',
     renderMode: RenderMode.Prerender

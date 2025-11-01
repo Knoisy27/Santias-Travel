@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { SessionManagerService } from '../services/session-manager.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ import { AuthService } from '../services/auth.service';
 export class AuthGuard implements CanActivate {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private sessionManager = inject(SessionManagerService);
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -21,6 +23,9 @@ export class AuthGuard implements CanActivate {
       });
       return false;
     }
+
+    // Validar sesión en navegación (funciona en rutas hijas también)
+    this.sessionManager.validateOnNavigation();
 
     // Verificar roles requeridos si están especificados en la ruta
     const requiredRoles = route.data['roles'] as string[];

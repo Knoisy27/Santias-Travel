@@ -1,25 +1,29 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MaterialModule } from '../../../../shared/material/material.module';
-import { TripsService, ViajeGrupalCreateRequest, FileUploadResponse, UploadProgress } from '../../../../core/services/trips.service';
+import { TripsService, ViajeGrupalCreateRequest, ViajeGrupal, FileUploadResponse, UploadProgress } from '../../../../core/services/trips.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subject, takeUntil } from 'rxjs';
+import { NgxEditorComponent, NgxEditorMenuComponent, Editor, Toolbar } from 'ngx-editor';
 
 @Component({
   selector: 'app-viajes-grupales-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule, NgxEditorComponent, NgxEditorMenuComponent],
   templateUrl: './viajes-grupales-form.component.html',
   styleUrl: './viajes-grupales-form.component.scss'
 })
-export class ViajesGrupalesFormComponent {
+export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private tripsService = inject(TripsService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
+  private destroy$ = new Subject<void>();
 
   viajeForm: FormGroup;
   isLoading = signal(false);
@@ -31,9 +35,96 @@ export class ViajesGrupalesFormComponent {
   selectedVideoFile: File | null = null;
   uploadedImageUrl = signal<string | null>(null);
   uploadedVideoUrl = signal<string | null>(null);
+  
+  viajeId = signal<number | null>(null);
+  isEditMode = signal(false);
+
+  // Editores Ngx Editor
+  editorIncluye!: Editor;
+  editorItinerario!: Editor;
+  editorNoIncluye!: Editor;
+  editorSugerencias!: Editor;
+
+  // Toolbar personalizado con solo las opciones requeridas
+  toolbar: Toolbar = [
+    ['bold', 'italic'],
+    ['underline', 'strike'],
+    ['ordered_list', 'bullet_list'],
+    ['align_left', 'align_center', 'align_right', 'align_justify'],
+  ];
 
   constructor() {
     this.viajeForm = this.createForm();
+    
+    // Inicializar editores con configuración
+    this.editorIncluye = new Editor();
+    this.editorItinerario = new Editor();
+    this.editorNoIncluye = new Editor();
+    this.editorSugerencias = new Editor();
+  }
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      const idNumber = parseInt(id, 10);
+      if (!isNaN(idNumber)) {
+        this.viajeId.set(idNumber);
+        this.isEditMode.set(true);
+        this.cargarViaje(idNumber);
+      }
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    
+    // Destruir editores
+    this.editorIncluye.destroy();
+    this.editorItinerario.destroy();
+    this.editorNoIncluye.destroy();
+    this.editorSugerencias.destroy();
+  }
+
+  cargarViaje(id: number): void {
+    this.isLoading.set(true);
+    this.tripsService.getViajeGrupal(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (viaje) => {
+          this.viajeForm.patchValue({
+            nombre: viaje.nombre,
+            descripcion: viaje.descripcion,
+            valor: viaje.valor || 0,
+            fechaInicio: viaje.fechaInicio ? viaje.fechaInicio.split('T')[0] : '',
+            fechaFin: viaje.fechaFin ? viaje.fechaFin.split('T')[0] : '',
+            incluye: viaje.incluye || '',
+            itinerario: viaje.itinerario || '',
+            noIncluye: viaje.noIncluye || '',
+            sugerencias: viaje.sugerencias || ''
+          }, { emitEvent: false });
+
+          // Forzar validación después de cargar los datos
+          this.viajeForm.updateValueAndValidity({ emitEvent: false });
+
+          if (viaje.imagenUrl) {
+            this.uploadedImageUrl.set(viaje.imagenUrl);
+          }
+          if (viaje.videoUrl) {
+            this.uploadedVideoUrl.set(viaje.videoUrl);
+          }
+
+          this.isLoading.set(false);
+        },
+        error: (error) => {
+          console.error('Error al cargar viaje grupal:', error);
+          this.isLoading.set(false);
+          this.snackBar.open('Error al cargar el viaje grupal. Redirigiendo...', 'Cerrar', { duration: 3000 });
+          setTimeout(() => {
+            this.router.navigate(['/admin/viajes']);
+          }, 2000);
+        }
+      });
   }
 
   private createForm(): FormGroup {
@@ -67,9 +158,44 @@ export class ViajesGrupalesFormComponent {
     return null;
   }
 
-  // Getter para fecha mínima (hoy)
+  // Getter para fecha mínima (hoy solo en modo creación)
   get minDate(): Date {
+    // En modo edición, permitir fechas pasadas retornando una fecha muy antigua
+    if (this.isEditMode()) {
+      return new Date('1900-01-01');
+    }
     return new Date();
+  }
+
+  /**
+   * Convierte una fecha (string o Date) a formato ISO con hora (LocalDateTime)
+   * @param date Fecha en formato string (YYYY-MM-DD) o Date
+   * @returns String en formato ISO (YYYY-MM-DDTHH:mm:ss) para LocalDateTime del backend
+   */
+  private formatDateToISO(date: string | Date): string {
+    if (!date) {
+      return '';
+    }
+    
+    if (typeof date === 'string') {
+      // Si es string (YYYY-MM-DD del datepicker), agregar hora 00:00:00
+      // Retornar directamente en formato LocalDateTime: YYYY-MM-DDTHH:mm:ss
+      const formatted = date + 'T00:00:00';
+      console.log('formatDateToISO: Input:', date, 'Output:', formatted);
+      return formatted;
+    } else {
+      // Si es Date, convertir a formato YYYY-MM-DDTHH:mm:ss sin zona horaria
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+      
+      const formatted = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+      console.log('formatDateToISO: Input:', date, 'Output:', formatted);
+      return formatted;
+    }
   }
 
   onSubmit(): void {
@@ -109,7 +235,11 @@ export class ViajesGrupalesFormComponent {
 
     // Esperar a que se suban todos los archivos
     Promise.all(uploadPromises).then(([imagenUrl, videoUrl]) => {
+      if (this.isEditMode() && this.viajeId()) {
+        this.updateViajeGrupal(this.viajeId()!, user, imagenUrl, videoUrl);
+      } else {
       this.createViajeGrupal(user, imagenUrl, videoUrl);
+      }
     }).catch((error) => {
       this.isLoading.set(false);
       this.snackBar.open('Error al subir archivos. Intenta nuevamente.', 'Cerrar', { duration: 5000 });
@@ -137,14 +267,19 @@ export class ViajesGrupalesFormComponent {
 
   private createViajeGrupal(user: any, imagenUrl: string | null, videoUrl: string | null): void {
     const formValue = this.viajeForm.value;
+    
+    // Convertir fechas - el formulario ya valida que sean requeridas
+    const fechaInicioISO = this.formatDateToISO(formValue.fechaInicio);
+    const fechaFinISO = this.formatDateToISO(formValue.fechaFin);
+    
     const newViaje: ViajeGrupalCreateRequest = {
       nombre: formValue.nombre,
       descripcion: formValue.descripcion,
       valor: formValue.valor,
       imagenUrl: imagenUrl || undefined,
       videoUrl: videoUrl || undefined,
-      fechaInicio: formValue.fechaInicio,
-      fechaFin: formValue.fechaFin,
+      fechaInicio: fechaInicioISO,
+      fechaFin: fechaFinISO,
       incluye: formValue.incluye,
       itinerario: formValue.itinerario,
       noIncluye: formValue.noIncluye,
@@ -154,6 +289,8 @@ export class ViajesGrupalesFormComponent {
     };
 
     console.log('Creando viaje grupal con datos:', newViaje);
+    console.log('fechaInicio formValue:', formValue.fechaInicio, '->', newViaje.fechaInicio);
+    console.log('fechaFin formValue:', formValue.fechaFin, '->', newViaje.fechaFin);
     console.log('URLs de archivos - Imagen:', imagenUrl, 'Video:', videoUrl);
 
     this.tripsService.createViajeGrupal(newViaje).subscribe({
@@ -188,8 +325,72 @@ export class ViajesGrupalesFormComponent {
     });
   }
 
+  private updateViajeGrupal(id: number, user: any, imagenUrl: string | null, videoUrl: string | null): void {
+    const formValue = this.viajeForm.value;
+    
+    // Convertir fechas - el formulario ya valida que sean requeridas
+    const fechaInicioISO = this.formatDateToISO(formValue.fechaInicio);
+    const fechaFinISO = this.formatDateToISO(formValue.fechaFin);
+    
+    const updatedViaje: ViajeGrupalCreateRequest = {
+      nombre: formValue.nombre,
+      descripcion: formValue.descripcion,
+      valor: formValue.valor,
+      imagenUrl: imagenUrl || (this.uploadedImageUrl() || undefined),
+      videoUrl: videoUrl || (this.uploadedVideoUrl() || undefined),
+      fechaInicio: fechaInicioISO,
+      fechaFin: fechaFinISO,
+      incluye: formValue.incluye,
+      itinerario: formValue.itinerario,
+      noIncluye: formValue.noIncluye,
+      sugerencias: formValue.sugerencias,
+      estado: 'A',
+      modificadoPor: user.username
+    };
+
+    console.log('Actualizando viaje grupal con datos:', updatedViaje);
+    console.log('fechaInicio formValue:', formValue.fechaInicio, '->', updatedViaje.fechaInicio);
+    console.log('fechaFin formValue:', formValue.fechaFin, '->', updatedViaje.fechaFin);
+
+    this.tripsService.updateViajeGrupal(id, updatedViaje)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.isLoading.set(false);
+          this.snackBar.open('Viaje grupal actualizado exitosamente!', 'Cerrar', { duration: 3000 });
+          this.router.navigate(['/viajes-grupales']);
+        },
+        error: (error) => {
+          this.isLoading.set(false);
+          console.error('Error detallado al actualizar viaje grupal:', error);
+          
+          let errorMessage = 'Error al actualizar el viaje grupal. Intenta nuevamente.';
+          if (error.status === 400) {
+            if (error.error && error.error.message) {
+              errorMessage = `Error de validación: ${error.error.message}`;
+            } else if (error.error && Array.isArray(error.error)) {
+              errorMessage = `Errores de validación: ${error.error.join(', ')}`;
+            } else {
+              errorMessage = 'Datos inválidos. Por favor, revisa el formulario.';
+            }
+          } else if (error.status === 403) {
+            errorMessage = 'No tienes permisos para realizar esta acción.';
+          } else if (error.status === 404) {
+            errorMessage = 'El viaje no fue encontrado.';
+        } else if (error.status === 0) {
+          errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión o el backend.';
+        }
+        this.snackBar.open(errorMessage, 'Cerrar', { duration: 5000 });
+      }
+    });
+  }
+
   onCancel(): void {
+    if (this.isEditMode()) {
+      this.router.navigate(['/viajes-grupales']);
+    } else {
     this.router.navigate(['/admin/viajes']);
+    }
   }
 
   private markFormGroupTouched(): void {
@@ -246,6 +447,8 @@ export class ViajesGrupalesFormComponent {
         this.selectedImageFile = file;
         // Solo mostrar preview, no subir aún
         this.showImagePreview(file);
+        // Asegurar que el formulario sigue válido
+        this.viajeForm.updateValueAndValidity({ emitEvent: false });
       } else {
         this.snackBar.open(
           'Tipo de archivo no válido. Solo se permiten JPG, PNG y WebP.',
@@ -344,12 +547,14 @@ export class ViajesGrupalesFormComponent {
     this.selectedImageFile = null;
     this.uploadedImageUrl.set(null);
     this.imageUploadProgress.set(0);
+    // No afecta la validación del formulario
   }
 
   removeVideo(): void {
     this.selectedVideoFile = null;
     this.uploadedVideoUrl.set(null);
     this.videoUploadProgress.set(0);
+    // No afecta la validación del formulario
   }
 
   // Métodos para mostrar previews

@@ -4,9 +4,10 @@ import { RouterModule, Router } from '@angular/router';
 import { MaterialModule } from '../../material/material.module';
 import { AgencyService } from '../../../core/services/agency.service';
 import { AgencyInfo } from '../../../core/interfaces/agency.interface';
-import { NewsletterDialogService } from '../../services/newsletter-dialog.service';
 import { AuthService, User } from '../../../core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MockDataService } from '../../../core/services/mock-data.service';
+import { APP_CONSTANTS } from '../../../core/constants/app.constants';
 
 @Component({
   selector: 'app-header',
@@ -17,8 +18,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class HeaderComponent implements OnInit {
   private agencyService = inject(AgencyService);
+  private mockDataService = inject(MockDataService);
   private router = inject(Router);
-  private newsletterService = inject(NewsletterDialogService);
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
   
@@ -41,30 +42,13 @@ export class HeaderComponent implements OnInit {
     //   error: (error) => console.error('Error cargando información de la agencia:', error)
     // });
     
-    // Usar datos mock por ahora
-    const mockAgencyInfo = {
-      name: 'Santias Travel',
-      description: 'Tu agencia de viajes de confianza',
-      logo: '',
-      email: 'info@santiastravel.com',
-      phone: '+57 300 123 4567',
-      whatsapp: '573001234567',
-      address: 'Bogotá, Colombia',
-      city: 'Bogotá',
-      country: 'Colombia',
-      socialMedia: {
-        facebook: 'https://facebook.com/santiastravel',
-        instagram: 'https://instagram.com/santiastravel'
-      },
-      statistics: {
-        yearsOfExperience: 7,
-        destinationsAvailable: 50,
-        happyClients: 106000,
-        tripsCompleted: 5000
-      },
-      certifications: []
-    };
-    this.agencyInfo.set(mockAgencyInfo);
+    // Usar datos mock centralizados
+    this.mockDataService.getAgencyInfo().subscribe({
+      next: (info) => this.agencyInfo.set(info),
+      error: (error) => {
+        this.agencyInfo.set(APP_CONSTANTS.AGENCY_INFO);
+      }
+    });
   }
 
   toggleMenu(): void {
@@ -99,17 +83,10 @@ export class HeaderComponent implements OnInit {
   openWhatsApp(): void {
     const agencyInfo = this.agencyInfo();
     if (agencyInfo?.whatsapp) {
+      const cleanPhone = agencyInfo.whatsapp.replace(/\D/g, '');
       const message = encodeURIComponent('¡Hola! Me interesa conocer más sobre sus destinos de viaje.');
-      window.open(`https://wa.me/${agencyInfo.whatsapp}?text=${message}`, '_blank');
+      window.open(`https://wa.me/${cleanPhone}?text=${message}`, '_blank');
     }
-  }
-
-  openNewsletterDialog(): void {
-    this.newsletterService.openNewsletterDialog().subscribe(result => {
-      if (result) {
-        // Usuario se suscribió al newsletter
-      }
-    });
   }
 
   /**
