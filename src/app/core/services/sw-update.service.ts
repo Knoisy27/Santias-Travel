@@ -74,6 +74,9 @@ export class SwUpdateService {
   activateUpdate(): void {
     if (this.swUpdate.isEnabled) {
       this.swUpdate.activateUpdate().then(() => {
+        // Limpiar caché del Service Worker antes de recargar
+        this.clearServiceWorkerCache();
+        
         this.notificationService.success(
           'Aplicación actualizada correctamente. Recargando...',
           'Actualización Exitosa'
@@ -88,6 +91,23 @@ export class SwUpdateService {
           'Error al activar la actualización. Por favor, recarga la página manualmente.',
           'Error de Actualización'
         );
+      });
+    }
+  }
+
+  /**
+   * Limpia el caché del Service Worker
+   */
+  private clearServiceWorkerCache(): void {
+    if ('caches' in window) {
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames
+            .filter(cacheName => cacheName.includes('ngsw') || cacheName.includes('api'))
+            .map(cacheName => caches.delete(cacheName))
+        );
+      }).catch(error => {
+        console.error('Error al limpiar caché del Service Worker:', error);
       });
     }
   }
