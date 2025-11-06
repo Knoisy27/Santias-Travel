@@ -21,7 +21,7 @@ const devConfig = {
 // Configuración de producción
 const prodConfig = {
   production: true,
-  apiUrl: 'http://api.santiastravel.cloud:9090/api/v1',
+  apiUrl: 'https://api.santiastravel.cloud:9090/api/v1',
   appName: 'Santias Travel',
   version: '1.0.0',
   enableAnalytics: true,
