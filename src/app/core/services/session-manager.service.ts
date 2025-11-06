@@ -265,10 +265,17 @@ export class SessionManagerService {
           }
         },
         error: (error) => {
-          console.error('SessionManager: Error al validar sesión:', error);
-          // Solo cerrar sesión si el error es realmente de sesión inválida
+          // Solo registrar errores críticos o cuando hay sesión
           if (error.status === 401) {
-            this.forceLogout(SESSION_CONFIG.MESSAGES.SESSION_INVALID);
+            // Si es 401, es porque no hay sesión o expiró - esto es normal si el usuario no está autenticado
+            if (environment.session.logActivity) {
+              console.log('SessionManager: No hay sesión activa');
+            }
+            // Solo cerrar sesión si realmente había una sesión activa
+            // No forzar logout en caso de error 400 (Bad Request) que indica cookies faltantes
+          } else if (error.status !== 400) {
+            // Solo registrar otros errores que no sean 400 (Bad Request)
+            console.error('SessionManager: Error al validar sesión:', error);
           }
         }
       });

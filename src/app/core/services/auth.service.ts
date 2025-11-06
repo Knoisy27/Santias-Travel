@@ -266,7 +266,7 @@ export class AuthService {
    */
   validateSession(): Observable<any> {
     const now = new Date().toLocaleTimeString();
-    console.log(`[${now}] AuthService: 🔍 Validando sesión con backend`);
+    console.log(`[${now}] AuthService: Validando sesión con backend`);
     
     // Con cookies, no necesitamos enviar el token en el header
     return this.apiService['http'].post(`${this.apiService['baseUrl']}/auth/session/validate`, {}, {
@@ -274,11 +274,11 @@ export class AuthService {
     }).pipe(
       tap(() => {
         const successTime = new Date().toLocaleTimeString();
-        console.log(`[${successTime}] AuthService: ✅ Sesión válida`);
+        console.log(`[${successTime}] AuthService: Sesión válida`);
       }),
       catchError(error => {
         const errorTime = new Date().toLocaleTimeString();
-        console.error(`[${errorTime}] AuthService: ❌ Error al validar sesión:`, error);
+        console.error(`[${errorTime}] AuthService: Error al validar sesión:`, error);
         throw error;
       })
     );
