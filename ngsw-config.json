@@ -43,6 +43,19 @@
       }
     },
     {
+      "name": "api-viajes-freshness",
+      "urls": [
+        "/api/v1/stViajes/**",
+        "/api/v1/stViajesGrupales/**"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 100,
+        "maxAge": "1h",
+        "timeout": "10s"
+      }
+    },
+    {
       "name": "api-performance",
       "urls": [
         "/api/**"
