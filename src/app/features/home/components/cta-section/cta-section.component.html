@@ -14,14 +14,14 @@
       <div class="cta-card bg-black/70 backdrop-blur-md rounded-3xl p-8 lg:p-12 text-center border border-white/10 shadow-2xl">
         <!-- Title -->
         <h2 class="cta-title text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-10 leading-tight tracking-tight">
-          {{ title }}
+          {{ config.title }}
         </h2>
         
         <!-- Button -->
         <button 
           (click)="openWhatsApp()"
           class="cta-button inline-flex items-center gap-3 px-8 py-4 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-base lg:text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border border-amber-500/30">
-          <span>{{ buttonText }}</span>
+          <span>{{ config.buttonText }}</span>
           <svg class="w-5 h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
           </svg>
@@ -30,4 +30,3 @@
     </div>
   </div>
 </section>
-

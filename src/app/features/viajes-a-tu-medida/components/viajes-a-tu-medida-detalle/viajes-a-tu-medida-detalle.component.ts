@@ -10,10 +10,14 @@ import { APP_CONSTANTS } from '../../../../core/constants/app.constants';
 import { Subject, takeUntil } from 'rxjs';
 import { VIAJES_A_TU_MEDIDA_CONFIG } from '../../config/viajes-a-tu-medida.config';
 
+import { CTA_SECTION_CONFIG } from '../../../home/config/cta-section.config';
+import { ServicesSectionComponent } from '../../../home/components/services-section/services-section.component';
+import { CtaSectionComponent } from '../../../home/components/cta-section/cta-section.component';
+
 @Component({
   selector: 'app-viajes-a-tu-medida-detalle',
   standalone: true,
-  imports: [CommonModule, MaterialModule, MatProgressSpinnerModule],
+  imports: [CommonModule, MaterialModule, MatProgressSpinnerModule, ServicesSectionComponent, CtaSectionComponent],
   templateUrl: './viajes-a-tu-medida-detalle.component.html',
   styleUrl: './viajes-a-tu-medida-detalle.component.scss'
 })
@@ -22,7 +26,8 @@ export class ViajesATuMedidaDetalleComponent implements OnInit, OnDestroy {
   isLoading = true;
   private destroy$ = new Subject<void>();
   readonly config = VIAJES_A_TU_MEDIDA_CONFIG;
-  
+  readonly ctaConfig = CTA_SECTION_CONFIG;
+
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private tripsService = inject(TripsService);
@@ -32,7 +37,7 @@ export class ViajesATuMedidaDetalleComponent implements OnInit, OnDestroy {
   constructor(
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -63,7 +68,7 @@ export class ViajesATuMedidaDetalleComponent implements OnInit, OnDestroy {
         next: (viaje) => {
           this.viaje = viaje;
           this.isLoading = false;
-          
+
           this.ngZone.run(() => {
             this.cdr.markForCheck();
             this.cdr.detectChanges();
@@ -73,12 +78,12 @@ export class ViajesATuMedidaDetalleComponent implements OnInit, OnDestroy {
           console.error('Error al cargar viaje:', error);
           this.isLoading = false;
           this.snackBar.open(this.config.detail.messages.loadError, 'Cerrar', { duration: this.config.errors.edit.duration });
-          
+
           this.ngZone.run(() => {
             this.cdr.markForCheck();
             this.cdr.detectChanges();
           });
-          
+
           setTimeout(() => {
             this.router.navigate(['/viajes-a-tu-medida']);
           }, 2000);

@@ -8,8 +8,10 @@ export interface ViajeGrupal {
   idVigr?: number;
   nombre: string;
   descripcion: string;
+  descripcionCorta?: string;
   valor: number;
   imagenUrl?: string;
+  imagenListadoUrl?: string;
   videoUrl?: string;
   fechaInicio: string;
   fechaFin: string;
@@ -28,6 +30,8 @@ export interface ViajeIndividual {
   id?: number;
   nombre: string;
   descripcion: string;
+  descripcionCorta?: string;
+  imagenListadoUrl?: string;
   valor: number;
   imagenUrl?: string;
   videoUrl?: string;
@@ -43,8 +47,10 @@ export interface ViajeIndividual {
 export interface ViajeGrupalCreateRequest {
   nombre: string;
   descripcion: string;
+  descripcionCorta?: string;
   valor: number;
   imagenUrl?: string;
+  imagenListadoUrl?: string;
   videoUrl?: string;
   fechaInicio: string;
   fechaFin: string;
@@ -59,6 +65,8 @@ export interface ViajeGrupalCreateRequest {
 export interface ViajeIndividualCreateRequest {
   nombre: string;
   descripcion: string;
+  descripcionCorta?: string;
+  imagenListadoUrl?: string;
   valor: number;
   imagenUrl?: string;
   videoUrl?: string;

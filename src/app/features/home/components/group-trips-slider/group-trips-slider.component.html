@@ -1,0 +1,71 @@
+<section class="group-trips-slider">
+  <div class="group-trips-slider__container">
+    <div class="group-trips-slider__header">
+      <p class="group-trips-slider__pretitle">{{ config.general.pretitle }}</p>
+      <h2 class="group-trips-slider__title">{{ config.general.title }}</h2>
+      <p class="group-trips-slider__subtitle">{{ config.general.subtitle }}</p>
+    </div>
+
+    <ng-container *ngIf="!isLoading(); else loading">
+      <div class="group-trips-slider__slider">
+        <button class="nav-btn nav-btn--left" type="button" (click)="moverIzquierda()" [disabled]="viajes().length === 0">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <div class="group-trips-slider__viewport">
+          <div
+            class="group-trips-slider__track"
+            [style.transform]="transformValue"
+            [style.width.px]="displayViajes().length * config.slider.cardWidth">
+            <article
+              class="group-trips-slider__card"
+              *ngFor="let viaje of displayViajes(); trackBy: trackByViaje"
+              [style.width.px]="config.slider.cardWidth"
+              (click)="irADetalle(viaje)">
+            <div
+              class="group-trips-slider__media"
+              [style.background-image]="'url(' + getCardImage(viaje) + ')'">
+              <div class="group-trips-slider__overlay">
+                <div class="group-trips-slider__text">
+                  <div class="group-trips-slider__text-panel">
+                    <div class="group-trips-slider__text-box group-trips-slider__title-box">
+                      <p class="group-trips-slider__name">{{ viaje.nombre }}</p>
+                    </div>
+                    <div class="group-trips-slider__text-box group-trips-slider__description-box">
+                      <p class="group-trips-slider__description">
+                        {{ getCardDescription(viaje) }}
+                      </p>
+                    </div>
+                    <div class="group-trips-slider__text-box group-trips-slider__date-box" *ngIf="formatearRangoFechas(viaje.fechaInicio, viaje.fechaFin)">
+                      <p class="group-trips-slider__date">
+                        {{ formatearRangoFechas(viaje.fechaInicio, viaje.fechaFin) }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="group-trips-slider__footer">
+                  <span class="group-trips-slider__price" *ngIf="viaje.valor">{{ formatPrice(viaje.valor) }}</span>
+                  <button class="group-trips-slider__button" (click)="irADetalle(viaje)">
+                    {{ config.general.title }}
+                  </button>
+                </div>
+              </div>
+            </div>
+            </article>
+          </div>
+        </div>
+
+        <button class="nav-btn nav-btn--right" type="button" (click)="moverDerecha()" [disabled]="viajes().length === 0">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    </ng-container>
+  </div>
+
+  <ng-template #loading>
+    <div class="group-trips-slider__loading">
+      <mat-spinner diameter="40" strokeWidth="3"></mat-spinner>
+    </div>
+  </ng-template>
+</section>
+

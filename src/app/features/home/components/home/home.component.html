@@ -19,14 +19,20 @@
     <app-about-section [agencyInfo]="agencyInfo()"></app-about-section>
   </section>
 
+  <app-group-trips-slider></app-group-trips-slider>
+
+  <section class="group-divider">
+    <div class="group-divider__overlay"></div>
+    <div class="group-divider__content">
+      <p class="group-divider__eyebrow">Descubre lo que viene</p>
+      <h3>Descubre tu próximo destino a tu manera, en tus tiempos y con un viaje personalizado solo para ti.</h3>
+      <p>Planificamos una experiencia a medida con acompañamiento de expertos para que te conectes con el lugar sin preocupaciones.</p>
+      <a routerLink="/viajes-a-tu-medida" class="group-divider__cta">Viaja a tu medida</a>
+    </div>
+  </section>
+
   <!-- Trips Slider Section -->
   <app-trips-slider></app-trips-slider>
-
-  <!-- Services Section -->
-  <app-services-section></app-services-section>
-
-  <!-- CTA Section -->
-  <app-cta-section></app-cta-section>
 
   <!-- Testimonials Section -->
   <section id="testimonials">

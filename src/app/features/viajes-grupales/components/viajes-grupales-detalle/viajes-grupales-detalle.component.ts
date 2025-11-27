@@ -11,10 +11,14 @@ import { Subject, takeUntil } from 'rxjs';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { VIAJES_GRUPALES_CONFIG } from '../../config/viajes-grupales.config';
 
+import { CTA_SECTION_CONFIG } from '../../../home/config/cta-section.config';
+import { ServicesSectionComponent } from '../../../home/components/services-section/services-section.component';
+import { CtaSectionComponent } from '../../../home/components/cta-section/cta-section.component';
+
 @Component({
   selector: 'app-viajes-grupales-detalle',
   standalone: true,
-  imports: [CommonModule, MaterialModule, MatProgressSpinnerModule],
+  imports: [CommonModule, MaterialModule, MatProgressSpinnerModule, ServicesSectionComponent, CtaSectionComponent],
   templateUrl: './viajes-grupales-detalle.component.html',
   styleUrl: './viajes-grupales-detalle.component.scss'
 })
@@ -23,13 +27,14 @@ export class ViajesGrupalesDetalleComponent implements OnInit, OnDestroy {
   isLoading = true;
   private destroy$ = new Subject<void>();
   readonly config = VIAJES_GRUPALES_CONFIG;
-  
+  readonly ctaConfig = CTA_SECTION_CONFIG;
+
   // Estados de los desplegables
   isIncluyeExpanded = false;
   isNoIncluyeExpanded = false;
   isItinerarioExpanded = false;
   isSugerenciasExpanded = false;
-  
+
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private tripsService = inject(TripsService);
@@ -40,7 +45,7 @@ export class ViajesGrupalesDetalleComponent implements OnInit, OnDestroy {
   constructor(
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -71,7 +76,7 @@ export class ViajesGrupalesDetalleComponent implements OnInit, OnDestroy {
         next: (viaje) => {
           this.viaje = viaje;
           this.isLoading = false;
-          
+
           this.ngZone.run(() => {
             this.cdr.markForCheck();
             this.cdr.detectChanges();
@@ -81,12 +86,12 @@ export class ViajesGrupalesDetalleComponent implements OnInit, OnDestroy {
           console.error('Error al cargar viaje grupal:', error);
           this.isLoading = false;
           this.snackBar.open(this.config.detail.messages.loadError, 'Cerrar', { duration: this.config.errors.edit.duration });
-          
+
           this.ngZone.run(() => {
             this.cdr.markForCheck();
             this.cdr.detectChanges();
           });
-          
+
           setTimeout(() => {
             this.router.navigate(['/viajes-grupales']);
           }, 2000);
@@ -126,10 +131,10 @@ export class ViajesGrupalesDetalleComponent implements OnInit, OnDestroy {
     if (!this.viaje) return;
 
     const precio = this.viaje.valor ? this.formatearPrecio(this.viaje.valor) : undefined;
-    const fechas = (this.viaje.fechaInicio && this.viaje.fechaFin) 
-      ? this.formatearRangoFechas(this.viaje.fechaInicio, this.viaje.fechaFin) 
+    const fechas = (this.viaje.fechaInicio && this.viaje.fechaFin)
+      ? this.formatearRangoFechas(this.viaje.fechaInicio, this.viaje.fechaFin)
       : undefined;
-    
+
     const mensaje = this.config.detail.messages.whatsappMessage(
       this.viaje.nombre,
       this.viaje.descripcion,

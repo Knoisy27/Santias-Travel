@@ -178,8 +178,8 @@ export class SEOService {
       email: 'info@santiastravel.com',
       address: {
         '@type': 'PostalAddress',
-        streetAddress: 'Bogotá, Colombia',
-        addressLocality: 'Bogotá',
+        streetAddress: 'Carrera 34 # 26 - 61, Barrio Alvernia',
+        addressLocality: 'Tuluá',
         addressCountry: 'CO'
       },
       sameAs: [

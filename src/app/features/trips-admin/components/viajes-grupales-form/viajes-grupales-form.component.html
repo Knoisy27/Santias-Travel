@@ -21,6 +21,15 @@
             </div>
 
             <div class="form-row">
+              <!-- Descripción corta -->
+              <mat-form-field appearance="outline" class="full-width">
+                <textarea matInput formControlName="descripcionCorta" rows="2"
+                  placeholder="Descripción corta - Resumen para tarjetas y listados"></textarea>
+                <mat-error>{{ getFieldError('descripcionCorta') }}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
               <!-- Descripción -->
               <mat-form-field appearance="outline" class="full-width required-field">
                 <textarea matInput formControlName="descripcion" rows="4" 
@@ -70,6 +79,30 @@
             }
 
             <div class="form-row">
+              <!-- Imagen para listado -->
+              <div class="file-upload-container half-width">
+                <label class="file-upload-label">Imagen para listados y slider</label>
+                <div class="file-upload-area">
+                  <input type="file" #listImageInput (change)="onListadoImageSelected($event)" 
+                    accept="image/jpeg,image/png,image/webp" style="display: none;">
+
+                  @if (uploadedListadoImageUrl()) {
+                    <div class="uploaded-file">
+                      <img [src]="uploadedListadoImageUrl()" alt="Imagen de listado" class="preview-image">
+                      <button type="button" mat-icon-button (click)="removeListadoImage()" class="remove-btn">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  } @else {
+                    <div class="upload-placeholder" (click)="listImageInput.click()">
+                      <mat-icon>photo</mat-icon>
+                      <span>Haz clic para subir la imagen que verá en listados</span>
+                      <small>JPG, PNG, WebP (máx. 50MB)</small>
+                    </div>
+                  }
+                </div>
+              </div>
+
               <!-- Subida de Imagen -->
               <div class="file-upload-container half-width">
                 <label class="file-upload-label">Imagen del Viaje</label>
@@ -98,13 +131,16 @@
                   }
                 </div>
               </div>
+            </div>
 
+            <div class="form-row">
               <!-- Subida de Video -->
               <div class="file-upload-container half-width">
                 <label class="file-upload-label">Video del Viaje</label>
-                <div class="file-upload-area" [class.uploading]="isUploadingVideo()">
+                <div class="file-upload-area" [class.disabled]="videoUploadDisabled">
                   <input type="file" #videoInput (change)="onVideoSelected($event)" 
-                    accept="video/mp4,video/webm" style="display: none;">
+                    accept="video/mp4,video/webm" style="display: none;"
+                    [disabled]="videoUploadDisabled">
                   
                   @if (uploadedVideoUrl()) {
                     <div class="uploaded-file">
@@ -113,16 +149,11 @@
                         <mat-icon>close</mat-icon>
                       </button>
                     </div>
-                  } @else if (isUploadingVideo()) {
-                    <div class="upload-progress">
-                      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-                      <span class="progress-text">Subiendo video...</span>
-                    </div>
                   } @else {
-                    <div class="upload-placeholder" (click)="videoInput.click()">
+                    <div class="upload-placeholder disabled">
                       <mat-icon>video_library</mat-icon>
-                      <span>Haz clic para subir video</span>
-                      <small>MP4, WebM (máx. 50MB)</small>
+                      <span>Próximamente podrás subir videos</span>
+                      <small>Esta funcionalidad estará disponible en la próxima actualización.</small>
                     </div>
                   }
                 </div>

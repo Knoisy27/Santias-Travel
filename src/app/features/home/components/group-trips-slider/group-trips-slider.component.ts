@@ -1,38 +1,30 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { TripsService, ViajeIndividual } from '../../../../core/services/trips.service';
+import { TripsService, ViajeGrupal } from '../../../../core/services/trips.service';
 import { MaterialModule } from '../../../../shared/material/material.module';
 import { Subject, takeUntil } from 'rxjs';
-import { TRIPS_SLIDER_CONFIG } from '../../config/trips-slider.config';
+import { GROUP_TRIPS_SLIDER_CONFIG } from '../../config/group-trips-slider.config';
 
 @Component({
-  selector: 'app-trips-slider',
+  selector: 'app-group-trips-slider',
   standalone: true,
   imports: [CommonModule, MaterialModule],
-  templateUrl: './trips-slider.component.html',
-  styleUrl: './trips-slider.component.scss'
+  templateUrl: './group-trips-slider.component.html',
+  styleUrl: './group-trips-slider.component.scss'
 })
-export class TripsSliderComponent implements OnInit, OnDestroy {
-  viajes = signal<ViajeIndividual[]>([]);
-  displayViajes = signal<ViajeIndividual[]>([]);
+export class GroupTripsSliderComponent implements OnInit, OnDestroy {
+  viajes = signal<ViajeGrupal[]>([]);
+  displayViajes = signal<ViajeGrupal[]>([]);
   currentIndex = signal(0);
   isLoading = signal(true);
+  readonly config = GROUP_TRIPS_SLIDER_CONFIG;
   private destroy$ = new Subject<void>();
-  readonly config = TRIPS_SLIDER_CONFIG;
 
-  private tripsService: TripsService;
-  private router: Router;
+  private tripsService = inject(TripsService);
+  private router = inject(Router);
 
-  constructor(
-    tripsService: TripsService,
-    router: Router,
-    private cdr: ChangeDetectorRef,
-    private ngZone: NgZone
-  ) {
-    this.tripsService = tripsService;
-    this.router = router;
-  }
+  constructor(private cdr: ChangeDetectorRef, private ngZone: NgZone) {}
 
   ngOnInit(): void {
     this.cargarViajes();
@@ -45,25 +37,22 @@ export class TripsSliderComponent implements OnInit, OnDestroy {
 
   cargarViajes(): void {
     this.isLoading.set(true);
-    this.tripsService.getViajesIndividuales()
+    this.tripsService.getViajesGrupales()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (viajes) => {
           const viajesOrdenados = (viajes || [])
             .sort((a, b) => {
-              // Ordenar por fecha de creación descendente (más recientes primero)
-              const fechaA = a.fechaCreacion ? new Date(a.fechaCreacion).getTime() : 0;
-              const fechaB = b.fechaCreacion ? new Date(b.fechaCreacion).getTime() : 0;
-              return fechaB - fechaA;
+              const fechaA = a.fechaInicio ? new Date(a.fechaInicio).getTime() : 0;
+              const fechaB = b.fechaInicio ? new Date(b.fechaInicio).getTime() : 0;
+              return fechaA - fechaB;
             })
-            .slice(0, this.config.mockData.maxCards); // Tomar solo los últimos N
+            .slice(0, this.config.slider.maxCards);
 
-          // Si no hay suficientes viajes, completar con mocks
           const viajesConMocks = this.completarConMocks(viajesOrdenados);
 
           this.viajes.set(viajesConMocks);
-          this.displayViajes.set([...viajesConMocks, ...viajesConMocks, ...viajesConMocks]); // Triplicar para efecto infinito
-          // Iniciar en el segundo grupo (middle) para permitir navegación infinita
+          this.displayViajes.set([...viajesConMocks, ...viajesConMocks, ...viajesConMocks]);
           this.currentIndex.set(viajesConMocks.length);
           this.isLoading.set(false);
 
@@ -73,12 +62,10 @@ export class TripsSliderComponent implements OnInit, OnDestroy {
           });
         },
         error: (error) => {
-          console.error('Error al cargar viajes:', error);
-          // En caso de error, mostrar mocks
+          console.error('Error al cargar viajes grupales para el slider:', error);
           const viajesMocks = this.completarConMocks([]);
           this.viajes.set(viajesMocks);
           this.displayViajes.set([...viajesMocks, ...viajesMocks, ...viajesMocks]);
-          // Iniciar en el segundo grupo (middle) para permitir navegación infinita
           this.currentIndex.set(viajesMocks.length);
           this.isLoading.set(false);
 
@@ -90,21 +77,26 @@ export class TripsSliderComponent implements OnInit, OnDestroy {
       });
   }
 
-  private completarConMocks(viajes: ViajeIndividual[]): ViajeIndividual[] {
-    const mocksNecesarios = this.config.mockData.maxCards - viajes.length;
+  private completarConMocks(viajes: ViajeGrupal[]): ViajeGrupal[] {
+    const mocksNecesarios = this.config.slider.maxCards - viajes.length;
     if (mocksNecesarios <= 0) return viajes;
 
-    const mocks: ViajeIndividual[] = [];
+    const mocks: ViajeGrupal[] = [];
     for (let i = 0; i < mocksNecesarios; i++) {
       mocks.push({
-        id: undefined,
+        idVigr: undefined,
         nombre: this.config.mockData.nombrePattern(i),
         descripcion: this.config.mockData.defaultDescription,
+        descripcionCorta: this.config.mockData.defaultDescription,
         valor: 0,
-        imagenUrl: this.config.mockData.imagePath,
-        imagenListadoUrl: this.config.mockData.imagePath,
+        imagenUrl: this.config.mockData.defaultImage,
+        imagenListadoUrl: this.config.mockData.defaultImage,
         fechaInicio: '',
         fechaFin: '',
+        incluye: '',
+        itinerario: '',
+        noIncluye: '',
+        sugerencias: '',
         estado: this.config.mockData.defaultEstado,
         modificadoPor: this.config.mockData.defaultModificadoPor
       });
@@ -119,7 +111,6 @@ export class TripsSliderComponent implements OnInit, OnDestroy {
     const totalViajes = this.viajes().length;
     let nuevoIndex = this.currentIndex() - 1;
 
-    // Si llegamos antes del inicio del segundo grupo, saltar al final del segundo grupo
     if (nuevoIndex < totalViajes) {
       nuevoIndex = totalViajes * 2 - 1;
     }
@@ -133,7 +124,6 @@ export class TripsSliderComponent implements OnInit, OnDestroy {
     const totalViajes = this.viajes().length;
     let nuevoIndex = this.currentIndex() + 1;
 
-    // Si llegamos al final del segundo grupo, saltar al inicio del segundo grupo
     if (nuevoIndex >= totalViajes * 2) {
       nuevoIndex = totalViajes;
     }
@@ -141,38 +131,41 @@ export class TripsSliderComponent implements OnInit, OnDestroy {
     this.currentIndex.set(nuevoIndex);
   }
 
-  irADetalle(viaje: ViajeIndividual): void {
-    if (viaje?.id) {
-      this.router.navigate(['/viajes-a-tu-medida', viaje.id]);
+  irADetalle(viaje: ViajeGrupal): void {
+    if (viaje?.idVigr) {
+      this.router.navigate(['/viajes-grupales', viaje.idVigr]);
     }
   }
 
   get transformValue(): string {
-    const cardWidth = this.config.tripCard.cardWidth;
+    const cardWidth = this.config.slider.cardWidth;
     const offset = this.currentIndex() * cardWidth;
     return `translateX(-${offset}px)`;
   }
 
-  truncarTexto(texto: string, maxLength: number = 100): string {
-    if (!texto || texto.length <= maxLength) return texto;
-    return texto.substring(0, maxLength) + '...';
+  getCardImage(viaje: ViajeGrupal): string {
+    return viaje.imagenListadoUrl || viaje.imagenUrl || this.config.slider.placeholderImage;
   }
 
-  getCardImage(viaje: ViajeIndividual): string {
-    return viaje.imagenListadoUrl || viaje.imagenUrl || this.config.tripCard.placeholderImage;
-  }
-
-  getCardDescripcion(viaje: ViajeIndividual): string {
+  getCardDescription(viaje: ViajeGrupal): string {
     return viaje.descripcionCorta?.trim() || viaje.descripcion || '';
-  }
-
-  trackByViaje(index: number, viaje: ViajeIndividual): number {
-    return viaje?.id ?? index;
   }
 
   formatPrice(valor?: number): string {
     if (!valor) return '';
     return `$${valor.toLocaleString('es-CO')}`;
+  }
+
+  formatearRangoFechas(fechaInicio?: string, fechaFin?: string): string {
+    if (!fechaInicio || !fechaFin) return '';
+    const inicio = new Date(fechaInicio);
+    const fin = new Date(fechaFin);
+    const opciones = { day: '2-digit', month: 'short' } as const;
+    return `${inicio.toLocaleDateString('es-CO', opciones)} - ${fin.toLocaleDateString('es-CO', opciones)}`;
+  }
+
+  trackByViaje(index: number): number {
+    return index;
   }
 }
 

@@ -3,19 +3,131 @@
     max-width: 1400px;
   }
 
-  // Line clamp utilities si no están disponibles globalmente
-  .line-clamp-2 {
+  .trips-slider-cards {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-inline: clamp(1rem, 3vw, 2.5rem);
+
+    .nav-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid rgba(15, 23, 42, 0.1);
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 30px rgba(15, 23, 42, 0.25);
+      }
+    }
+  }
+
+  .trips-slider-cards__viewport {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .trips-slider-cards__track {
+    display: flex;
+    gap: 1rem;
+    transition: transform 0.35s ease;
+  }
+
+  .trips-slider-card {
+    flex-shrink: 0;
+    border-radius: 1.75rem;
+    overflow: hidden;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.25s ease;
+
+    &:hover,
+    &:focus-within {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 25px 45px rgba(15, 23, 42, 0.35);
+      z-index: 3;
+    }
+  }
+
+  .trips-slider-card__media {
+    width: 100%;
+    height: 360px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .trips-slider-card__content {
+    width: 100%;
+    padding: 2rem;
+    color: #fff;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(2, 6, 23, 0.85) 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .trips-slider-card__name {
+    font-size: clamp(1.5rem, 2vw, 1.9rem);
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .trips-slider-card__description {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    max-height: 4rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+  }
+
+  .trips-slider-card__footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .trips-slider-card__price {
+    font-weight: 600;
+  }
+
+  .trips-slider-card__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+  }
+
+  // Line clamp utilities
+  .line-clamp-2, .line-clamp-3 {
     display: -webkit-box;
-    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
+  .line-clamp-2 {
+    -webkit-line-clamp: 2;
+  }
+
   .line-clamp-3 {
-    display: -webkit-box;
     -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
   }
 }
 

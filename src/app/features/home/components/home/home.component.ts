@@ -12,8 +12,7 @@ import { HeroSectionComponent } from '../hero-section/hero-section.component';
 import { AboutSectionComponent } from '../about-section/about-section.component';
 import { TestimonialsSectionComponent } from '../testimonials-section/testimonials-section.component';
 import { TripsSliderComponent } from '../trips-slider/trips-slider.component';
-import { ServicesSectionComponent } from '../services-section/services-section.component';
-import { CtaSectionComponent } from '../cta-section/cta-section.component';
+import { GroupTripsSliderComponent } from '../group-trips-slider/group-trips-slider.component';
 // import { NewsletterPopupComponent } from '../newsletter-popup/newsletter-popup.component'; // No usado
 
 @Component({
@@ -27,8 +26,7 @@ import { CtaSectionComponent } from '../cta-section/cta-section.component';
     AboutSectionComponent,
     TestimonialsSectionComponent,
     TripsSliderComponent,
-    ServicesSectionComponent,
-    CtaSectionComponent
+    GroupTripsSliderComponent
     // NewsletterPopupComponent // No usado
   ],
   templateUrl: './home.component.html',

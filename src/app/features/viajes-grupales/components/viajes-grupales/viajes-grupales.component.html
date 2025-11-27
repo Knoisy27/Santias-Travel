@@ -32,8 +32,8 @@
     <!-- Viajes reales del backend -->
     <ng-container *ngIf="!showMockTrip && viajes.length > 0">
       <div class="trip-card cursor-pointer" *ngFor="let viaje of viajes; trackBy: trackByViaje" (click)="verMasDetalles(viaje)">
-        <div class="trip-image-container" *ngIf="viaje.imagenUrl">
-          <img [src]="viaje.imagenUrl" [alt]="viaje.nombre" class="trip-image">
+        <div class="trip-image-container" *ngIf="viaje.imagenListadoUrl || viaje.imagenUrl">
+          <img [src]="viaje.imagenListadoUrl || viaje.imagenUrl" [alt]="viaje.nombre" class="trip-image">
         </div>
         <div class="trip-content">
           <div class="trip-header">
@@ -70,8 +70,15 @@
           <!-- Nombre del viaje (bold y más grande) -->
           <h2 class="trip-title">{{ viaje.nombre }}</h2>
 
+          <!-- Descripción corta -->
+          <p class="trip-description short">
+            {{ viaje.descripcionCorta || viaje.descripcion }}
+          </p>
+
           <!-- Descripción -->
-          <p class="trip-description">{{ viaje.descripcion }}</p>
+          <p class="trip-description full">
+            {{ viaje.descripcion }}
+          </p>
 
           <!-- Precio -->
           <div class="trip-price" *ngIf="viaje.valor">

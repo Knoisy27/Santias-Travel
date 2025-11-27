@@ -33,7 +33,10 @@
     <ng-container *ngIf="!showMockTrip && viajes.length > 0">
       <div class="trip-card cursor-pointer" *ngFor="let viaje of viajes; trackBy: trackByViaje" (click)="verDetalles(viaje)">
         <div class="trip-image-container">
-          <img [src]="viaje.imagenUrl" [alt]="viaje.nombre" class="trip-image">
+          <img
+            [src]="viaje.imagenListadoUrl || viaje.imagenUrl || 'assets/images/placeholder-destination.jpg'"
+            [alt]="viaje.nombre"
+            class="trip-image">
         </div>
         <div class="trip-content">
           <div class="trip-header">
@@ -61,7 +64,7 @@
               </button>
             </div>
           </div>
-          <p class="trip-description">{{ viaje.descripcion }}</p>
+          <p class="trip-description">{{ viaje.descripcionCorta || viaje.descripcion }}</p>
           <div class="trip-details">
             <span class="trip-price" *ngIf="viaje.valor">Desde ${{ viaje.valor | number:'1.0-0' }}</span>
             <!-- <span class="trip-status" [class]="'status-' + viaje.estado.toLowerCase()">{{ viaje.estado }}</span> -->

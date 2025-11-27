@@ -32,8 +32,11 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
   imageUploadProgress = signal(0);
   videoUploadProgress = signal(0);
   selectedImageFile: File | null = null;
+  selectedListadoImageFile: File | null = null;
   selectedVideoFile: File | null = null;
+  videoUploadDisabled = true;
   uploadedImageUrl = signal<string | null>(null);
+  uploadedListadoImageUrl = signal<string | null>(null);
   uploadedVideoUrl = signal<string | null>(null);
   
   viajeId = signal<number | null>(null);
@@ -94,6 +97,7 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
         next: (viaje) => {
           this.viajeForm.patchValue({
             nombre: viaje.nombre,
+        descripcionCorta: viaje.descripcionCorta || '',
             descripcion: viaje.descripcion,
             valor: viaje.valor || 0,
             fechaInicio: viaje.fechaInicio ? viaje.fechaInicio.split('T')[0] : '',
@@ -110,6 +114,7 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
           if (viaje.imagenUrl) {
             this.uploadedImageUrl.set(viaje.imagenUrl);
           }
+        this.uploadedListadoImageUrl.set(viaje.imagenListadoUrl || null);
           if (viaje.videoUrl) {
             this.uploadedVideoUrl.set(viaje.videoUrl);
           }
@@ -130,6 +135,7 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       nombre: ['', [Validators.required, Validators.maxLength(200)]],
+      descripcionCorta: ['', [Validators.maxLength(500)]],
       descripcion: ['', [Validators.required, Validators.minLength(10)]], // Sin maxLength
       valor: [0, [Validators.required, Validators.min(0)]],
       fechaInicio: ['', [Validators.required]],
@@ -219,26 +225,28 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
   private uploadFilesAndCreateViaje(user: any): void {
     const uploadPromises: Promise<string | null>[] = [];
 
-    // Subir imagen si hay una seleccionada
+    if (this.selectedListadoImageFile) {
+      uploadPromises.push(this.uploadImagePromise(this.selectedListadoImageFile));
+    } else {
+      uploadPromises.push(Promise.resolve(null));
+    }
+
     if (this.selectedImageFile) {
       uploadPromises.push(this.uploadImagePromise(this.selectedImageFile));
     } else {
       uploadPromises.push(Promise.resolve(null));
     }
 
-    // Subir video si hay uno seleccionado
-    if (this.selectedVideoFile) {
-      uploadPromises.push(this.uploadVideoPromise(this.selectedVideoFile));
-    } else {
-      uploadPromises.push(Promise.resolve(null));
-    }
+    const videoPromise = this.videoUploadDisabled
+      ? Promise.resolve(null)
+      : (this.selectedVideoFile ? this.uploadVideoPromise(this.selectedVideoFile) : Promise.resolve(null));
+    uploadPromises.push(videoPromise);
 
-    // Esperar a que se suban todos los archivos
-    Promise.all(uploadPromises).then(([imagenUrl, videoUrl]) => {
+    Promise.all(uploadPromises).then(([listImageUrl, imagenUrl, videoUrl]) => {
       if (this.isEditMode() && this.viajeId()) {
-        this.updateViajeGrupal(this.viajeId()!, user, imagenUrl, videoUrl);
+        this.updateViajeGrupal(this.viajeId()!, user, listImageUrl, imagenUrl, videoUrl);
       } else {
-      this.createViajeGrupal(user, imagenUrl, videoUrl);
+      this.createViajeGrupal(user, listImageUrl, imagenUrl, videoUrl);
       }
     }).catch((error) => {
       this.isLoading.set(false);
@@ -265,7 +273,7 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  private createViajeGrupal(user: any, imagenUrl: string | null, videoUrl: string | null): void {
+  private createViajeGrupal(user: any, listImageUrl: string | null, imagenUrl: string | null, videoUrl: string | null): void {
     const formValue = this.viajeForm.value;
     
     // Convertir fechas - el formulario ya valida que sean requeridas
@@ -274,8 +282,10 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
     
     const newViaje: ViajeGrupalCreateRequest = {
       nombre: formValue.nombre,
+      descripcionCorta: formValue.descripcionCorta || undefined,
       descripcion: formValue.descripcion,
       valor: formValue.valor,
+      imagenListadoUrl: listImageUrl || undefined,
       imagenUrl: imagenUrl || undefined,
       videoUrl: videoUrl || undefined,
       fechaInicio: fechaInicioISO,
@@ -325,7 +335,7 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  private updateViajeGrupal(id: number, user: any, imagenUrl: string | null, videoUrl: string | null): void {
+  private updateViajeGrupal(id: number, user: any, listImageUrl: string | null, imagenUrl: string | null, videoUrl: string | null): void {
     const formValue = this.viajeForm.value;
     
     // Convertir fechas - el formulario ya valida que sean requeridas
@@ -334,8 +344,10 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
     
     const updatedViaje: ViajeGrupalCreateRequest = {
       nombre: formValue.nombre,
+      descripcionCorta: formValue.descripcionCorta || undefined,
       descripcion: formValue.descripcion,
       valor: formValue.valor,
+      imagenListadoUrl: listImageUrl || (this.uploadedListadoImageUrl() || undefined),
       imagenUrl: imagenUrl || (this.uploadedImageUrl() || undefined),
       videoUrl: videoUrl || (this.uploadedVideoUrl() || undefined),
       fechaInicio: fechaInicioISO,
@@ -427,6 +439,7 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
   private getFieldLabel(fieldName: string): string {
     const labels: { [key: string]: string } = {
       nombre: 'Nombre',
+      descripcionCorta: 'Descripción corta',
       descripcion: 'Descripción',
       valor: 'Valor',
       fechaInicio: 'Fecha de Inicio',
@@ -461,12 +474,32 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  onListadoImageSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      if (this.isValidImageType(file)) {
+        this.selectedListadoImageFile = file;
+        this.showListadoImagePreview(file);
+      } else {
+        this.snackBar.open(
+          'Tipo de archivo no válido. Solo se permiten JPG, PNG y WebP.',
+          'Cerrar',
+          { duration: 5000 }
+        );
+        event.target.value = '';
+      }
+    }
+  }
+
   onVideoSelected(event: any): void {
+    if (this.videoUploadDisabled) {
+      return;
+    }
+
     const file = event.target.files[0];
     if (file) {
       if (this.isValidVideoType(file)) {
         this.selectedVideoFile = file;
-        // Solo mostrar preview, no subir aún
         this.showVideoPreview(file);
       } else {
         this.snackBar.open(
@@ -474,7 +507,6 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
           'Cerrar',
           { duration: 5000 }
         );
-        // Limpiar el input
         event.target.value = '';
       }
     }
@@ -550,6 +582,11 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
     // No afecta la validación del formulario
   }
 
+  removeListadoImage(): void {
+    this.selectedListadoImageFile = null;
+    this.uploadedListadoImageUrl.set(null);
+  }
+
   removeVideo(): void {
     this.selectedVideoFile = null;
     this.uploadedVideoUrl.set(null);
@@ -562,6 +599,14 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
     const reader = new FileReader();
     reader.onload = (e: any) => {
       this.uploadedImageUrl.set(e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  private showListadoImagePreview(file: File): void {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.uploadedListadoImageUrl.set(e.target.result);
     };
     reader.readAsDataURL(file);
   }

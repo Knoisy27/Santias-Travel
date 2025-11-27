@@ -12,7 +12,7 @@ export const APP_CONSTANTS = {
     email: 'servicioalcliente@santiastravel.com.co',
     phone: '+57 3042672662',
     whatsapp: '+57 3042672662',
-    address: 'Carrera 35 # 26',
+    address: 'Carrera 34 # 26 - 61, Barrio Alvernia',
     city: 'Tuluá',
     country: 'Colombia',
     socialMedia: {

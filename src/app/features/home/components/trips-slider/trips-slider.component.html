@@ -14,70 +14,53 @@
         <mat-spinner [diameter]="config.general.loadingSpinner.diameter" [strokeWidth]="config.general.loadingSpinner.strokeWidth"></mat-spinner>
       </div>
     } @else if (displayViajes().length > 0) {
-      <div class="relative">
-        <!-- Botón izquierda -->
-        <button
-          (click)="moverIzquierda()"
-          class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-shadow duration-300 hover:bg-gray-50 border border-gray-200"
-          [attr.aria-label]="config.navigation.leftButtonAriaLabel">
-          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
+    <div class="trips-slider-cards">
+      <button
+        (click)="moverIzquierda()"
+        class="nav-btn nav-btn--left"
+        [attr.aria-label]="config.navigation.leftButtonAriaLabel">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
 
-        <!-- Contenedor del slider -->
-        <div class="overflow-hidden pl-4 lg:mx-16">
-          <div
-            class="flex transition-transform duration-300 px-8 pl-2 ease-in-out"
-            [style.transform]="transformValue"
-            [style.width]="(displayViajes().length * 336) + 'px'">
-            @for (viaje of displayViajes(); track $index) {
-              <div class="flex-shrink-0 w-80 px-4 py-5">
-                <mat-card class="h-full flex flex-col shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-                  <!-- Imagen -->
-                  <div class="relative w-full h-48 overflow-hidden bg-gray-200">
-                    <img
-                      [src]="viaje.imagenUrl || config.tripCard.placeholderImage"
-                      [alt]="viaje.nombre"
-                      class="w-full h-full object-cover">
-                  </div>
-
-                  <!-- Contenido -->
-                  <mat-card-content class="flex-grow p-4">
-                    <h3 class="text-xl font-bold text-gray-800 mb-2 line-clamp-2">
-                      {{ viaje.nombre }}
-                    </h3>
-                    <p class="text-sm text-gray-600 mb-4 line-clamp-3">
-                      {{ truncarTexto(viaje.descripcion, config.tripCard.maxDescriptionLength) }}
-                    </p>
-                  </mat-card-content>
-
-                  <!-- Botón -->
-                  <mat-card-actions class="p-4 pt-0">
-                    <button
-                      mat-raised-button
-                      color="primary"
-                      class="w-full"
-                      (click)="irADetalle(viaje)">
-                      {{ config.tripCard.buttonText }}
-                    </button>
-                  </mat-card-actions>
-                </mat-card>
+      <div class="trips-slider-cards__viewport">
+        <div
+          class="trips-slider-cards__track"
+          [style.transform]="transformValue"
+          [style.width.px]="displayViajes().length * config.tripCard.cardWidth">
+          <article
+            class="trips-slider-card"
+            *ngFor="let viaje of displayViajes(); trackBy: trackByViaje"
+            [style.width.px]="config.tripCard.cardWidth"
+            (click)="irADetalle(viaje)">
+            <div
+              class="trips-slider-card__media"
+              [style.background-image]="'linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.85) 100%), url(' + getCardImage(viaje) + ')'">
+              <div class="trips-slider-card__content">
+                <p class="trips-slider-card__name">{{ viaje.nombre }}</p>
+                <p class="trips-slider-card__description">
+                  {{ getCardDescripcion(viaje) }}
+                </p>
+                <div class="trips-slider-card__footer">
+                  <p class="trips-slider-card__price" *ngIf="viaje.valor">
+                    {{ formatPrice(viaje.valor) }}
+                  </p>
+                  <span class="trips-slider-card__action">
+                    <mat-icon>arrow_forward</mat-icon>
+                  </span>
+                </div>
               </div>
-            }
-          </div>
+            </div>
+          </article>
         </div>
-
-        <!-- Botón derecha -->
-        <button
-          (click)="moverDerecha()"
-          class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-shadow duration-300 hover:bg-gray-50 border border-gray-200"
-          [attr.aria-label]="config.navigation.rightButtonAriaLabel">
-          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
       </div>
+
+      <button
+        (click)="moverDerecha()"
+        class="nav-btn nav-btn--right"
+        [attr.aria-label]="config.navigation.rightButtonAriaLabel">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
     } @else {
       <div class="text-center py-12">
         <p class="text-gray-600">{{ config.general.emptyState }}</p>
