@@ -1,5 +1,5 @@
 // Cambiar esta variable para elegir entre dev y prod
-const USE_PROD = false; // true = producción, false = desarrollo
+const USE_PROD = true; // true = producción, false = desarrollo
 
 // Configuración de desarrollo
 const devConfig = {
