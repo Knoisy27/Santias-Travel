@@ -26,11 +26,14 @@
         <div
           class="trips-slider-cards__track"
           [style.transform]="transformValue"
-          [style.width.px]="displayViajes().length * config.tripCard.cardWidth">
+          [style.width.px]="displayViajes().length * (cardWidth() + 16)"
+          (mousedown)="onDragStart($event)"
+          (touchstart)="onDragStart($event)"
+          style="touch-action: pan-y;"> <!-- Permite scroll vertical pero captura horizontal -->
           <article
             class="trips-slider-card"
             *ngFor="let viaje of displayViajes(); trackBy: trackByViaje"
-            [style.width.px]="config.tripCard.cardWidth"
+            [style.width.px]="cardWidth()"
             (click)="irADetalle(viaje)">
             <div
               class="trips-slider-card__media"
@@ -68,4 +71,3 @@
     }
   </div>
 </section>
-

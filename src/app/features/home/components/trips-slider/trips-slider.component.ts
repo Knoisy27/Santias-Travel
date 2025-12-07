@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, signal, HostListener, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { TripsService, ViajeIndividual } from '../../../../core/services/trips.service';
 import { MaterialModule } from '../../../../shared/material/material.module';
@@ -13,29 +13,102 @@ import { TRIPS_SLIDER_CONFIG } from '../../config/trips-slider.config';
   templateUrl: './trips-slider.component.html',
   styleUrl: './trips-slider.component.scss'
 })
-export class TripsSliderComponent implements OnInit, OnDestroy {
+export class TripsSliderComponent implements OnInit, AfterViewInit, OnDestroy {
   viajes = signal<ViajeIndividual[]>([]);
   displayViajes = signal<ViajeIndividual[]>([]);
   currentIndex = signal(0);
   isLoading = signal(true);
+  cardWidth = signal(TRIPS_SLIDER_CONFIG.tripCard.cardWidth);
+  dragOffset = signal(0);
+  
   private destroy$ = new Subject<void>();
   readonly config = TRIPS_SLIDER_CONFIG;
+  private isBrowser: boolean;
 
-  private tripsService: TripsService;
-  private router: Router;
+  // Variables para el control del deslizamiento
+  private startX = 0;
+  private isDragging = false;
+  private minSwipeDistance = 50; // Distancia mínima para considerar un swipe
 
   constructor(
-    tripsService: TripsService,
-    router: Router,
+    private tripsService: TripsService,
+    private router: Router,
     private cdr: ChangeDetectorRef,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    @Inject(PLATFORM_ID) platformId: Object
   ) {
-    this.tripsService = tripsService;
-    this.router = router;
+    this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit(): void {
+    this.calcularAnchoTarjeta();
     this.cargarViajes();
+  }
+
+  ngAfterViewInit(): void {
+    this.calcularAnchoTarjeta();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.calcularAnchoTarjeta();
+  }
+
+  // Manejo de eventos de ratón y táctiles
+  onDragStart(event: MouseEvent | TouchEvent): void {
+    this.isDragging = true;
+    this.startX = this.getPositionX(event);
+    this.dragOffset.set(0);
+  }
+
+  @HostListener('window:mousemove', ['$event'])
+  @HostListener('window:touchmove', ['$event'])
+  onDragMove(event: MouseEvent | TouchEvent): void {
+    if (!this.isDragging) return;
+    
+    const currentX = this.getPositionX(event);
+    const diff = currentX - this.startX;
+    this.dragOffset.set(diff);
+  }
+
+  @HostListener('window:mouseup')
+  @HostListener('window:touchend')
+  onDragEnd(): void {
+    if (!this.isDragging) return;
+    
+    this.isDragging = false;
+    const moved = this.dragOffset();
+    
+    if (Math.abs(moved) > this.minSwipeDistance) {
+      if (moved < 0) {
+        this.moverDerecha();
+      } else {
+        this.moverIzquierda();
+      }
+    }
+    
+    this.dragOffset.set(0);
+  }
+
+  private getPositionX(event: MouseEvent | TouchEvent): number {
+    return event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
+  }
+
+  private calcularAnchoTarjeta(): void {
+    if (this.isBrowser) {
+      const anchoPantalla = document.documentElement.clientWidth || window.innerWidth;
+      const breakpointMovil = 768;
+      
+      if (anchoPantalla <= breakpointMovil) {
+        const paddingTotal = 32;
+        const anchoDisponible = anchoPantalla - paddingTotal;
+        this.cardWidth.set(Math.max(anchoDisponible, 280));
+      } else {
+        this.cardWidth.set(this.config.tripCard.cardWidth);
+      }
+      
+      this.cdr.markForCheck();
+    }
   }
 
   ngOnDestroy(): void {
@@ -51,40 +124,37 @@ export class TripsSliderComponent implements OnInit, OnDestroy {
         next: (viajes) => {
           const viajesOrdenados = (viajes || [])
             .sort((a, b) => {
-              // Ordenar por fecha de creación descendente (más recientes primero)
               const fechaA = a.fechaCreacion ? new Date(a.fechaCreacion).getTime() : 0;
               const fechaB = b.fechaCreacion ? new Date(b.fechaCreacion).getTime() : 0;
               return fechaB - fechaA;
             })
-            .slice(0, this.config.mockData.maxCards); // Tomar solo los últimos N
+            .slice(0, this.config.mockData.maxCards);
 
-          // Si no hay suficientes viajes, completar con mocks
           const viajesConMocks = this.completarConMocks(viajesOrdenados);
 
           this.viajes.set(viajesConMocks);
-          this.displayViajes.set([...viajesConMocks, ...viajesConMocks, ...viajesConMocks]); // Triplicar para efecto infinito
-          // Iniciar en el segundo grupo (middle) para permitir navegación infinita
+          this.displayViajes.set([...viajesConMocks, ...viajesConMocks, ...viajesConMocks]);
           this.currentIndex.set(viajesConMocks.length);
           this.isLoading.set(false);
 
           this.ngZone.run(() => {
             this.cdr.markForCheck();
             this.cdr.detectChanges();
+            setTimeout(() => this.calcularAnchoTarjeta(), 0);
           });
         },
         error: (error) => {
           console.error('Error al cargar viajes:', error);
-          // En caso de error, mostrar mocks
           const viajesMocks = this.completarConMocks([]);
           this.viajes.set(viajesMocks);
           this.displayViajes.set([...viajesMocks, ...viajesMocks, ...viajesMocks]);
-          // Iniciar en el segundo grupo (middle) para permitir navegación infinita
           this.currentIndex.set(viajesMocks.length);
           this.isLoading.set(false);
 
           this.ngZone.run(() => {
             this.cdr.markForCheck();
             this.cdr.detectChanges();
+            setTimeout(() => this.calcularAnchoTarjeta(), 0);
           });
         }
       });
@@ -119,7 +189,6 @@ export class TripsSliderComponent implements OnInit, OnDestroy {
     const totalViajes = this.viajes().length;
     let nuevoIndex = this.currentIndex() - 1;
 
-    // Si llegamos antes del inicio del segundo grupo, saltar al final del segundo grupo
     if (nuevoIndex < totalViajes) {
       nuevoIndex = totalViajes * 2 - 1;
     }
@@ -133,7 +202,6 @@ export class TripsSliderComponent implements OnInit, OnDestroy {
     const totalViajes = this.viajes().length;
     let nuevoIndex = this.currentIndex() + 1;
 
-    // Si llegamos al final del segundo grupo, saltar al inicio del segundo grupo
     if (nuevoIndex >= totalViajes * 2) {
       nuevoIndex = totalViajes;
     }
@@ -142,15 +210,20 @@ export class TripsSliderComponent implements OnInit, OnDestroy {
   }
 
   irADetalle(viaje: ViajeIndividual): void {
+    // Evitar navegación si se estaba arrastrando
+    if (this.isDragging || Math.abs(this.dragOffset()) > 5) return;
+    
     if (viaje?.id) {
       this.router.navigate(['/viajes-a-tu-medida', viaje.id]);
     }
   }
 
   get transformValue(): string {
-    const cardWidth = this.config.tripCard.cardWidth;
-    const offset = this.currentIndex() * cardWidth;
-    return `translateX(-${offset}px)`;
+    const cardWidth = this.cardWidth();
+    const gap = 16; 
+    const baseOffset = this.currentIndex() * (cardWidth + gap);
+    // Incluimos el dragOffset en la transformación
+    return `translateX(calc(-${baseOffset}px + ${this.dragOffset()}px))`;
   }
 
   truncarTexto(texto: string, maxLength: number = 100): string {
@@ -175,4 +248,3 @@ export class TripsSliderComponent implements OnInit, OnDestroy {
     return `$${valor.toLocaleString('es-CO')}`;
   }
 }
-

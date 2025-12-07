@@ -16,11 +16,14 @@
           <div
             class="group-trips-slider__track"
             [style.transform]="transformValue"
-            [style.width.px]="displayViajes().length * config.slider.cardWidth">
+            [style.width.px]="displayViajes().length * (cardWidth() + 16)"
+            (mousedown)="onDragStart($event)"
+            (touchstart)="onDragStart($event)"
+            style="touch-action: pan-y;">
             <article
               class="group-trips-slider__card"
               *ngFor="let viaje of displayViajes(); trackBy: trackByViaje"
-              [style.width.px]="config.slider.cardWidth"
+              [style.width.px]="cardWidth()"
               (click)="irADetalle(viaje)">
             <div
               class="group-trips-slider__media"
@@ -68,4 +71,3 @@
     </div>
   </ng-template>
 </section>
-

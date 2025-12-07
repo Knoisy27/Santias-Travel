@@ -47,6 +47,11 @@
 
   &__viewport {
     overflow: hidden;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      padding: 0 16px; 
+    }
   }
 
   .nav-btn {
@@ -78,16 +83,33 @@
     &--right {
       right: 0;
     }
-  }
 
-  &__viewport {
-    overflow: hidden;
+    @media (max-width: 768px) {
+      width: 40px;
+      height: 40px;
+      
+      &--left {
+        left: 0;
+      }
+      
+      &--right {
+        right: 0;
+      }
+
+      &:hover {
+        transform: translateY(-50%) scale(1.05);
+      }
+    }
   }
 
   &__track {
     display: flex;
-    gap: 1.2rem;
-    transition: transform 0.45s ease;
+    gap: 1rem; // Unificado a 16px
+    transition: transform 0.35s ease-out;
+
+    @media (max-width: 768px) {
+      gap: 1rem;
+    }
   }
 
   &__card {
@@ -95,11 +117,21 @@
     width: 300px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 
+    // En móvil forzamos el ancho para coincidir con el viewport menos padding
+    @media (max-width: 768px) {
+      width: calc(100vw - 32px) !important;
+    }
+
     &:hover,
     &:focus-within {
       transform: translateY(-6px) scale(1.02);
       box-shadow: 0 25px 45px rgba(15, 23, 42, 0.3);
       z-index: 4;
+
+      @media (max-width: 768px) {
+        transform: none;
+        box-shadow: none;
+      }
     }
   }
 
@@ -220,7 +252,7 @@
 
   @media (max-width: 1024px) {
     .nav-btn {
-      display: none;
+      display: inline-flex; // Restaurado para mostrar en móvil también si se desea, o mantener none
     }
 
     &__track {

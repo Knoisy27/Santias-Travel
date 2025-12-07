@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, signal, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, signal, inject, HostListener, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { TripsService, ViajeGrupal } from '../../../../core/services/trips.service';
 import { MaterialModule } from '../../../../shared/material/material.module';
@@ -13,21 +13,104 @@ import { GROUP_TRIPS_SLIDER_CONFIG } from '../../config/group-trips-slider.confi
   templateUrl: './group-trips-slider.component.html',
   styleUrl: './group-trips-slider.component.scss'
 })
-export class GroupTripsSliderComponent implements OnInit, OnDestroy {
+export class GroupTripsSliderComponent implements OnInit, AfterViewInit, OnDestroy {
   viajes = signal<ViajeGrupal[]>([]);
   displayViajes = signal<ViajeGrupal[]>([]);
   currentIndex = signal(0);
   isLoading = signal(true);
+  cardWidth = signal(GROUP_TRIPS_SLIDER_CONFIG.slider.cardWidth);
+  dragOffset = signal(0);
+  
   readonly config = GROUP_TRIPS_SLIDER_CONFIG;
   private destroy$ = new Subject<void>();
+  private isBrowser: boolean;
+
+  // Variables para el control del deslizamiento
+  private startX = 0;
+  private isDragging = false;
+  private minSwipeDistance = 50;
 
   private tripsService = inject(TripsService);
   private router = inject(Router);
 
-  constructor(private cdr: ChangeDetectorRef, private ngZone: NgZone) {}
+  constructor(
+    private cdr: ChangeDetectorRef, 
+    private ngZone: NgZone,
+    @Inject(PLATFORM_ID) platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
   ngOnInit(): void {
+    this.calcularAnchoTarjeta();
     this.cargarViajes();
+  }
+
+  ngAfterViewInit(): void {
+    this.calcularAnchoTarjeta();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.calcularAnchoTarjeta();
+  }
+
+  // Manejo de eventos de ratón y táctiles
+  onDragStart(event: MouseEvent | TouchEvent): void {
+    this.isDragging = true;
+    this.startX = this.getPositionX(event);
+    this.dragOffset.set(0);
+  }
+
+  @HostListener('window:mousemove', ['$event'])
+  @HostListener('window:touchmove', ['$event'])
+  onDragMove(event: MouseEvent | TouchEvent): void {
+    if (!this.isDragging) return;
+    
+    const currentX = this.getPositionX(event);
+    const diff = currentX - this.startX;
+    this.dragOffset.set(diff);
+  }
+
+  @HostListener('window:mouseup')
+  @HostListener('window:touchend')
+  onDragEnd(): void {
+    if (!this.isDragging) return;
+    
+    this.isDragging = false;
+    const moved = this.dragOffset();
+    
+    if (Math.abs(moved) > this.minSwipeDistance) {
+      if (moved < 0) {
+        this.moverDerecha();
+      } else {
+        this.moverIzquierda();
+      }
+    }
+    
+    this.dragOffset.set(0);
+  }
+
+  private getPositionX(event: MouseEvent | TouchEvent): number {
+    return event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
+  }
+
+  private calcularAnchoTarjeta(): void {
+    if (this.isBrowser) {
+      const anchoPantalla = document.documentElement.clientWidth || window.innerWidth;
+      const breakpointMovil = 768;
+      
+      if (anchoPantalla <= breakpointMovil) {
+        // En móvil: Ancho pantalla - padding del contenedor (16px * 2 = 32px)
+        const paddingTotal = 32;
+        const anchoDisponible = anchoPantalla - paddingTotal;
+        this.cardWidth.set(Math.max(anchoDisponible, 280));
+      } else {
+        this.cardWidth.set(this.config.slider.cardWidth);
+      }
+      
+      this.cdr.markForCheck();
+    }
   }
 
   ngOnDestroy(): void {
@@ -59,6 +142,7 @@ export class GroupTripsSliderComponent implements OnInit, OnDestroy {
           this.ngZone.run(() => {
             this.cdr.markForCheck();
             this.cdr.detectChanges();
+            setTimeout(() => this.calcularAnchoTarjeta(), 0);
           });
         },
         error: (error) => {
@@ -72,6 +156,7 @@ export class GroupTripsSliderComponent implements OnInit, OnDestroy {
           this.ngZone.run(() => {
             this.cdr.markForCheck();
             this.cdr.detectChanges();
+            setTimeout(() => this.calcularAnchoTarjeta(), 0);
           });
         }
       });
@@ -132,15 +217,23 @@ export class GroupTripsSliderComponent implements OnInit, OnDestroy {
   }
 
   irADetalle(viaje: ViajeGrupal): void {
+    // Evitar navegación si se estaba arrastrando
+    if (this.isDragging || Math.abs(this.dragOffset()) > 5) return;
+    
     if (viaje?.idVigr) {
       this.router.navigate(['/viajes-grupales', viaje.idVigr]);
     }
   }
 
   get transformValue(): string {
-    const cardWidth = this.config.slider.cardWidth;
-    const offset = this.currentIndex() * cardWidth;
-    return `translateX(-${offset}px)`;
+    const cardWidth = this.cardWidth();
+    // Ajustar gap a 16px para consistencia o usar el config.slider.cardGap si se prefiere
+    // En CSS de group-trips-slider está en 1.2rem (aprox 19.2px) pero mejor estandarizar
+    // Voy a usar el mismo cálculo que en trips-slider para consistencia en móvil: 16px (1rem)
+    // Pero debo revisar el CSS de group-trips-slider
+    const gap = 16; 
+    const offset = this.currentIndex() * (cardWidth + gap);
+    return `translateX(calc(-${offset}px + ${this.dragOffset()}px))`;
   }
 
   getCardImage(viaje: ViajeGrupal): string {
@@ -168,4 +261,3 @@ export class GroupTripsSliderComponent implements OnInit, OnDestroy {
     return index;
   }
 }
-
