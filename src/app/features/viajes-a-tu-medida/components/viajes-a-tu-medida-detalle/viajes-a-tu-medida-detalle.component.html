@@ -8,19 +8,16 @@
 } @else if (viaje) {
   <div class="w-full min-h-screen bg-[#F8FAFC] flex flex-col items-center">
     <div class="w-full max-w-7xl mx-auto mt-8 sm:mt-12 lg:mt-16 mb-12 sm:mb-16 px-4 sm:px-6">
-      <mat-card class="!rounded-[2rem] overflow-hidden w-full shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border-0 bg-white">
-        <div class="flex flex-col lg:flex-row w-full items-stretch">
+      <div class="w-full">
+        <div class="flex flex-col lg:flex-row w-full lg:items-start">
           
           <!-- Imagen a la izquierda (Columna Visual) -->
-          <div class="w-full lg:w-[45%] flex-shrink-0 p-4 sm:p-6 lg:p-8 flex items-center justify-center bg-gray-50/50">
-            <div class="w-full h-full min-h-[300px] lg:min-h-[500px] rounded-3xl overflow-hidden shadow-lg relative group">
-              <!-- Overlay sutil -->
-              <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
-              
+          <div class="w-full lg:w-[45%] lg:flex-shrink-0 lg:flex-grow-0 lg:max-w-[45%] p-4 sm:p-6 lg:p-8 lg:sticky lg:top-8 lg:self-start">
+            <div class="w-full aspect-[5/4] rounded-3xl overflow-hidden shadow-lg relative">
               <img 
                 [src]="viaje.imagenUrl || 'assets/images/placeholder-destination.jpg'" 
                 [alt]="viaje.nombre" 
-                class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
+                class="w-full h-full object-cover"
               />
             </div>
           </div>
@@ -29,21 +26,21 @@
           <div class="w-full lg:w-[55%] flex flex-col p-6 lg:p-10 pt-4 lg:pt-10">
             
             <!-- Header -->
-            <div class="mb-8">
-              <div class="flex items-center gap-3 mb-3">
-                <span class="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-bold uppercase tracking-wider">
+            <div class="mb-5">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="text-amber-500 text-2xl lg:text-3xl font-bold uppercase tracking-wider">
                   {{ config.detail.content.prefixTitle }}
                 </span>
               </div>
               
-              <mat-card-title class="text-3xl lg:text-5xl font-bold text-slate-900 !mb-2 !leading-tight tracking-tight">
+              <mat-card-title class="viaje-title font-serif font-extrabold text-slate-900 !mb-2 !leading-tight tracking-tight" style="font-size: 2.7rem; line-height: 1.1;">
                 {{ viaje.nombre }}
               </mat-card-title>
             </div>
 
             <!-- Descripción -->
-            <mat-card-content class="!p-0 mb-8">
-              <p class="text-base lg:text-lg text-slate-600 leading-loose font-normal">
+            <mat-card-content class="!p-0 mb-5">
+              <p class="text-lg lg:text-xl text-slate-600 leading-loose font-normal">
                 {{ viaje.descripcion }}
               </p>
             </mat-card-content>
@@ -52,12 +49,12 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
               <!-- Precio -->
               @if (viaje.valor) {
-                <div class="flex items-center gap-4 p-4 rounded-2xl bg-emerald-50/50 border border-emerald-100/50">
-                  <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 text-emerald-600">
+                <div class="flex items-center gap-4 p-4 rounded-2xl bg-emerald-100/70 border border-emerald-200/70 shadow-sm">
+                  <div class="w-12 h-12 rounded-full bg-emerald-200 flex items-center justify-center flex-shrink-0 text-emerald-700">
                     <mat-icon>attach_money</mat-icon>
                   </div>
                   <div>
-                    <p class="text-xs font-bold text-emerald-600 uppercase tracking-wide mb-0.5">{{ config.detail.content.sections.price.label }}</p>
+                    <p class="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-0.5">{{ config.detail.content.sections.price.label }}</p>
                     <p class="text-xl font-bold text-slate-900">
                       {{ formatearPrecio(viaje.valor) }}
                     </p>
@@ -67,12 +64,12 @@
 
               <!-- Fechas -->
               @if (viaje.fechaInicio && viaje.fechaFin) {
-                <div class="flex items-center gap-4 p-4 rounded-2xl bg-blue-50/50 border border-blue-100/50">
-                  <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 text-blue-600">
+                <div class="flex items-center gap-4 p-4 rounded-2xl bg-blue-100/70 border border-blue-200/70 shadow-sm">
+                  <div class="w-12 h-12 rounded-full bg-blue-200 flex items-center justify-center flex-shrink-0 text-blue-700">
                     <mat-icon>{{ config.detail.content.sections.dates.icon }}</mat-icon>
                   </div>
                   <div>
-                    <p class="text-xs font-bold text-blue-600 uppercase tracking-wide mb-0.5">{{ config.detail.content.sections.dates.label }}</p>
+                    <p class="text-xs font-bold text-blue-700 uppercase tracking-wide mb-0.5">{{ config.detail.content.sections.dates.label }}</p>
                     <p class="text-base font-bold text-slate-900 leading-tight">
                       {{ formatearRangoFechas(viaje.fechaInicio, viaje.fechaFin) }}
                     </p>
@@ -82,7 +79,7 @@
             </div>
           </div>
         </div>
-      </mat-card>
+      </div>
     </div>
 
     <!-- Secciones Adicionales -->

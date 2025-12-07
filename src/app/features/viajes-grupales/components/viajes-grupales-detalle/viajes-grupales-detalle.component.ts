@@ -171,19 +171,34 @@ export class ViajesGrupalesDetalleComponent implements OnInit, OnDestroy {
 
   // Métodos para controlar los desplegables
   toggleIncluye(): void {
-    this.isIncluyeExpanded = !this.isIncluyeExpanded;
+    const wasExpanded = this.isIncluyeExpanded;
+    this.cerrarTodos();
+    this.isIncluyeExpanded = !wasExpanded;
   }
 
   toggleNoIncluye(): void {
-    this.isNoIncluyeExpanded = !this.isNoIncluyeExpanded;
+    const wasExpanded = this.isNoIncluyeExpanded;
+    this.cerrarTodos();
+    this.isNoIncluyeExpanded = !wasExpanded;
   }
 
   toggleItinerario(): void {
-    this.isItinerarioExpanded = !this.isItinerarioExpanded;
+    const wasExpanded = this.isItinerarioExpanded;
+    this.cerrarTodos();
+    this.isItinerarioExpanded = !wasExpanded;
   }
 
   toggleSugerencias(): void {
-    this.isSugerenciasExpanded = !this.isSugerenciasExpanded;
+    const wasExpanded = this.isSugerenciasExpanded;
+    this.cerrarTodos();
+    this.isSugerenciasExpanded = !wasExpanded;
+  }
+
+  private cerrarTodos(): void {
+    this.isIncluyeExpanded = false;
+    this.isNoIncluyeExpanded = false;
+    this.isItinerarioExpanded = false;
+    this.isSugerenciasExpanded = false;
   }
 }
 

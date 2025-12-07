@@ -75,11 +75,6 @@
             {{ viaje.descripcionCorta || viaje.descripcion }}
           </p>
 
-          <!-- Descripción -->
-          <p class="trip-description full">
-            {{ viaje.descripcion }}
-          </p>
-
           <!-- Precio -->
           <div class="trip-price" *ngIf="viaje.valor">
             {{ formatearPrecio(viaje.valor) }}

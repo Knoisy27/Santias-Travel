@@ -14,7 +14,7 @@ export interface ServicesSectionConfig {
 export const SERVICES_SECTION_CONFIG: ServicesSectionConfig = {
   preTitle: '¡Te puede incluir',
   title: 'Personaliza tu viaje como quieras',
-  subtitle: 'No todos los viajeros buscan lo mismo, por eso con Santiás Travel tú decides qué incluir en tu plan.',
+  subtitle: 'No todos los viajeros buscan lo mismo, por eso con Santias Travel tú decides qué incluir en tu plan.',
   services: [
     {
       title: 'Tiquetes aéreos',

@@ -1,1 +1,9 @@
-// Este archivo está vacío porque usamos Tailwind CSS
+.viaje-title {
+  font-size: 2.7rem;
+  line-height: 1.1;
+
+  @media (min-width: 1024px) {
+    font-size: 6rem;
+    line-height: 1.1;
+  }
+}
