@@ -12,13 +12,13 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { VIAJES_GRUPALES_CONFIG } from '../../config/viajes-grupales.config';
 
 import { CTA_SECTION_CONFIG } from '../../../home/config/cta-section.config';
-import { ServicesSectionComponent } from '../../../home/components/services-section/services-section.component';
+import { GroupTripsSliderComponent } from '../../../home/components/group-trips-slider/group-trips-slider.component';
 import { CtaSectionComponent } from '../../../home/components/cta-section/cta-section.component';
 
 @Component({
   selector: 'app-viajes-grupales-detalle',
   standalone: true,
-  imports: [CommonModule, MaterialModule, MatProgressSpinnerModule, ServicesSectionComponent, CtaSectionComponent],
+  imports: [CommonModule, MaterialModule, MatProgressSpinnerModule, GroupTripsSliderComponent, CtaSectionComponent],
   templateUrl: './viajes-grupales-detalle.component.html',
   styleUrl: './viajes-grupales-detalle.component.scss'
 })

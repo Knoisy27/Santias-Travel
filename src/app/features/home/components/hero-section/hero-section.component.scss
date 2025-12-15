@@ -1,13 +1,29 @@
 @use '../../../../../assets/styles/variables' as vars;
 @use '../../../../../assets/styles/mixins' as mixins;
 
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Poppins:wght@400;700&display=swap');
+
 .hero-section {
   position: relative;
   height: 100vh;
   min-height: 600px;
   @include mixins.flex-center;
   overflow: hidden;
-  background: linear-gradient(135deg, #3B5998 0%, #1a365d 100%);
+  // Imagen de fondo configurada según solicitud
+  background: url('/assets/images/backgrounds/portada 1.png') no-repeat center center;
+  background-size: cover;
+  
+  // Overlay oscuro para mejorar legibilidad del texto sobre la imagen si es necesario
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.2); // Ajustar opacidad según la imagen
+    z-index: 1;
+  }
 
   @include mixins.mobile {
     height: 80vh;
@@ -15,18 +31,20 @@
   }
 }
 
-// Eliminado hero-background - ahora solo usamos gradiente
-
-// Container usa estilos globales
-
 .hero-content {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr; // Cambio a 1 columna para centrar atención o ajustar según diseño
   align-items: center;
   gap: vars.$spacing-2xl;
   padding: vars.$spacing-2xl 0;
   position: relative;
   z-index: 2;
+  max-width: 1200px; // Limitar ancho contenido
+  margin: 0 auto;
+
+  @include mixins.desktop {
+     grid-template-columns: 1fr 1fr; // En escritorio, texto a la izquierda, espacio a la derecha
+  }
 
   @include mixins.mobile {
     grid-template-columns: 1fr;
@@ -37,33 +55,43 @@
 
 .hero-text {
   color: vars.$white;
+  max-width: 650px; // Limitar ancho del texto
 
   .hero-title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: vars.$font-weight-extrabold;
-    line-height: 1.1;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700; // Poppins Bold
+    font-size: clamp(2rem, 4vw, 3rem); // Ajustado para "SOMOS MÁS QUE UNA"
+    line-height: 1.2;
     margin-bottom: vars.$spacing-lg;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
 
     .highlight {
       display: block;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 500; // Oswald Medium
+      font-size: clamp(3rem, 6vw, 5rem); // Mucho más grande "AGENCIA DE VIAJES"
+      color: vars.$primary-orange; // Color naranja sólido o gradiente según preferencia
       background: linear-gradient(135deg, #f97316, #fbbf24);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      text-shadow: none;
+      margin-top: vars.$spacing-xs;
+      line-height: 1;
     }
   }
 
   .hero-description {
-    font-size: vars.$font-size-xl;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400; // Poppins Regular
+    font-size: vars.$font-size-lg;
     line-height: 1.6;
     margin-bottom: vars.$spacing-2xl;
-    max-width: 600px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    max-width: 500px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 
     @include mixins.mobile {
-      font-size: vars.$font-size-lg;
+      font-size: vars.$font-size-base;
       margin: 0 auto vars.$spacing-xl;
     }
   }
@@ -79,7 +107,6 @@
     justify-content: center;
   }
 
-  // Material UI button styles
   .hero-btn-primary {
     min-width: 200px;
     height: 56px;
@@ -88,47 +115,20 @@
     letter-spacing: 0.8px;
     font-size: 16px;
     border-radius: 28px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    background-color: vars.$primary-blue; // Asegurar color
+    color: vars.$white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     transition: all 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      background-color: darken(#3B5998, 5%);
     }
 
     mat-icon {
       margin-right: vars.$spacing-sm;
       font-size: 20px;
-    }
-  }
-
-  // Legacy button styles for backward compatibility
-  .btn {
-    min-width: 180px;
-    font-weight: vars.$font-weight-semibold;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    transition: all vars.$transition-normal;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    }
-  }
-
-  .btn-whatsapp {
-    @include mixins.flex-center;
-    gap: vars.$spacing-sm;
-    background-color: #25D366;
-    color: vars.$white;
-
-    &:hover:not(:disabled) {
-      background-color: #1ea854;
-    }
-
-    svg {
-      flex-shrink: 0;
     }
   }
 }
@@ -138,22 +138,24 @@
   @include mixins.flex-center;
   @include mixins.flex-column;
   gap: vars.$spacing-md;
+  
+  // Posicionar a la derecha o dejar que el grid lo maneje
+  justify-self: end;
 
   @include mixins.mobile {
-    display: none; // Ocultar en móvil para ahorrar espacio
+    display: none; 
   }
 }
 
 .social-icons {
-  background: rgba(vars.$white, 0.1);
+  background: rgba(vars.$white, 0.15);
   backdrop-filter: blur(10px);
   border-radius: vars.$border-radius-xl;
   padding: vars.$spacing-md;
   @include mixins.flex-column;
   gap: vars.$spacing-md;
-  border: 1px solid rgba(vars.$white, 0.2);
+  border: 1px solid rgba(vars.$white, 0.3);
 
-  // Material UI social buttons
   .social-icon-material {
     transition: all 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
     
@@ -167,17 +169,12 @@
       
       &:hover {
         opacity: 1;
-        transform: scale(1.1);
       }
       
       svg {
         width: 24px;
         height: 24px;
         display: block;
-    }
-      
-      mat-icon {
-        color: white;
       }
     }
 
@@ -187,8 +184,6 @@
       
       &:hover {
         opacity: 1;
-        background-color: #166FE5;
-        transform: scale(1.1);
       }
       
       mat-icon {
@@ -198,38 +193,13 @@
   }
 }
 
-.social-icon {
-  @include mixins.flex-center;
-  width: 50px;
-  height: 50px;
-  border-radius: vars.$border-radius-full;
-  background: rgba(vars.$white, 0.1);
-  border: 1px solid rgba(vars.$white, 0.3);
-  color: vars.$white;
-  cursor: pointer;
-  transition: all vars.$transition-fast;
-
-  &:hover {
-    background: rgba(vars.$white, 0.2);
-    transform: scale(1.1);
-  }
-
-  &.instagram:hover {
-    color: white;
-  }
-
-  &.facebook:hover {
-    color: white;
-  }
-}
-
-// Elemento decorativo del avión
+// Elemento decorativo del avión - Opcional, puede que choque con el fondo nuevo
 .airplane-element {
   position: absolute;
   top: 20%;
   right: 10%;
   z-index: 2;
-  opacity: 0.7;
+  opacity: 0.8;
   animation: float 3s ease-in-out infinite;
 
   @include mixins.mobile {

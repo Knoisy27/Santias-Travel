@@ -6,14 +6,14 @@
     </div>
   </div>
 } @else if (viaje) {
-  <div class="w-full min-h-screen bg-[#F8FAFC] flex flex-col items-center">
+  <div class="w-full min-h-screen bg-white flex flex-col items-center">
     <div class="w-full max-w-7xl mx-auto mt-8 sm:mt-12 lg:mt-16 mb-12 sm:mb-16 px-4 sm:px-6">
       <div class="w-full">
         <div class="flex flex-col lg:flex-row w-full lg:items-start">
           
           <!-- Imagen a la izquierda (Columna Visual) -->
           <div class="w-full lg:w-[45%] lg:flex-shrink-0 lg:flex-grow-0 lg:max-w-[45%] p-4 sm:p-6 lg:p-8 lg:sticky lg:top-8 lg:self-start">
-            <div class="w-full aspect-[5/4] rounded-3xl overflow-hidden shadow-lg relative mb-6">
+            <div class="w-full aspect-[5/4] overflow-hidden relative mb-6">
               <img 
                 [src]="viaje.imagenUrl || 'assets/images/placeholder-destination.jpg'" 
                 [alt]="viaje.nombre" 
@@ -59,8 +59,8 @@
           <div class="w-full lg:w-[55%] flex flex-col p-6 lg:p-10 pt-4 lg:pt-10">
             
             <!-- Header -->
-            <div class="mb-6">
-              <div class="flex items-center gap-3 mb-4">
+            <div class="mb-[15px]">
+              <div class="flex items-center gap-3 mb-[7px]">
                 <span class="text-amber-500 text-2xl lg:text-3xl font-bold uppercase tracking-wider">
                   {{ config.detail.content.prefixTitle }}
                 </span>
@@ -232,7 +232,7 @@
     </div>
 
     <!-- Secciones Adicionales -->
-    <app-services-section class="w-full"></app-services-section>
+    <app-group-trips-slider class="w-full"></app-group-trips-slider>
     <app-cta-section 
       class="w-full"
       [viajeNombre]="viaje.nombre"

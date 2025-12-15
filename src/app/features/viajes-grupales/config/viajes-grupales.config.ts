@@ -111,7 +111,7 @@ export const VIAJES_GRUPALES_CONFIG: ViajesGrupalesConfig = {
       buttonText: 'Volver a viajes'
     },
     content: {
-      prefixTitle: 'Viaja a',
+      prefixTitle: 'DESCUBRE',
       sections: {
         price: {
           label: 'Precio',

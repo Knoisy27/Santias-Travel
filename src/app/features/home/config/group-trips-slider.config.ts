@@ -21,12 +21,12 @@ export interface GroupTripsSliderConfig {
 
 export const GROUP_TRIPS_SLIDER_CONFIG: GroupTripsSliderConfig = {
   general: {
-    pretitle: 'PRÓXIMOS',
+    pretitle: '',
     title: 'Viajes grupales',
     subtitle: 'Descubre viajes con fechas definidas, acompañamiento experto y experiencias memorables que puedes compartir.'
   },
   slider: {
-    cardWidth: 320,
+    cardWidth: 336,
     cardGap: 18,
     maxCards: 6,
     placeholderImage: 'assets/images/mock-viajes/mock_viajes.png'

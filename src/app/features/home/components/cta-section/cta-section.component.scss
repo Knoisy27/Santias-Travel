@@ -1,60 +1,20 @@
 .cta-section {
-  min-height: 500px;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  @media (min-width: 768px) {
-    min-height: 600px;
-  }
-
-  @media (min-width: 1024px) {
-    min-height: 700px;
-  }
-
-  .cta-background {
-    // Puedes reemplazar esto con una imagen de fondo de playa/tropical
-    // background-image: url('/assets/images/cta-background.jpg');
-    // background-size: cover;
-    // background-position: center;
-    
-    // Mientras tanto, usar gradiente animado que simula un paisaje tropical
-    animation: gradientShift 20s ease infinite;
-    background-size: 200% 200%;
-    background-position: center;
-  }
-
   .cta-overlay {
     transition: opacity 0.3s ease;
-  }
-
-  .cta-card {
-    transition: all 0.3s ease;
-    
-    &:hover {
-      background: rgba(0, 0, 0, 0.75);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-  }
-
-  .cta-title {
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-    word-wrap: break-word;
-    letter-spacing: -0.02em;
-    
-    // Asegurar que el título se separe bien en múltiples líneas
-    @media (max-width: 768px) {
-      font-size: 2rem;
-      line-height: 1.2;
-    }
   }
 
   .cta-button {
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    margin-top: 22px;
+    margin-bottom: 22px;
     
     &::before {
       content: '';
@@ -85,16 +45,3 @@
     }
   }
 }
-
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-

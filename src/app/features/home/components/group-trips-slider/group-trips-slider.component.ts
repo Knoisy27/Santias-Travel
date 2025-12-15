@@ -221,7 +221,9 @@ export class GroupTripsSliderComponent implements OnInit, AfterViewInit, OnDestr
     if (this.isDragging || Math.abs(this.dragOffset()) > 5) return;
     
     if (viaje?.idVigr) {
-      this.router.navigate(['/viajes-grupales', viaje.idVigr]);
+      this.router.navigate(['/viajes-grupales', viaje.idVigr]).then(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
     }
   }
 

@@ -1,7 +1,6 @@
 <section class="group-trips-slider">
   <div class="group-trips-slider__container">
     <div class="group-trips-slider__header">
-      <p class="group-trips-slider__pretitle">{{ config.general.pretitle }}</p>
       <h2 class="group-trips-slider__title">{{ config.general.title }}</h2>
       <p class="group-trips-slider__subtitle">{{ config.general.subtitle }}</p>
     </div>
@@ -27,30 +26,16 @@
               (click)="irADetalle(viaje)">
             <div
               class="group-trips-slider__media"
-              [style.background-image]="'url(' + getCardImage(viaje) + ')'">
-              <div class="group-trips-slider__overlay">
-                <div class="group-trips-slider__text">
-                  <div class="group-trips-slider__text-panel">
-                    <div class="group-trips-slider__text-box group-trips-slider__title-box">
-                      <p class="group-trips-slider__name">{{ viaje.nombre }}</p>
-                    </div>
-                    <div class="group-trips-slider__text-box group-trips-slider__description-box">
-                      <p class="group-trips-slider__description">
-                        {{ getCardDescription(viaje) }}
-                      </p>
-                    </div>
-                    <div class="group-trips-slider__text-box group-trips-slider__date-box" *ngIf="formatearRangoFechas(viaje.fechaInicio, viaje.fechaFin)">
-                      <p class="group-trips-slider__date">
-                        {{ formatearRangoFechas(viaje.fechaInicio, viaje.fechaFin) }}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+              [style.background-image]="'linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.85) 100%), url(' + getCardImage(viaje) + ')'">
+              <div class="group-trips-slider__content">
+                <p class="group-trips-slider__name">{{ viaje.nombre }}</p>
+                <p class="group-trips-slider__description">
+                  {{ getCardDescription(viaje) }}
+                </p>
                 <div class="group-trips-slider__footer">
-                  <span class="group-trips-slider__price" *ngIf="viaje.valor">{{ formatPrice(viaje.valor) }}</span>
-                  <button class="group-trips-slider__button" (click)="irADetalle(viaje)">
-                    {{ config.general.title }}
-                  </button>
+                  <span class="group-trips-slider__action">
+                    <mat-icon>arrow_forward</mat-icon>
+                  </span>
                 </div>
               </div>
             </div>

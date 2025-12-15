@@ -108,7 +108,7 @@ export const VIAJES_A_TU_MEDIDA_CONFIG: ViajesATuMedidaConfig = {
       buttonText: 'Volver a viajes'
     },
     content: {
-      prefixTitle: 'Viaja a',
+      prefixTitle: 'DESCUBRE',
       sections: {
         price: {
           label: 'Precio'

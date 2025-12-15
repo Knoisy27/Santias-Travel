@@ -1,32 +1,23 @@
-<section class="cta-section relative overflow-hidden">
-  <!-- Background Image with gradient -->
-  <div class="cta-background absolute inset-0 bg-gradient-to-br from-sky-300 via-teal-400 to-blue-500">
-    <!-- Optional: Puedes agregar una imagen de fondo aquí -->
-    <!-- <img src="/assets/images/cta-background.jpg" alt="Destino de viaje" class="absolute inset-0 w-full h-full object-cover"> -->
-  </div>
+<section class="cta-section relative w-full bg-white">
+  <!-- Imagen principal -->
+  <img 
+    src="assets/images/backgrounds/banner 2.png" 
+    alt="¿Listo para vivir tu siguiente aventura?" 
+    class="w-full h-auto block"
+  />
   
-  <!-- Dark Overlay -->
-  <div class="cta-overlay absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
+  <!-- Overlay oscuro sutil -->
+  <div class="cta-overlay absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors duration-500"></div>
   
-  <!-- Content Card -->
-  <div class="relative z-10 container mx-auto px-4 flex items-center justify-center flex-1 py-8 lg:py-12">
-    <div class="max-w-4xl mx-auto w-full">
-      <div class="cta-card bg-black/70 backdrop-blur-md rounded-3xl p-8 lg:p-12 text-center border border-white/10 shadow-2xl">
-        <!-- Title -->
-        <h2 class="cta-title text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-10 leading-tight tracking-tight">
-          {{ config.title }}
-        </h2>
-        
-        <!-- Button -->
-        <button 
-          (click)="openWhatsApp()"
-          class="cta-button inline-flex items-center gap-3 px-8 py-4 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-base lg:text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border border-amber-500/30">
-          <span>{{ config.buttonText }}</span>
-          <svg class="w-5 h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
-        </button>
-      </div>
-    </div>
+  <!-- Contenido Overlay -->
+  <div class="absolute inset-0 z-10 container mx-auto px-4 flex flex-col items-center justify-end pb-8 lg:pb-12">
+    <button 
+      (click)="openWhatsApp()"
+      class="cta-button inline-flex items-center gap-3 px-8 py-4 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-base lg:text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border border-amber-500/30">
+      <span>{{ config.buttonText }}</span>
+      <svg class="w-5 h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+      </svg>
+    </button>
   </div>
 </section>

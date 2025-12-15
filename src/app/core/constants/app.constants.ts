@@ -9,7 +9,7 @@ export const APP_CONSTANTS = {
     name: 'Santias Travel',
     description: 'Tu agencia de viajes de confianza',
     logo: '/assets/images/logo.png',
-    email: 'servicioalcliente@santiastravel.com.co',
+    email: 'santiastravel@gmail.com',
     phone: '+57 3042672662',
     whatsapp: '+57 3042672662',
     address: 'Carrera 34 # 26 - 61, Barrio Alvernia',
