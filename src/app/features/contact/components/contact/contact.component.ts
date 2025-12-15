@@ -29,7 +29,8 @@ import { APP_CONSTANTS } from '../../../../core/constants/app.constants';
                 </div>
                 <h3>Teléfono</h3>
                 <p>{{ agencyInfo()!.phone }}</p>
-                <p>Lun - Vie: 8:00 AM - 6:00 PM</p>
+                <p>Lun - Vie: 8:00 AM - 12:00 PM - 2:00 PM - 6:00 PM</p>
+                <p>Sab: 8:00 AM - 12:00 PM</p>
               </div>
               
               <div class="info-card" (click)="sendEmail()" style="cursor: pointer;">
