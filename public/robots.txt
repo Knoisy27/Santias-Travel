@@ -1,0 +1,30 @@
+# Robots.txt para Santias Travel
+# https://santiastravel.cloud
+
+User-agent: *
+Allow: /
+
+# Páginas principales
+Allow: /viajes-grupales
+Allow: /viajes-a-tu-medida
+Allow: /sobre-nosotros
+Allow: /contacto
+Allow: /terminos
+Allow: /privacidad
+
+# Bloquear páginas de administración y login
+Disallow: /admin
+Disallow: /admin/
+Disallow: /login
+Disallow: /backend-test
+
+# Bloquear recursos innecesarios para SEO
+Disallow: /*.json$
+Disallow: /ngsw-worker.js
+Disallow: /ngsw.json
+
+# Sitemap
+Sitemap: https://santiastravel.cloud/sitemap.xml
+
+# Crawl-delay para ser amigable con el servidor
+Crawl-delay: 1

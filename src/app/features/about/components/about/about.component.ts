@@ -1,6 +1,7 @@
-import { Component, OnInit, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { register } from 'swiper/element/bundle';
+import { SEOService } from '../../../../core/services/seo.service';
 
 register();
 
@@ -13,6 +14,8 @@ register();
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AboutComponent implements OnInit, AfterViewInit {
+  private seoService = inject(SEOService);
+
   slider1Images: string[] = [
     '/assets/images/nosotros/slider1/slider1 (1).jpeg',
     '/assets/images/nosotros/slider1/slider1 (2).jpeg',
@@ -28,6 +31,9 @@ export class AboutComponent implements OnInit, AfterViewInit {
   ];
 
   ngOnInit(): void {
+    // Actualizar meta tags SEO
+    this.seoService.updateAboutPageMeta();
+    
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 

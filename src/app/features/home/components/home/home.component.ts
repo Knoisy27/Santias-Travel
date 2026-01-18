@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../../shared/material/material.module';
 import { TestimonialService } from '../../../../core/services/testimonial.service';
 import { AgencyService } from '../../../../core/services/agency.service';
+import { SEOService } from '../../../../core/services/seo.service';
 import { Testimonial } from '../../../../core/interfaces/testimonial.interface';
 import { AgencyInfo } from '../../../../core/interfaces/agency.interface';
 import { MockDataService } from '../../../../core/services/mock-data.service';
@@ -36,6 +37,7 @@ export class HomeComponent implements OnInit {
   private testimonialService = inject(TestimonialService);
   private agencyService = inject(AgencyService);
   private mockDataService = inject(MockDataService);
+  private seoService = inject(SEOService);
 
   agencyInfo = signal<AgencyInfo | null>(null);
   featuredTestimonials = signal<Testimonial[]>([]);
@@ -43,6 +45,9 @@ export class HomeComponent implements OnInit {
   showNewsletterPopup = signal(false);
 
   ngOnInit(): void {
+    // Actualizar meta tags SEO para la página de inicio
+    this.seoService.updateHomePageMeta();
+    
     this.loadHomeData();
     // this.scheduleNewsletterPopup(); // Comentado: no queremos el popup automático
   }

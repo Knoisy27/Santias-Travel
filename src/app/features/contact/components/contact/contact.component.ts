@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContactFormComponent } from '../contact-form/contact-form.component';
 import { AgencyService } from '../../../../core/services/agency.service';
+import { SEOService } from '../../../../core/services/seo.service';
 import { AgencyInfo } from '../../../../core/interfaces/agency.interface';
 import { MockDataService } from '../../../../core/services/mock-data.service';
 import { APP_CONSTANTS } from '../../../../core/constants/app.constants';
@@ -185,10 +186,14 @@ import { APP_CONSTANTS } from '../../../../core/constants/app.constants';
 export class ContactComponent implements OnInit {
   private agencyService = inject(AgencyService);
   private mockDataService = inject(MockDataService);
+  private seoService = inject(SEOService);
   
   agencyInfo = signal<AgencyInfo | null>(null);
 
   ngOnInit(): void {
+    // Actualizar meta tags SEO
+    this.seoService.updateContactPageMeta();
+    
     this.loadAgencyInfo();
   }
 

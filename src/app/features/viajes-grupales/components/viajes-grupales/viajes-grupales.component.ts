@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, inject } from 
 import { CommonModule } from '@angular/common';
 import { TripsService, ViajeGrupal } from '../../../../core/services/trips.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { SEOService } from '../../../../core/services/seo.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MaterialModule } from '../../../../shared/material/material.module';
 import { Subject, takeUntil } from 'rxjs';
@@ -23,6 +24,7 @@ export class ViajesGrupalesComponent implements OnInit, OnDestroy {
 
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
+  private seoService = inject(SEOService);
 
   constructor(
     private tripsService: TripsService,
@@ -32,6 +34,9 @@ export class ViajesGrupalesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    // Actualizar meta tags SEO
+    this.seoService.updateGroupTripsPageMeta();
+    
     this.cargarViajes();
   }
 

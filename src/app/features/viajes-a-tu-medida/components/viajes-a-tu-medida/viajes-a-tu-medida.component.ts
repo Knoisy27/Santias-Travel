@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TripsService, ViajeIndividual } from '../../../../core/services/trips.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { SEOService } from '../../../../core/services/seo.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
 import { VIAJES_A_TU_MEDIDA_CONFIG } from '../../config/viajes-a-tu-medida.config';
@@ -23,6 +24,7 @@ export class ViajesATuMedidaComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
   private router = inject(Router);
+  private seoService = inject(SEOService);
 
   constructor(
     private tripsService: TripsService,
@@ -31,6 +33,9 @@ export class ViajesATuMedidaComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    // Actualizar meta tags SEO
+    this.seoService.updateCustomTripsPageMeta();
+    
     this.cargarViajes();
   }
 

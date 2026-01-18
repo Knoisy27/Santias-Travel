@@ -5,6 +5,7 @@
   "framework": null,
   "installCommand": "npm install",
   "devCommand": "npm start",
+  "trailingSlash": false,
   "routes": [
     {
       "src": "/ngsw-worker.js",
