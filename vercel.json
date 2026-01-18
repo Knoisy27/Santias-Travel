@@ -1,7 +1,7 @@
 {
   "version": 2,
   "buildCommand": "npm run build",
-  "outputDirectory": "dist/santiasTravelFront/browser",
+  "outputDirectory": "dist/santiasTravelFront",
   "framework": null,
   "installCommand": "npm install",
   "devCommand": "npm start",
