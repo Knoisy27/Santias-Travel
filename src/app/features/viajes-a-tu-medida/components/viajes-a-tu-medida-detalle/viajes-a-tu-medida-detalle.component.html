@@ -6,14 +6,14 @@
     </div>
   </div>
 } @else if (viaje) {
-  <div class="w-full min-h-screen bg-[#F8FAFC] flex flex-col items-center">
+  <div class="w-full min-h-screen bg-white flex flex-col items-center">
     <div class="w-full max-w-7xl mx-auto mt-8 sm:mt-12 lg:mt-16 mb-12 sm:mb-16 px-4 sm:px-6">
       <div class="w-full">
         <div class="flex flex-col lg:flex-row w-full lg:items-start">
           
           <!-- Imagen a la izquierda (Columna Visual) -->
           <div class="w-full lg:w-[45%] lg:flex-shrink-0 lg:flex-grow-0 lg:max-w-[45%] p-4 sm:p-6 lg:p-8 lg:sticky lg:top-8 lg:self-start">
-            <div class="w-full aspect-[5/4] rounded-3xl overflow-hidden shadow-lg relative">
+            <div class="w-full aspect-[5/4] rounded-3xl overflow-hidden relative">
               <img 
                 [src]="viaje.imagenUrl || 'assets/images/placeholder-destination.jpg'" 
                 [alt]="viaje.nombre" 

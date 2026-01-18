@@ -1,18 +1,28 @@
 .trips-slider-section {
+  @media (max-width: 480px) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
   .container {
     max-width: 1400px;
+
+    @media (max-width: 480px) {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
   }
 
   .trips-slider-cards {
     position: relative;
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding-inline: clamp(1rem, 3vw, 2.5rem);
+    justify-content: center;
+    gap: 0;
+    padding: 0 60px; // Espacio para los botones absolutos
     
-    @media (max-width: 768px) {
+    @media (max-width: 480px) {
       padding-inline: 0;
-      gap: 0;
     }
 
     .nav-btn {
@@ -28,53 +38,46 @@
       cursor: pointer;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       z-index: 10;
+      flex-shrink: 0;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+
+      &--left {
+        left: 0;
+      }
+
+      &--right {
+        right: 0;
+      }
 
       &:hover {
-        transform: translateY(-2px);
+        transform: translateY(-50%) scale(1.05);
         box-shadow: 0 15px 30px rgba(15, 23, 42, 0.25);
       }
       
-      @media (max-width: 768px) {
-        width: 40px;
-        height: 40px;
-        position: absolute;
-        // Ajustamos la posición vertical para que esté centrado visualmente respecto a la imagen
-        top: 50%;
-        transform: translateY(-50%);
-        
-        &--left {
-          left: 1rem; // Un poco más adentro para asegurar visibilidad
-        }
-        
-        &--right {
-          right: 1rem;
-        }
-
-        &:hover {
-          transform: translateY(-50%) scale(1.05);
-        }
+      @media (max-width: 480px) {
+        display: none;
       }
     }
   }
 
   .trips-slider-cards__viewport {
-    flex: 1;
     overflow: hidden;
+    margin: 0 auto;
     
-    @media (max-width: 768px) {
-      width: 100%;
-      // Padding lateral de 16px para que se vea un poco del borde o solo centrado
-      padding: 0 16px; 
+    @media (max-width: 480px) {
+      width: 100% !important;
     }
   }
 
   .trips-slider-cards__track {
     display: flex;
-    gap: 1rem; // 16px
-    transition: transform 0.35s ease-out; // Suavizamos la transición
-    
-    @media (max-width: 768px) {
-      gap: 1rem;
+    gap: 1rem;
+    transition: transform 0.35s ease-out;
+
+    @media (max-width: 480px) {
+      gap: 0;
     }
   }
 
@@ -87,9 +90,8 @@
     position: relative;
     transition: transform 0.3s ease, box-shadow 0.25s ease;
 
-    // En móvil forzamos el ancho para coincidir con el viewport menos padding
-    @media (max-width: 768px) {
-      width: calc(100vw - 32px) !important;
+    @media (max-width: 480px) {
+      border-radius: 0;
     }
 
     &:hover,
@@ -98,8 +100,7 @@
       box-shadow: 0 25px 45px rgba(15, 23, 42, 0.35);
       z-index: 3;
       
-      // En móvil reducimos el efecto hover para que no sea molesto
-      @media (max-width: 768px) {
+      @media (max-width: 480px) {
         transform: none;
         box-shadow: none;
       }
@@ -114,8 +115,8 @@
     display: flex;
     align-items: flex-end;
 
-    @media (max-width: 768px) {
-      height: 400px; // Un poco más alto en móvil para mejor impacto
+    @media (max-width: 480px) {
+      height: 400px;
     }
   }
 
@@ -128,7 +129,7 @@
     flex-direction: column;
     gap: 0.6rem;
 
-    @media (max-width: 768px) {
+    @media (max-width: 480px) {
       padding: 1.5rem;
     }
   }

@@ -1,0 +1,119 @@
+<div class="about-page">
+  <div class="about-container">
+    <!-- Header -->
+    <header class="about-header">
+      <h1 class="about-title">Nosotros</h1>
+      <p class="about-subtitle">SANTIAS TRAVEL - Agencia certificada RNT 172280</p>
+    </header>
+
+    <!-- Main Content -->
+    <section class="about-content">
+      <div class="about-intro">
+        <p class="lead-text">
+          En Santiás Travel creemos que viajar no debería ser un lujo, sino una experiencia posible
+          para todas las familias.
+        </p>
+        <p>
+          Nacimos con el propósito de acercar los sueños a la realidad, creando viajes familiares y
+          grupales pensados para disfrutar, compartir y recordar toda la vida.
+        </p>
+      </div>
+
+      <div class="about-section">
+        <p>
+          Somos una agencia de viajes con más de 3 años de experiencia, dedicada a diseñar
+          experiencias nacionales e internacionales que combinan comodidad, seguridad y precios
+          accesibles. Nuestro enfoque está en acompañar a familias, parejas y grupos que desean
+          conocer el mar, descubrir nuevos destinos o cumplir ese viaje soñado que siempre han
+          postergado por pensar que es demasiado costoso.
+        </p>
+      </div>
+
+      <div class="about-section">
+        <p>
+          En Santiás Travel entendemos que cada viaje tiene una historia detrás. Por eso, ofrecemos
+          atención personalizada, asesorando a cada cliente desde el primer contacto hasta su
+          regreso a casa, cuidando cada detalle para que solo se preocupen por disfrutar.
+        </p>
+      </div>
+
+      <div class="about-section">
+        <p>
+          Creemos firmemente que viajar en familia fortalece vínculos, crea recuerdos inolvidables y
+          transforma la forma de ver el mundo. Por eso trabajamos con opciones de pago flexibles,
+          planes grupales y paquetes bien estructurados, pensados para que más personas puedan
+          decir: "sí se puede viajar".
+        </p>
+      </div>
+
+      <div class="about-certification">
+        <p>
+          Contamos con agencia certificada <strong>RNT 172280</strong>, lo que garantiza legalidad, respaldo y
+          confianza en cada experiencia que ofrecemos.
+        </p>
+      </div>
+
+      <div class="about-mission">
+        <p class="mission-text">
+          En Santiás Travel, no vendemos solo viajes.
+        </p>
+        <p>
+          Creamos momentos, cumplimos sueños y acompañamos a las familias en la aventura de
+          descubrir nuevos destinos, sin complicaciones y sin que el precio sea una barrera.
+        </p>
+      </div>
+
+      <!-- Slider 1 -->
+      <div class="about-slider-container">
+        <swiper-container id="slider1" init="false">
+          @for (image of slider1Images; track image) {
+            <swiper-slide>
+              <div class="slider-image-wrapper">
+                <img [src]="image" [alt]="'Imagen de Santiás Travel ' + $index" class="slider-image" />
+              </div>
+            </swiper-slide>
+          }
+        </swiper-container>
+      </div>
+
+      <!-- Slider 2 -->
+      <div class="about-slider-container">
+        <swiper-container id="slider2" init="false">
+          @for (image of slider2Images; track image) {
+            <swiper-slide>
+              <div class="slider-image-wrapper">
+                <img [src]="image" [alt]="'Imagen de Santiás Travel ' + $index" class="slider-image" />
+              </div>
+            </swiper-slide>
+          }
+        </swiper-container>
+      </div>
+
+      <!-- Misión -->
+      <section class="about-mission-vision">
+        <h2 class="mission-vision-title">Misión</h2>
+        <div class="mission-vision-content">
+          <p>
+            Próximamente estaremos compartiendo nuestra misión institucional.
+          </p>
+        </div>
+      </section>
+
+      <!-- Visión -->
+      <section class="about-mission-vision">
+        <h2 class="mission-vision-title">Visión</h2>
+        <div class="mission-vision-content">
+          <p>
+            Próximamente estaremos compartiendo nuestra visión institucional.
+          </p>
+        </div>
+      </section>
+    </section>
+
+    <!-- Footer -->
+    <footer class="about-footer">
+      <p><strong>SANTIAS TRAVEL</strong></p>
+      <p>Agencia certificada RNT 172280</p>
+    </footer>
+  </div>
+</div>

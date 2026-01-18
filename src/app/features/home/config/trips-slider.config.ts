@@ -22,7 +22,8 @@ export interface TripsSliderConfig {
   // Configuración de mock data
   mockData: {
     imagePath: string;
-    maxCards: number;
+    maxCards: number; // Número máximo de mocks a mostrar cuando no hay viajes
+    maxRealTrips: number; // Número máximo de viajes reales a mostrar
     defaultDescription: string;
     defaultEstado: string;
     defaultModificadoPor: string;
@@ -57,7 +58,8 @@ export const TRIPS_SLIDER_CONFIG: TripsSliderConfig = {
 
   mockData: {
     imagePath: 'assets/images/mock-viajes/mock_viajes.png',
-    maxCards: 5,
+    maxCards: 1, // Solo 1 mock cuando no hay viajes
+    maxRealTrips: 20, // Mostrar hasta 20 viajes reales
     defaultDescription: 'Descubre experiencias únicas diseñadas especialmente para ti. Desde destinos exóticos hasta aventuras culturales inolvidables.',
     defaultEstado: 'A',
     defaultModificadoPor: 'Sistema',

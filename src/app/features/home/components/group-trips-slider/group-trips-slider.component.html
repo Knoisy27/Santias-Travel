@@ -1,4 +1,4 @@
-<section class="group-trips-slider">
+<section class="group-trips-slider" #sliderContainer>
   <div class="group-trips-slider__container">
     <div class="group-trips-slider__header">
       <h2 class="group-trips-slider__title">{{ config.general.title }}</h2>
@@ -11,11 +11,11 @@
           <mat-icon>chevron_left</mat-icon>
         </button>
 
-        <div class="group-trips-slider__viewport">
+        <div class="group-trips-slider__viewport" [style.width.px]="viewportWidth()">
           <div
             class="group-trips-slider__track"
             [style.transform]="transformValue"
-            [style.width.px]="displayViajes().length * (cardWidth() + 16)"
+            [style.width.px]="displayViajes().length * (cardWidth() + currentGap)"
             (mousedown)="onDragStart($event)"
             (touchstart)="onDragStart($event)"
             style="touch-action: pan-y;">

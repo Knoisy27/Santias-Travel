@@ -7,7 +7,8 @@ export interface GroupTripsSliderConfig {
   slider: {
     cardWidth: number;
     cardGap: number;
-    maxCards: number;
+    maxCards: number; // Número máximo de mocks a mostrar cuando no hay viajes
+    maxRealTrips: number; // Número máximo de viajes reales a mostrar
     placeholderImage: string;
   };
   mockData: {
@@ -28,7 +29,8 @@ export const GROUP_TRIPS_SLIDER_CONFIG: GroupTripsSliderConfig = {
   slider: {
     cardWidth: 336,
     cardGap: 18,
-    maxCards: 6,
+    maxCards: 1, // Solo 1 mock cuando no hay viajes
+    maxRealTrips: 20, // Mostrar hasta 20 viajes reales
     placeholderImage: 'assets/images/mock-viajes/mock_viajes.png'
   },
   mockData: {

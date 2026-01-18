@@ -1,0 +1,270 @@
+.terms-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+  padding: 2rem 1rem 4rem;
+
+  @media (min-width: 768px) {
+    padding: 3rem 2rem 5rem;
+  }
+}
+
+.terms-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  padding: 2rem 1.5rem;
+
+  @media (min-width: 768px) {
+    padding: 3rem 4rem;
+  }
+}
+
+.terms-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.terms-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.2;
+
+  @media (min-width: 768px) {
+    font-size: 2.5rem;
+  }
+}
+
+.terms-subtitle {
+  font-size: 1rem;
+  color: #d97706;
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.terms-intro {
+  background: #fef3c7;
+  border-left: 4px solid #d97706;
+  padding: 1.25rem 1.5rem;
+  border-radius: 0 0.75rem 0.75rem 0;
+  margin-bottom: 2.5rem;
+
+  p {
+    margin: 0;
+    color: #92400e;
+    font-size: 1rem;
+    line-height: 1.7;
+
+    &:not(:last-child) {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+.terms-section {
+  margin-bottom: 2.5rem;
+
+  p {
+    color: #475569;
+    line-height: 1.7;
+    margin: 0 0 1rem 0;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+    list-style-type: disc;
+
+    li {
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 0.5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1.25rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e5e7eb;
+
+  @media (min-width: 768px) {
+    font-size: 1.75rem;
+  }
+}
+
+.section-intro {
+  color: #64748b;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 0.5rem;
+}
+
+.subsection {
+  margin-bottom: 1.75rem;
+  padding-left: 1rem;
+  border-left: 3px solid #e5e7eb;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #334155;
+    margin: 0 0 0.75rem 0;
+
+    @media (min-width: 768px) {
+      font-size: 1.2rem;
+    }
+  }
+
+  p {
+    color: #475569;
+    line-height: 1.7;
+    margin: 0 0 0.75rem 0;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  ul {
+    margin: 0.75rem 0;
+    padding-left: 1.5rem;
+    list-style-type: disc;
+
+    li {
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 0.5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  strong {
+    color: #1e293b;
+  }
+}
+
+.note {
+  font-size: 0.95rem;
+  color: #64748b;
+  font-style: italic;
+  background: #f1f5f9;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.paragraph-note {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+
+  strong {
+    color: #334155;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    margin: 0 0 0.5rem 0;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  ul {
+    margin: 0.5rem 0 0 0;
+    list-style-type: disc;
+    padding-left: 1.5rem;
+  }
+
+  &.important {
+    background: #fef3c7;
+    border-color: #fcd34d;
+
+    strong {
+      color: #92400e;
+    }
+
+    p {
+      color: #92400e;
+    }
+  }
+}
+
+.highlight-warning {
+  background: #fef2f2;
+  border-left-color: #ef4444;
+  padding: 1.25rem;
+  border-radius: 0 0.75rem 0.75rem 0;
+
+  h3 {
+    color: #dc2626;
+  }
+
+  p {
+    color: #7f1d1d;
+  }
+}
+
+.acceptance-box {
+  background: linear-gradient(135deg, rgba(3, 160, 71, 0.82) 0%, rgba(2, 172, 84, 0.82) 100%);
+  color: #ffffff;
+  padding: 1.5rem 2rem;
+  border-radius: 1rem;
+  text-align: center;
+
+  p {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #ffffff;
+  }
+}
+
+.terms-footer {
+  text-align: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #f3f4f6;
+
+  p {
+    margin: 0 0 0.25rem 0;
+    color: #64748b;
+
+    &:first-child {
+      color: #1e293b;
+      font-size: 1.1rem;
+    }
+  }
+}

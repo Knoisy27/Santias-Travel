@@ -5,6 +5,11 @@
 @use 'assets/styles/variables' as vars;
 @use 'assets/styles/mixins' as mixins;
 
+// Swiper styles (después de @use rules)
+@import 'swiper/css';
+@import 'swiper/css/pagination';
+@import 'swiper/css/navigation';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -62,47 +62,60 @@ export class HomeComponent implements OnInit {
         next: (info) => {
           this.agencyInfo.set(info);
           
-          // Datos de ejemplo para testimonios
+          // Testimonios reales de Google Reviews
           const mockTestimonials = [
             {
               id: '1',
-              clientName: 'María García',
-              clientCity: 'Bogotá',
+              clientName: 'Manuela Rivera Puerta',
+              clientCity: 'Colombia',
               clientCountry: 'Colombia',
               rating: 5,
-              comment: 'Una experiencia increíble. Todo perfectamente organizado y el servicio excepcional.',
+              comment: 'Excelente experiencia con Santías Travel. Mi viaje a Ciudad de México y Cancún fue increíble, todo estuvo muy bien planeado. La organización, atención y acompañamiento fue impecable. Disfruté el viaje al máximo sin preocuparme por nada. Sin duda volvería a viajar con ellos. ¡Gracias por todo! ✈️🇲🇽❤️',
               destinationId: '1',
               destinationName: 'México',
-              travelDate: new Date('2025-03-15'),
+              travelDate: new Date('2025-01-10'),
               isVerified: true,
               isHighlighted: true,
               createdAt: new Date()
             },
-            
             {
               id: '2',
-              clientName: 'Juan Martínez',
-              clientCity: 'Cali',
+              clientName: 'Angie Gutierrez',
+              clientCity: 'Colombia',
               clientCountry: 'Colombia',
               rating: 5,
-              comment: 'Excelente servicio, muy profesional y atento a las necesidades de los clientes.',
+              comment: '10 / 10 una agencia super recomendada cumplen con todo, confiable, y están atentos todo el tiempo. Gracias santias travel por tan maravillosas vacaciones',
               destinationId: '2',
-              destinationName: 'Perú',
-              travelDate: new Date('2025-06-15'),
+              destinationName: 'La Guajira',
+              travelDate: new Date('2025-01-10'),
               isVerified: true,
               isHighlighted: true,
               createdAt: new Date()
             },
             {
               id: '3',
-              clientName: 'Camila Hurtado',
-              clientCity: 'Medellín',
+              clientName: 'Esmeralda Puerta Monsalve',
+              clientCity: 'Colombia',
               clientCountry: 'Colombia',
               rating: 5,
-              comment: 'El viaje superó todas mis expectativas, atención y organización de primera.',
-              destinationId: '2',
-              destinationName: 'Punta Cana',
-              travelDate: new Date('2025-09-15'),
+              comment: 'Excelente experiencia con santias travel, mis mejores vacaciones, súper recomendado 100/10',
+              destinationId: '3',
+              destinationName: 'República Dominicana',
+              travelDate: new Date('2025-01-10'),
+              isVerified: true,
+              isHighlighted: true,
+              createdAt: new Date()
+            },
+            {
+              id: '4',
+              clientName: 'Angie Gutierrez',
+              clientCity: 'Colombia',
+              clientCountry: 'Colombia',
+              rating: 5,
+              comment: 'Viaje con mi familia a santa Marta, muy buena agencia. En cualquier situación estaban atentos.',
+              destinationId: '4',
+              destinationName: 'Santa Marta',
+              travelDate: new Date('2025-01-11'),
               isVerified: true,
               isHighlighted: true,
               createdAt: new Date()

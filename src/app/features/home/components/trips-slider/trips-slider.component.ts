@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, signal, HostListener, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, signal, HostListener, AfterViewInit, Inject, PLATFORM_ID, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { TripsService, ViajeIndividual } from '../../../../core/services/trips.service';
@@ -14,21 +14,27 @@ import { TRIPS_SLIDER_CONFIG } from '../../config/trips-slider.config';
   styleUrl: './trips-slider.component.scss'
 })
 export class TripsSliderComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('sliderContainer') sliderContainer!: ElementRef<HTMLElement>;
+  
   viajes = signal<ViajeIndividual[]>([]);
   displayViajes = signal<ViajeIndividual[]>([]);
   currentIndex = signal(0);
   isLoading = signal(true);
   cardWidth = signal(TRIPS_SLIDER_CONFIG.tripCard.cardWidth);
+  visibleCards = signal(1);
+  viewportWidth = signal(0);
   dragOffset = signal(0);
   
   private destroy$ = new Subject<void>();
   readonly config = TRIPS_SLIDER_CONFIG;
+  readonly FIXED_CARD_WIDTH = 340;
+  readonly CARD_GAP = 16;
   private isBrowser: boolean;
 
   // Variables para el control del deslizamiento
   private startX = 0;
   private isDragging = false;
-  private minSwipeDistance = 50; // Distancia mínima para considerar un swipe
+  private minSwipeDistance = 50;
 
   constructor(
     private tripsService: TripsService,
@@ -96,15 +102,34 @@ export class TripsSliderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private calcularAnchoTarjeta(): void {
     if (this.isBrowser) {
-      const anchoPantalla = document.documentElement.clientWidth || window.innerWidth;
-      const breakpointMovil = 768;
+      const screenWidth = document.documentElement.clientWidth || window.innerWidth;
+      const breakpointMovil = 480;
       
-      if (anchoPantalla <= breakpointMovil) {
-        const paddingTotal = 32;
-        const anchoDisponible = anchoPantalla - paddingTotal;
-        this.cardWidth.set(Math.max(anchoDisponible, 280));
+      // Usar el ancho real del contenedor si está disponible
+      let containerWidth = screenWidth;
+      if (this.sliderContainer?.nativeElement) {
+        containerWidth = this.sliderContainer.nativeElement.offsetWidth;
+      }
+      
+      if (screenWidth <= breakpointMovil) {
+        // En móvil pequeño: La tarjeta ocupa el 100% del ancho de pantalla
+        this.cardWidth.set(screenWidth);
+        this.visibleCards.set(1);
+        this.viewportWidth.set(screenWidth);
       } else {
-        this.cardWidth.set(this.config.tripCard.cardWidth);
+        // Tarjetas con ancho fijo
+        this.cardWidth.set(this.FIXED_CARD_WIDTH);
+        
+        // Calcular cuántas tarjetas caben en el contenedor disponible
+        const buttonSpace = 120; // 60px padding a cada lado para los botones
+        const availableWidth = containerWidth - buttonSpace;
+        const cardWithGap = this.FIXED_CARD_WIDTH + this.CARD_GAP;
+        const numCards = Math.max(1, Math.floor((availableWidth + this.CARD_GAP) / cardWithGap));
+        this.visibleCards.set(numCards);
+        
+        // Ancho exacto para mostrar N tarjetas completas
+        const exactWidth = (numCards * this.FIXED_CARD_WIDTH) + ((numCards - 1) * this.CARD_GAP);
+        this.viewportWidth.set(exactWidth);
       }
       
       this.cdr.markForCheck();
@@ -128,7 +153,7 @@ export class TripsSliderComponent implements OnInit, AfterViewInit, OnDestroy {
               const fechaB = b.fechaCreacion ? new Date(b.fechaCreacion).getTime() : 0;
               return fechaB - fechaA;
             })
-            .slice(0, this.config.mockData.maxCards);
+            .slice(0, this.config.mockData.maxRealTrips);
 
           const viajesConMocks = this.completarConMocks(viajesOrdenados);
 
@@ -214,15 +239,21 @@ export class TripsSliderComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.isDragging || Math.abs(this.dragOffset()) > 5) return;
     
     if (viaje?.id) {
-      this.router.navigate(['/viajes-a-tu-medida', viaje.id]);
+      this.router.navigate(['/viajes-a-tu-medida', viaje.id]).then(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
     }
+  }
+
+  get currentGap(): number {
+    const isMobile = this.isBrowser && window.innerWidth <= 480;
+    return isMobile ? 0 : this.CARD_GAP;
   }
 
   get transformValue(): string {
     const cardWidth = this.cardWidth();
-    const gap = 16; 
+    const gap = this.currentGap;
     const baseOffset = this.currentIndex() * (cardWidth + gap);
-    // Incluimos el dragOffset en la transformación
     return `translateX(calc(-${baseOffset}px + ${this.dragOffset()}px))`;
   }
 

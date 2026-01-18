@@ -1,0 +1,276 @@
+.about-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+  padding: 2rem 1rem 4rem;
+
+  @media (min-width: 768px) {
+    padding: 3rem 2rem 5rem;
+  }
+}
+
+.about-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  padding: 2rem 1.5rem;
+
+  @media (min-width: 768px) {
+    padding: 3rem 4rem;
+  }
+}
+
+.about-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.about-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.2;
+
+  @media (min-width: 768px) {
+    font-size: 2.5rem;
+  }
+}
+
+.about-subtitle {
+  font-size: 1rem;
+  color: #d97706;
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.about-content {
+  margin-bottom: 2rem;
+}
+
+.about-intro {
+  margin-bottom: 2.5rem;
+
+  .lead-text {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.7;
+    margin: 0 0 1.5rem 0;
+
+    @media (min-width: 768px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  p {
+    color: #475569;
+    line-height: 1.7;
+    margin: 0 0 1rem 0;
+    font-size: 1.05rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.about-section {
+  margin-bottom: 2rem;
+
+  p {
+    color: #475569;
+    line-height: 1.7;
+    margin: 0;
+    font-size: 1.05rem;
+  }
+}
+
+.about-certification {
+  background: #fef3c7;
+  border-left: 4px solid #d97706;
+  padding: 1.25rem 1.5rem;
+  border-radius: 0 0.75rem 0.75rem 0;
+  margin: 2.5rem 0;
+
+  p {
+    margin: 0;
+    color: #92400e;
+    font-size: 1.05rem;
+    line-height: 1.7;
+
+    strong {
+      color: #78350f;
+      font-weight: 700;
+    }
+  }
+}
+
+.about-mission {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e5e7eb;
+
+  .mission-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.7;
+    margin: 0 0 1.5rem 0;
+
+    @media (min-width: 768px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  p {
+    color: #475569;
+    line-height: 1.7;
+    margin: 0;
+    font-size: 1.05rem;
+
+    &:not(.mission-text) {
+      margin-top: 1rem;
+    }
+  }
+}
+
+.about-slider-container {
+  margin: 3rem 0;
+  width: 100%;
+  overflow: hidden;
+
+  swiper-container {
+    width: 100%;
+    height: auto;
+    padding-bottom: 2rem;
+  }
+
+  swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+  }
+
+  .slider-image-wrapper {
+    width: 100%;
+    height: 0;
+    padding-bottom: 75%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  .slider-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  ::ng-deep {
+    .swiper-pagination {
+      bottom: 0 !important;
+    }
+
+    .swiper-pagination-bullet {
+      background: #d97706;
+      opacity: 0.5;
+      width: 10px;
+      height: 10px;
+      margin: 0 4px;
+    }
+
+    .swiper-pagination-bullet-active {
+      opacity: 1;
+      background: #d97706;
+    }
+  }
+
+  @media (min-width: 768px) {
+    margin: 4rem 0;
+
+    .slider-image-wrapper {
+      padding-bottom: 65%;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .slider-image-wrapper {
+      padding-bottom: 60%;
+    }
+  }
+}
+
+.about-mission-vision {
+  margin: 3rem 0;
+  padding: 2rem 0;
+  border-top: 2px solid #e5e7eb;
+
+  &:first-of-type {
+    margin-top: 4rem;
+  }
+
+  .mission-vision-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #d97706;
+    text-align: center;
+
+    @media (min-width: 768px) {
+      font-size: 2rem;
+      text-align: left;
+    }
+  }
+
+  .mission-vision-content {
+    p {
+      color: #475569;
+      line-height: 1.7;
+      margin: 0;
+      font-size: 1.05rem;
+      text-align: justify;
+
+      @media (min-width: 768px) {
+        text-align: left;
+      }
+    }
+  }
+}
+
+.about-footer {
+  text-align: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #f3f4f6;
+
+  p {
+    margin: 0 0 0.25rem 0;
+    color: #64748b;
+
+    &:first-child {
+      color: #1e293b;
+      font-size: 1.1rem;
+    }
+  }
+}

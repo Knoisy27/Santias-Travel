@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, signal, inject, HostListener, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, signal, inject, HostListener, AfterViewInit, Inject, PLATFORM_ID, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { TripsService, ViajeGrupal } from '../../../../core/services/trips.service';
@@ -14,14 +14,21 @@ import { GROUP_TRIPS_SLIDER_CONFIG } from '../../config/group-trips-slider.confi
   styleUrl: './group-trips-slider.component.scss'
 })
 export class GroupTripsSliderComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('sliderContainer') sliderContainer!: ElementRef<HTMLElement>;
+  
   viajes = signal<ViajeGrupal[]>([]);
   displayViajes = signal<ViajeGrupal[]>([]);
   currentIndex = signal(0);
   isLoading = signal(true);
   cardWidth = signal(GROUP_TRIPS_SLIDER_CONFIG.slider.cardWidth);
+  visibleCards = signal(1);
+  viewportWidth = signal(0);
   dragOffset = signal(0);
   
   readonly config = GROUP_TRIPS_SLIDER_CONFIG;
+  readonly FIXED_CARD_WIDTH = 340; // Ancho fijo de cada tarjeta
+  readonly CARD_GAP = 16; // Gap entre tarjetas
+  
   private destroy$ = new Subject<void>();
   private isBrowser: boolean;
 
@@ -97,16 +104,34 @@ export class GroupTripsSliderComponent implements OnInit, AfterViewInit, OnDestr
 
   private calcularAnchoTarjeta(): void {
     if (this.isBrowser) {
-      const anchoPantalla = document.documentElement.clientWidth || window.innerWidth;
-      const breakpointMovil = 768;
+      const screenWidth = document.documentElement.clientWidth || window.innerWidth;
+      const breakpointMovil = 480;
       
-      if (anchoPantalla <= breakpointMovil) {
-        // En móvil: Ancho pantalla - padding del contenedor (16px * 2 = 32px)
-        const paddingTotal = 32;
-        const anchoDisponible = anchoPantalla - paddingTotal;
-        this.cardWidth.set(Math.max(anchoDisponible, 280));
+      // Usar el ancho real del contenedor si está disponible
+      let containerWidth = screenWidth;
+      if (this.sliderContainer?.nativeElement) {
+        containerWidth = this.sliderContainer.nativeElement.offsetWidth;
+      }
+      
+      if (screenWidth <= breakpointMovil) {
+        // En móvil pequeño: La tarjeta ocupa el 100% del ancho de pantalla
+        this.cardWidth.set(screenWidth);
+        this.visibleCards.set(1);
+        this.viewportWidth.set(screenWidth);
       } else {
-        this.cardWidth.set(this.config.slider.cardWidth);
+        // Tarjetas con ancho fijo
+        this.cardWidth.set(this.FIXED_CARD_WIDTH);
+        
+        // Calcular cuántas tarjetas caben en el contenedor disponible
+        const buttonSpace = 120; // 60px padding a cada lado para los botones
+        const availableWidth = containerWidth - buttonSpace;
+        const cardWithGap = this.FIXED_CARD_WIDTH + this.CARD_GAP;
+        const numCards = Math.max(1, Math.floor((availableWidth + this.CARD_GAP) / cardWithGap));
+        this.visibleCards.set(numCards);
+        
+        // Ancho exacto para mostrar N tarjetas completas
+        const exactWidth = (numCards * this.FIXED_CARD_WIDTH) + ((numCards - 1) * this.CARD_GAP);
+        this.viewportWidth.set(exactWidth);
       }
       
       this.cdr.markForCheck();
@@ -130,7 +155,7 @@ export class GroupTripsSliderComponent implements OnInit, AfterViewInit, OnDestr
               const fechaB = b.fechaInicio ? new Date(b.fechaInicio).getTime() : 0;
               return fechaA - fechaB;
             })
-            .slice(0, this.config.slider.maxCards);
+            .slice(0, this.config.slider.maxRealTrips);
 
           const viajesConMocks = this.completarConMocks(viajesOrdenados);
 
@@ -227,13 +252,14 @@ export class GroupTripsSliderComponent implements OnInit, AfterViewInit, OnDestr
     }
   }
 
+  get currentGap(): number {
+    const isMobile = this.isBrowser && window.innerWidth <= 480;
+    return isMobile ? 0 : this.CARD_GAP;
+  }
+
   get transformValue(): string {
     const cardWidth = this.cardWidth();
-    // Ajustar gap a 16px para consistencia o usar el config.slider.cardGap si se prefiere
-    // En CSS de group-trips-slider está en 1.2rem (aprox 19.2px) pero mejor estandarizar
-    // Voy a usar el mismo cálculo que en trips-slider para consistencia en móvil: 16px (1rem)
-    // Pero debo revisar el CSS de group-trips-slider
-    const gap = 16; 
+    const gap = this.currentGap;
     const offset = this.currentIndex() * (cardWidth + gap);
     return `translateX(calc(-${offset}px + ${this.dragOffset()}px))`;
   }
