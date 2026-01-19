@@ -90,11 +90,11 @@ export class HeaderComponent implements OnInit {
   }
 
   /**
-   * Manejar triple click en el nombre de la marca
-   * - Si NO está autenticado: Accede al login
-   * - Si SÍ está autenticado: Muestra información del usuario
+   * Manejar click en el logo/marca
+   * - Si es triple click: Accede al login o muestra info del usuario
+   * - Si es click normal: Hace scroll al inicio de la página
    */
-  onBrandNameClick(event: Event): void {
+  onBrandClick(event: Event): void {
     this.clickCount++;
     
     // Limpiar timeout anterior si existe
@@ -104,11 +104,10 @@ export class HeaderComponent implements OnInit {
     
     // Si es el tercer click
     if (this.clickCount === 3) {
-      event.preventDefault(); // Prevenir la navegación del enlace
-      event.stopPropagation(); // Detener la propagación del evento
+      event.preventDefault();
+      event.stopPropagation();
       
       if (this.isAuthenticated) {
-        // Usuario autenticado: Mostrar información
         const user = this.currentUser;
         this.snackBar.open(
           `¡Hola ${user?.name}! Ya estás logueado como ${user?.role}. Usa el menú de usuario para cerrar sesión.`,
@@ -119,7 +118,6 @@ export class HeaderComponent implements OnInit {
           }
         );
       } else {
-        // Usuario no autenticado: Ir al login
         this.router.navigate(['/login']);
       }
       
@@ -127,10 +125,49 @@ export class HeaderComponent implements OnInit {
       return;
     }
     
+    // Si es click normal (no triple), hacer scroll al inicio
+    if (this.clickCount === 1) {
+      // Si estamos en home, hacer scroll
+      if (this.router.url === '/') {
+        event.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        this.closeMenu();
+      }
+      // Si no estamos en home, el routerLink navegará y luego haremos scroll
+      else {
+        this.router.navigate(['/']).then(() => {
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }, 100);
+        });
+      }
+    }
+    
     // Resetear contador después de 1 segundo sin clicks
     this.clickTimeout = setTimeout(() => {
       this.clickCount = 0;
     }, 1000);
+  }
+
+  /**
+   * Manejar click en "Inicio"
+   * - Hace scroll al inicio de la página
+   */
+  onInicioClick(event: Event): void {
+    // Si estamos en home, hacer scroll
+    if (this.router.url === '/') {
+      event.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      this.closeMenu();
+    }
+    // Si no estamos en home, el routerLink navegará y luego haremos scroll
+    else {
+      this.router.navigate(['/']).then(() => {
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 100);
+      });
+    }
   }
 
   /**

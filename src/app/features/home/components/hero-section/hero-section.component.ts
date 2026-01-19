@@ -54,4 +54,11 @@ export class HeroSectionComponent implements OnChanges {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
+
+  scrollToGroupTrips(): void {
+    const element = document.getElementById('group-trips-slider');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
 }
