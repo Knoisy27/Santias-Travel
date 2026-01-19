@@ -123,11 +123,14 @@
   ul {
     margin: 0.75rem 0;
     padding-left: 1.5rem;
+    list-style-type: disc; /* Asegura que se muestren los puntos */
+    list-style-position: outside;
 
     li {
       color: #475569;
       line-height: 1.6;
       margin-bottom: 0.5rem;
+      padding-left: 0.25rem; /* Un poco de espacio entre el punto y el texto */
 
       &:last-child {
         margin-bottom: 0;
@@ -169,6 +172,8 @@
 
   ul {
     margin: 0.5rem 0 0 0;
+    list-style-type: disc; /* Asegura que se muestren los puntos */
+    padding-left: 1.5rem;
   }
 
   &.important {
