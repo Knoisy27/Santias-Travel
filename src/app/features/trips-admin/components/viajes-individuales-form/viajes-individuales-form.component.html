@@ -51,7 +51,7 @@
               <!-- Valor -->
               <div class="field-block half-width">
                 <label class="field-label">Valor</label>
-                <mat-form-field appearance="outline" class="half-width">
+                <mat-form-field appearance="outline" class="full-width">
                 <input matInput type="number" formControlName="valor" placeholder="Valor (COP)">
                 <mat-error>{{ getFieldError('valor') }}</mat-error>
               </mat-form-field>
@@ -59,7 +59,7 @@
 
               <div class="field-block half-width required">
                 <label class="field-label">Estado</label>
-                <mat-form-field appearance="outline" class="half-width required-field">
+                <mat-form-field appearance="outline" class="full-width required-field">
                 <mat-select formControlName="estado" placeholder="Estado">
                   <mat-option value="A">Activo</mat-option>
                   <mat-option value="AGOTADO">Agotado</mat-option>
@@ -73,7 +73,7 @@
               <!-- Fecha Inicio -->
               <div class="field-block half-width">
                 <label class="field-label">Fecha de inicio</label>
-                <mat-form-field appearance="outline" class="half-width">
+                <mat-form-field appearance="outline" class="full-width">
                 <input matInput [matDatepicker]="fechaInicioPicker" formControlName="fechaInicio" 
                   [min]="minDate"
                   placeholder="Fecha de Inicio">
@@ -86,7 +86,7 @@
               <!-- Fecha Fin -->
               <div class="field-block half-width">
                 <label class="field-label">Fecha de fin</label>
-                <mat-form-field appearance="outline" class="half-width">
+                <mat-form-field appearance="outline" class="full-width">
                 <input matInput [matDatepicker]="fechaFinPicker" formControlName="fechaFin" 
                   [min]="minDate"
                   placeholder="Fecha de Fin">
