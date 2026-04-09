@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MaterialModule } from '../../../../shared/material/material.module';
-import { TripsService, ViajeGrupal } from '../../../../core/services/trips.service';
+import { TripsService, ViajeGrupal, isViajeAgotado } from '../../../../core/services/trips.service';
 import { UtilsService } from '../../../../core/services/utils.service';
 import { APP_CONSTANTS } from '../../../../core/constants/app.constants';
 import { Subject, takeUntil } from 'rxjs';
@@ -121,6 +121,10 @@ export class ViajesGrupalesDetalleComponent implements OnInit, OnDestroy {
     const inicio = this.formatearFecha(fechaInicio);
     const fin = this.formatearFecha(fechaFin);
     return `${inicio} al ${fin}`;
+  }
+
+  isAgotado(viaje: ViajeGrupal): boolean {
+    return isViajeAgotado(viaje);
   }
 
   volverAViajes(): void {

@@ -125,6 +125,48 @@ export class HomeComponent implements OnInit {
               isHighlighted: true,
               createdAt: new Date()
             },
+            {
+              id: '5',
+              clientName: 'Luz Stella Delgado',
+              clientCity: 'Colombia',
+              clientCountry: 'Colombia',
+              rating: 5,
+              comment: 'Excelente viaje a Boyacá, estuvimos 5 días conociendo sitios maravillosos. La guía muy responsable, se cumplió con todo lo ofertado. Se recomienda 100%',
+              destinationId: '5',
+              destinationName: 'Boyacá',
+              travelDate: new Date('2025-01-12'),
+              isVerified: true,
+              isHighlighted: true,
+              createdAt: new Date()
+            },
+            {
+              id: '6',
+              clientName: 'Norbey Holguin Rivera',
+              clientCity: 'Colombia',
+              clientCountry: 'Colombia',
+              rating: 5,
+              comment: 'Fue un paseo maravilloso lleno de sorpresas y sobretodo excelentes atenciones, hoteles super cómodos y un itinerario ajustado al tiempo. Muy satisfecho quedamos, gracias Luisa por tu liderazgo. Estamos casos para otra salida ojalá con el mismo grupo y otros más. Un abrazo',
+              destinationId: '6',
+              destinationName: 'Boyacá',
+              travelDate: new Date('2025-01-12'),
+              isVerified: true,
+              isHighlighted: true,
+              createdAt: new Date()
+            },
+            {
+              id: '7',
+              clientName: 'Gabi Sarmiento',
+              clientCity: 'Colombia',
+              clientCountry: 'Colombia',
+              rating: 5,
+              comment: 'Quiero recomendar muchísimo esta agencia. Hace poco viajé con mi abuela a Boyacá y la experiencia fue simplemente hermosa. La organización y el cuidado que tuvieron, hicieron que disfrutáramos cada momento sin preocupaciones. Súper recomendados!',
+              destinationId: '7',
+              destinationName: 'Boyacá',
+              travelDate: new Date('2025-01-12'),
+              isVerified: true,
+              isHighlighted: true,
+              createdAt: new Date()
+            },
           ];
           
           this.featuredTestimonials.set(mockTestimonials);

@@ -31,6 +31,9 @@
                 <span class="text-amber-500 text-2xl lg:text-3xl font-bold uppercase tracking-wider">
                   {{ config.detail.content.prefixTitle }}
                 </span>
+                @if (isAgotado(viaje)) {
+                  <span class="badge-agotado-detalle">Agotado</span>
+                }
               </div>
               
               <mat-card-title class="viaje-title font-serif font-extrabold text-slate-900 !mb-2 !leading-tight tracking-tight" style="font-size: 2.7rem; line-height: 1.1;">

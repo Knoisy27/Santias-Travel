@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { TripsService, ViajeIndividual } from '../../../../core/services/trips.service';
+import { TripsService, ViajeIndividual, isViajeAgotado } from '../../../../core/services/trips.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { SEOService } from '../../../../core/services/seo.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -68,6 +68,10 @@ export class ViajesATuMedidaComponent implements OnInit, OnDestroy {
 
   trackByViaje(index: number, viaje: ViajeIndividual): number {
     return viaje?.id ?? index;
+  }
+
+  isAgotado(viaje: ViajeIndividual): boolean {
+    return isViajeAgotado(viaje);
   }
 
   get isAuthenticated(): boolean {

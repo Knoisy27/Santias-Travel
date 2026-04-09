@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MaterialModule } from '../../../../shared/material/material.module';
-import { TripsService, ViajeIndividual } from '../../../../core/services/trips.service';
+import { TripsService, ViajeIndividual, isViajeAgotado } from '../../../../core/services/trips.service';
 import { UtilsService } from '../../../../core/services/utils.service';
 import { APP_CONSTANTS } from '../../../../core/constants/app.constants';
 import { Subject, takeUntil } from 'rxjs';
@@ -113,6 +113,10 @@ export class ViajesATuMedidaDetalleComponent implements OnInit, OnDestroy {
     const inicio = this.formatearFecha(fechaInicio);
     const fin = this.formatearFecha(fechaFin);
     return `${inicio} al ${fin}`;
+  }
+
+  isAgotado(viaje: ViajeIndividual): boolean {
+    return isViajeAgotado(viaje);
   }
 
   volverAViajes(): void {

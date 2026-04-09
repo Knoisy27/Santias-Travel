@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TripsService, ViajeGrupal } from '../../../../core/services/trips.service';
+import { TripsService, ViajeGrupal, isViajeAgotado } from '../../../../core/services/trips.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { SEOService } from '../../../../core/services/seo.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -94,6 +94,10 @@ export class ViajesGrupalesComponent implements OnInit, OnDestroy {
   formatearPrecio(valor: number): string {
     if (!valor) return '$0';
     return `$${valor.toLocaleString('es-CO')}`;
+  }
+
+  isAgotado(viaje: ViajeGrupal): boolean {
+    return isViajeAgotado(viaje);
   }
 
   verMasDetalles(viaje: ViajeGrupal) {

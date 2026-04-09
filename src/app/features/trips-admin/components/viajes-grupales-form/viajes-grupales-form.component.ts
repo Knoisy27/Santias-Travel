@@ -105,7 +105,8 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
             incluye: viaje.incluye || '',
             itinerario: viaje.itinerario || '',
             noIncluye: viaje.noIncluye || '',
-            sugerencias: viaje.sugerencias || ''
+            sugerencias: viaje.sugerencias || '',
+            estado: viaje.estado || 'A'
           }, { emitEvent: false });
 
           // Forzar validación después de cargar los datos
@@ -143,7 +144,8 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
       incluye: ['', [Validators.required, Validators.minLength(10)]], // Sin maxLength
       itinerario: ['', [Validators.required, Validators.minLength(10)]], // Sin maxLength
       noIncluye: ['', [Validators.required, Validators.minLength(10)]], // Sin maxLength
-      sugerencias: ['', [Validators.required, Validators.minLength(10)]] // Sin maxLength
+      sugerencias: ['', [Validators.required, Validators.minLength(10)]], // Sin maxLength
+      estado: ['A', [Validators.required]]
     }, { validators: this.dateRangeValidator });
   }
 
@@ -294,7 +296,8 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
       itinerario: formValue.itinerario,
       noIncluye: formValue.noIncluye,
       sugerencias: formValue.sugerencias,
-      estado: 'A', // Estado por defecto: Activo
+      estado: formValue.estado,
+      agotado: formValue.estado === 'AGOTADO',
       modificadoPor: user.username,
     };
 
@@ -356,7 +359,8 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
       itinerario: formValue.itinerario,
       noIncluye: formValue.noIncluye,
       sugerencias: formValue.sugerencias,
-      estado: 'A',
+      estado: formValue.estado,
+      agotado: formValue.estado === 'AGOTADO',
       modificadoPor: user.username
     };
 
@@ -447,7 +451,8 @@ export class ViajesGrupalesFormComponent implements OnInit, OnDestroy {
       incluye: 'Incluye',
       itinerario: 'Itinerario',
       noIncluye: 'No Incluye',
-      sugerencias: 'Sugerencias'
+      sugerencias: 'Sugerencias',
+      estado: 'Estado'
     };
     return labels[fieldName] || fieldName;
   }

@@ -14,41 +14,66 @@
           <form [formGroup]="viajeForm" (ngSubmit)="onSubmit()" class="viaje-form">
             <div class="form-row">
               <!-- Nombre -->
-              <mat-form-field appearance="outline" class="full-width required-field">
+              <div class="field-block full-width required">
+                <label class="field-label">Nombre</label>
+                <mat-form-field appearance="outline" class="full-width required-field">
                 <input matInput formControlName="nombre" placeholder="Nombre del Viaje">
                 <mat-error>{{ getFieldError('nombre') }}</mat-error>
               </mat-form-field>
+              </div>
             </div>
 
             <div class="form-row">
               <!-- Descripción corta -->
-              <mat-form-field appearance="outline" class="full-width">
+              <div class="field-block full-width">
+                <label class="field-label">Descripción corta</label>
+                <mat-form-field appearance="outline" class="full-width">
                 <textarea matInput formControlName="descripcionCorta" rows="2"
                   placeholder="Descripción corta - Resumen para tarjetas y listados"></textarea>
                 <mat-error>{{ getFieldError('descripcionCorta') }}</mat-error>
               </mat-form-field>
+              </div>
             </div>
 
             <div class="form-row">
               <!-- Descripción -->
-              <mat-form-field appearance="outline" class="full-width required-field">
+              <div class="field-block full-width required">
+                <label class="field-label">Descripción</label>
+                <mat-form-field appearance="outline" class="full-width required-field">
                 <textarea matInput formControlName="descripcion" rows="4" 
                   placeholder="Descripción - Describe el viaje, destinos, actividades principales..."></textarea>
                 <mat-error>{{ getFieldError('descripcion') }}</mat-error>
               </mat-form-field>
+              </div>
             </div>
 
             <div class="form-row">
               <!-- Valor -->
-              <mat-form-field appearance="outline" class="half-width required-field">
+              <div class="field-block half-width required">
+                <label class="field-label">Valor</label>
+                <mat-form-field appearance="outline" class="half-width required-field">
                 <input matInput type="number" formControlName="valor" placeholder="Valor (COP)">
                 <mat-error>{{ getFieldError('valor') }}</mat-error>
               </mat-form-field>
+              </div>
+
+              <div class="field-block half-width required">
+                <label class="field-label">Estado</label>
+                <mat-form-field appearance="outline" class="half-width required-field">
+                <mat-select formControlName="estado" placeholder="Estado">
+                  <mat-option value="A">Activo</mat-option>
+                  <mat-option value="AGOTADO">Agotado</mat-option>
+                </mat-select>
+                <mat-error>{{ getFieldError('estado') }}</mat-error>
+              </mat-form-field>
+              </div>
             </div>
 
             <div class="form-row">
               <!-- Fecha Inicio -->
-              <mat-form-field appearance="outline" class="half-width required-field">
+              <div class="field-block half-width required">
+                <label class="field-label">Fecha de inicio</label>
+                <mat-form-field appearance="outline" class="half-width required-field">
                 <input matInput [matDatepicker]="fechaInicioPicker" formControlName="fechaInicio" 
                   [min]="minDate"
                   placeholder="Fecha de Inicio">
@@ -56,9 +81,12 @@
                 <mat-datepicker #fechaInicioPicker [startAt]="minDate"></mat-datepicker>
                 <mat-error>{{ getFieldError('fechaInicio') }}</mat-error>
               </mat-form-field>
+              </div>
 
               <!-- Fecha Fin -->
-              <mat-form-field appearance="outline" class="half-width required-field">
+              <div class="field-block half-width required">
+                <label class="field-label">Fecha de fin</label>
+                <mat-form-field appearance="outline" class="half-width required-field">
                 <input matInput [matDatepicker]="fechaFinPicker" formControlName="fechaFin" 
                   [min]="minDate"
                   placeholder="Fecha de Fin">
@@ -66,6 +94,7 @@
                 <mat-datepicker #fechaFinPicker [startAt]="minDate"></mat-datepicker>
                 <mat-error>{{ getFieldError('fechaFin') }}</mat-error>
               </mat-form-field>
+              </div>
             </div>
 
             <!-- Error de rango de fechas -->

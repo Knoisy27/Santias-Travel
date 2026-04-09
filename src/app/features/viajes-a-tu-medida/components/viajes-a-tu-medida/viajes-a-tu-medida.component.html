@@ -33,6 +33,7 @@
     <ng-container *ngIf="!showMockTrip && viajes.length > 0">
       <div class="trip-card cursor-pointer" *ngFor="let viaje of viajes; trackBy: trackByViaje" (click)="verDetalles(viaje)">
         <div class="trip-image-container">
+          <span class="badge-agotado" *ngIf="isAgotado(viaje)">Agotado</span>
           <img
             [src]="viaje.imagenListadoUrl || viaje.imagenUrl || 'assets/images/placeholder-destination.jpg'"
             [alt]="viaje.nombre"

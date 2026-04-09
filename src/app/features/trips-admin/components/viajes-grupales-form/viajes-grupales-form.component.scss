@@ -69,6 +69,22 @@
   }
 }
 
+.field-block {
+  .field-label {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  &.required .field-label::after {
+    content: ' *';
+    color: #f44336;
+    font-weight: 700;
+  }
+}
+
 // Estilos para subida de archivos
 .file-upload-container {
   .file-upload-label {
@@ -298,6 +314,14 @@
 
 // Estilos específicos para textareas
 ::ng-deep {
+  .mat-mdc-notched-outline {
+    .mat-mdc-form-field-outline-gap,
+    .mdc-notched-outline__notch {
+      border-left: none !important;
+      border-right: none !important;
+    }
+  }
+
   .mat-mdc-form-field {
     .mat-mdc-text-field-wrapper {
       .mat-mdc-form-field-flex {

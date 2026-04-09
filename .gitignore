@@ -43,3 +43,4 @@ testem.log
 .DS_Store
 Thumbs.db
 .vercel
+.cursor/plans/auditoria-front-back-db_bba4205b.plan.md

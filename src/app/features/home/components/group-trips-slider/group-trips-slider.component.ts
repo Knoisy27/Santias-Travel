@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, signal, inject, HostListener, AfterViewInit, Inject, PLATFORM_ID, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
-import { TripsService, ViajeGrupal } from '../../../../core/services/trips.service';
+import { TripsService, ViajeGrupal, isViajeAgotado } from '../../../../core/services/trips.service';
 import { MaterialModule } from '../../../../shared/material/material.module';
 import { Subject, takeUntil } from 'rxjs';
 import { GROUP_TRIPS_SLIDER_CONFIG } from '../../config/group-trips-slider.config';
@@ -283,6 +283,10 @@ export class GroupTripsSliderComponent implements OnInit, AfterViewInit, OnDestr
     const fin = new Date(fechaFin);
     const opciones = { day: '2-digit', month: 'short' } as const;
     return `${inicio.toLocaleDateString('es-CO', opciones)} - ${fin.toLocaleDateString('es-CO', opciones)}`;
+  }
+
+  isAgotado(viaje: ViajeGrupal): boolean {
+    return isViajeAgotado(viaje);
   }
 
   trackByViaje(index: number): number {

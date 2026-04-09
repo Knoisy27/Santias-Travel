@@ -74,7 +74,8 @@ export class ViajesIndividualesFormComponent implements OnInit, OnDestroy {
             descripcion: viaje.descripcion,
             valor: viaje.valor || 0,
             fechaInicio: viaje.fechaInicio ? viaje.fechaInicio.split('T')[0] : '',
-            fechaFin: viaje.fechaFin ? viaje.fechaFin.split('T')[0] : ''
+            fechaFin: viaje.fechaFin ? viaje.fechaFin.split('T')[0] : '',
+            estado: viaje.estado || 'A'
           });
 
           this.uploadedListadoImageUrl.set(viaje.imagenListadoUrl || null);
@@ -105,7 +106,8 @@ export class ViajesIndividualesFormComponent implements OnInit, OnDestroy {
       descripcion: ['', [Validators.required, Validators.minLength(10)]], // Sin maxLength
       valor: [0, [Validators.min(0)]], // Opcional
       fechaInicio: [''], // Opcional
-      fechaFin: [''] // Opcional
+      fechaFin: [''], // Opcional
+      estado: ['A', [Validators.required]]
     }, { validators: this.dateRangeValidator });
   }
 
@@ -213,7 +215,8 @@ export class ViajesIndividualesFormComponent implements OnInit, OnDestroy {
       videoUrl: videoUrl || undefined,
       fechaInicio: formValue.fechaInicio || undefined, // Opcional
       fechaFin: formValue.fechaFin || undefined, // Opcional
-      estado: 'A', // Estado por defecto: Activo
+      estado: formValue.estado,
+      agotado: formValue.estado === 'AGOTADO',
       modificadoPor: user.username // Para viajes individuales es String
     };
 
@@ -264,7 +267,8 @@ export class ViajesIndividualesFormComponent implements OnInit, OnDestroy {
       videoUrl: videoUrl || (this.uploadedVideoUrl() || undefined),
       fechaInicio: formValue.fechaInicio || undefined,
       fechaFin: formValue.fechaFin || undefined,
-      estado: 'A',
+      estado: formValue.estado,
+      agotado: formValue.estado === 'AGOTADO',
       modificadoPor: user.username
     };
 
@@ -349,7 +353,8 @@ export class ViajesIndividualesFormComponent implements OnInit, OnDestroy {
       descripcion: 'Descripción',
       valor: 'Valor',
       fechaInicio: 'Fecha de Inicio',
-      fechaFin: 'Fecha de Fin'
+      fechaFin: 'Fecha de Fin',
+      estado: 'Estado'
     };
     return labels[fieldName] || fieldName;
   }

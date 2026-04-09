@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, signal, HostListener, AfterViewInit, Inject, PLATFORM_ID, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
-import { TripsService, ViajeIndividual } from '../../../../core/services/trips.service';
+import { TripsService, ViajeIndividual, isViajeAgotado } from '../../../../core/services/trips.service';
 import { MaterialModule } from '../../../../shared/material/material.module';
 import { Subject, takeUntil } from 'rxjs';
 import { TRIPS_SLIDER_CONFIG } from '../../config/trips-slider.config';
@@ -277,5 +277,9 @@ export class TripsSliderComponent implements OnInit, AfterViewInit, OnDestroy {
   formatPrice(valor?: number): string {
     if (!valor) return '';
     return `$${valor.toLocaleString('es-CO')}`;
+  }
+
+  isAgotado(viaje: ViajeIndividual): boolean {
+    return isViajeAgotado(viaje);
   }
 }

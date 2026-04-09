@@ -20,6 +20,7 @@ export interface ViajeGrupal {
   noIncluye: string;
   sugerencias: string;
   estado: string;
+  agotado?: boolean;
   modificadoPor: string;
   creadoPor?: string;
   fechaCreacion?: string;
@@ -38,6 +39,7 @@ export interface ViajeIndividual {
   fechaInicio: string;
   fechaFin: string;
   estado: string;
+  agotado?: boolean;
   modificadoPor: string;
   creadoPor?: string;
   fechaCreacion?: string;
@@ -59,6 +61,7 @@ export interface ViajeGrupalCreateRequest {
   noIncluye: string;
   sugerencias: string;
   estado: string;
+  agotado: boolean;
   modificadoPor: string;
 }
 
@@ -73,7 +76,17 @@ export interface ViajeIndividualCreateRequest {
   fechaInicio: string;
   fechaFin: string;
   estado: string;
+  agotado: boolean;
   modificadoPor: string;
+}
+
+export function isViajeAgotado(viaje: { estado?: string; agotado?: boolean }): boolean {
+  if (viaje.agotado === true) {
+    return true;
+  }
+
+  const estadoNormalizado = (viaje.estado ?? '').trim().toUpperCase();
+  return estadoNormalizado === 'AGOTADO';
 }
 
 export interface FileUploadResponse {
