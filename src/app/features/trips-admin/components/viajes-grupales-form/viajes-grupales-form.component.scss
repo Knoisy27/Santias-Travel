@@ -70,6 +70,14 @@
 }
 
 .field-block {
+  flex: 1;
+  min-width: 0;
+
+  mat-form-field {
+    width: 100%;
+    display: block;
+  }
+
   .field-label {
     display: block;
     margin-bottom: 0.35rem;
